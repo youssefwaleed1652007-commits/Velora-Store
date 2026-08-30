@@ -1,191 +1,159 @@
 const WHATSAPP = "201223562957";
 
+let cart = [];
+let activeCategory = "الكل";
+
+/* =========================
+PRODUCT DATA
+========================= */
+
 const products = [
 {
 id: 1,
 name: "خاتم أوراق",
 category: "خواتم",
-price: 280,
-icon: "💍",
-image: ""
+price: 280
 },
 {
 id: 2,
 name: "سلسلة فاني كليف",
 category: "سلاسل",
-price: 320,
-icon: "📿",
-image: ""
+price: 320
 },
 {
 id: 3,
 name: "أسورة فاني كليف",
 category: "أساور",
-price: 350,
-icon: "✨",
-image: ""
+price: 350
 },
 {
 id: 4,
 name: "حلق دائري فخم",
 category: "حلق",
-price: 300,
-icon: "💎",
-image: ""
+price: 300
 },
 {
 id: 5,
 name: "خاتم ناعم",
 category: "خواتم",
-price: 240,
-icon: "💍",
-image: ""
+price: 240
 },
 {
 id: 6,
 name: "سلسلة نجمة",
 category: "سلاسل",
-price: 290,
-icon: "📿",
-image: ""
+price: 290
 },
 {
 id: 7,
 name: "أسورة رفيعة",
 category: "أساور",
-price: 260,
-icon: "✨",
-image: ""
+price: 260
 },
 {
 id: 8,
 name: "حلق لؤلؤ",
 category: "حلق",
-price: 330,
-icon: "💎",
-image: ""
+price: 330
 }
 ];
 
-let activeCategory = "الكل";
-let cart = [];
-
 /* =========================
-SHOW PRODUCTS
-========================= */
-
-function renderProducts() {
-
-const grid = document.getElementById("productGrid");
-
-if (!grid) {
-console.log("productGrid not found");
-return;
-}
-
-const search = document.getElementById("search");
-
-const query = search
-? search.value.trim().toLowerCase()
-: "";
-
-const filteredProducts = products.filter(function(product) {
-
-```
-const categoryMatch =
-  activeCategory === "الكل" ||
-  product.category === activeCategory;
-
-const searchMatch =
-  product.name.toLowerCase().includes(query);
-
-return categoryMatch && searchMatch;
-```
-
-});
-
-if (filteredProducts.length === 0) {
-
-```
-grid.innerHTML = `
-  <div class="empty-products">
-    <div>✦</div>
-    <h3>لا توجد منتجات</h3>
-    <p>جربي قسمًا أو بحثًا مختلفًا.</p>
-  </div>
-`;
-
-return;
-```
-
-}
-
-grid.innerHTML = filteredProducts.map(function(product) {
-
-```
-return `
-  <article class="product">
-
-    <div class="product-img">
-
-      ${
-        product.image
-          ? `<img
-              src="${product.image}"
-              alt="${product.name}"
-            >`
-          : `<div class="product-placeholder">
-              ${product.icon}
-            </div>`
-      }
-
-    </div>
-
-    <div class="product-info">
-
-      <span class="cat">
-        ${product.category}
-      </span>
-
-      <h3>
-        ${product.name}
-      </h3>
-
-      <div class="price">
-        ${product.price} جنيه
-      </div>
-
-      <button onclick="addToCart(${product.id})">
-        أضف للسلة
-      </button>
-
-    </div>
-
-  </article>
-`;
-```
-
-}).join("");
-
-}
-
-/* =========================
-FILTER
+SEARCH + FILTER
 ========================= */
 
 function filterProducts(category) {
 
 activeCategory = category;
 
-renderProducts();
+const grid = document.getElementById("productGrid");
 
-const section = document.getElementById("products");
+if (!grid) return;
 
-if (section) {
-section.scrollIntoView({
-behavior: "smooth"
-});
+const searchInput = document.getElementById("search");
+
+const query = searchInput
+? searchInput.value.trim().toLowerCase()
+: "";
+
+const cards = grid.querySelectorAll(".product");
+
+cards.forEach(function(card) {
+
+```
+const productName =
+  card.querySelector("h3")?.textContent.toLowerCase() || "";
+
+const productCategory =
+  card.querySelector(".cat")?.textContent.trim() || "";
+
+
+const categoryMatch =
+  activeCategory === "الكل" ||
+  productCategory === activeCategory;
+
+
+const searchMatch =
+  productName.includes(query);
+
+
+if (categoryMatch && searchMatch) {
+  card.style.display = "";
+} else {
+  card.style.display = "none";
 }
+```
+
+});
+
+grid.scrollIntoView({
+behavior: "smooth",
+block: "start"
+});
+
+}
+
+function renderProducts() {
+
+const grid = document.getElementById("productGrid");
+
+if (!grid) return;
+
+const searchInput = document.getElementById("search");
+
+const query = searchInput
+? searchInput.value.trim().toLowerCase()
+: "";
+
+const cards = grid.querySelectorAll(".product");
+
+cards.forEach(function(card) {
+
+```
+const productName =
+  card.querySelector("h3")?.textContent.toLowerCase() || "";
+
+const productCategory =
+  card.querySelector(".cat")?.textContent.trim() || "";
+
+
+const categoryMatch =
+  activeCategory === "الكل" ||
+  productCategory === activeCategory;
+
+
+const searchMatch =
+  productName.includes(query);
+
+
+if (categoryMatch && searchMatch) {
+  card.style.display = "";
+} else {
+  card.style.display = "none";
+}
+```
+
+});
 
 }
 
@@ -195,30 +163,40 @@ ADD TO CART
 
 function addToCart(id) {
 
-const product = products.find(function(item) {
+const product =
+products.find(function(item) {
 return item.id === id;
 });
 
 if (!product) return;
 
-const existing = cart.find(function(item) {
+const existing =
+cart.find(function(item) {
 return item.id === id;
 });
 
 if (existing) {
-existing.qty += 1;
+
+```
+existing.qty++;
+```
+
 } else {
+
+```
 cart.push({
-id: product.id,
-name: product.name,
-category: product.category,
-price: product.price,
-icon: product.icon,
-qty: 1
+  id: product.id,
+  name: product.name,
+  category: product.category,
+  price: product.price,
+  qty: 1
 });
+```
+
 }
 
 updateCart();
+
 openCart();
 
 }
@@ -238,16 +216,22 @@ document.getElementById("cartItems");
 const cartTotal =
 document.getElementById("cartTotal");
 
-const quantity = cart.reduce(function(sum, item) {
+const totalQuantity =
+cart.reduce(function(sum, item) {
 return sum + item.qty;
 }, 0);
 
-const total = cart.reduce(function(sum, item) {
-return sum + item.price * item.qty;
+const totalPrice =
+cart.reduce(function(sum, item) {
+return sum + (item.price * item.qty);
 }, 0);
 
 if (cartCount) {
-cartCount.textContent = quantity;
+cartCount.textContent = totalQuantity;
+}
+
+if (cartTotal) {
+cartTotal.textContent = totalPrice;
 }
 
 if (!cartItems) return;
@@ -256,61 +240,69 @@ if (cart.length === 0) {
 
 ```
 cartItems.innerHTML = `
-  <div style="text-align:center;padding:30px 10px;">
-    <div style="font-size:45px;">🛍️</div>
+  <div class="cart-empty">
+    <div>🛍️</div>
     <h3>السلة فارغة</h3>
-    <p style="color:#777;">
-      أضيفي بعض المنتجات للبدء.
-    </p>
+    <p>أضيفي بعض القطع الجميلة للبدء.</p>
+  </div>
+`;
+
+return;
+```
+
+}
+
+cartItems.innerHTML = cart.map(function(item) {
+
+```
+return `
+  <div class="cart-line">
+
+    <div class="cart-product">
+
+      <strong>
+        ${item.name}
+      </strong>
+
+      <span class="cat">
+        ${item.price} جنيه للقطعة
+      </span>
+
+    </div>
+
+
+    <div class="quantity">
+
+      <button
+        type="button"
+        onclick="changeQty(${item.id}, -1)"
+      >
+        −
+      </button>
+
+      <b>
+        ${item.qty}
+      </b>
+
+      <button
+        type="button"
+        onclick="changeQty(${item.id}, 1)"
+      >
+        +
+      </button>
+
+    </div>
+
+
+    <strong class="cart-price">
+      ${item.price * item.qty} جنيه
+    </strong>
+
   </div>
 `;
 ```
 
-} else {
-
-```
-cartItems.innerHTML = cart.map(function(item) {
-
-  return `
-    <div class="cart-line">
-
-      <div style="flex:1;">
-        <strong>${item.name}</strong>
-
-        <div class="cat">
-          ${item.price} جنيه للقطعة
-        </div>
-      </div>
-
-      <div class="quantity">
-
-        <button onclick="changeQty(${item.id}, -1)">
-          −
-        </button>
-
-        <b>${item.qty}</b>
-
-        <button onclick="changeQty(${item.id}, 1)">
-          +
-        </button>
-
-      </div>
-
-      <strong>
-        ${item.price * item.qty} جنيه
-      </strong>
-
-    </div>
-  `;
-
 }).join("");
-```
-
-}
-
-if (cartTotal) {
-cartTotal.textContent = total;
-}
 
 }
 
@@ -320,7 +312,8 @@ CHANGE QUANTITY
 
 function changeQty(id, change) {
 
-const item = cart.find(function(product) {
+const item =
+cart.find(function(product) {
 return product.id === id;
 });
 
@@ -331,9 +324,10 @@ item.qty += change;
 if (item.qty <= 0) {
 
 ```
-cart = cart.filter(function(product) {
-  return product.id !== id;
-});
+cart =
+  cart.filter(function(product) {
+    return product.id !== id;
+  });
 ```
 
 }
@@ -375,23 +369,38 @@ modal.classList.add("hidden");
 }
 
 /* =========================
-CHECKOUT WHATSAPP
+WHATSAPP CHECKOUT
 ========================= */
 
 function checkout() {
 
 if (cart.length === 0) {
+
+```
 alert("السلة فارغة");
+
 return;
+```
+
 }
 
-const lines = cart.map(function(item) {
-return `• ${item.name} × ${item.qty} — ${item.price * item.qty} جنيه`;
-}).join("\n");
+const lines =
+cart.map(function(item) {
 
-const total = cart.reduce(function(sum, item) {
-return sum + item.price * item.qty;
+```
+  return `• ${item.name} × ${item.qty} — ${item.price * item.qty} جنيه`;
+
+}).join("\n");
+```
+
+const total =
+cart.reduce(function(sum, item) {
+
+```
+  return sum + (item.price * item.qty);
+
 }, 0);
+```
 
 const message =
 `مرحبًا VELORA، أريد طلب:
@@ -438,30 +447,39 @@ document.getElementById("mainNav");
 if (!nav) return;
 
 if (event.target.closest("nav a")) {
+
+```
 nav.classList.remove("mobile-open");
+```
+
 }
 
 });
 
 /* =========================
-ESC KEY
+ESCAPE KEY
 ========================= */
 
 document.addEventListener("keydown", function(event) {
 
 if (event.key === "Escape") {
+
+```
 closeCart();
+```
+
 }
 
 });
 
 /* =========================
-START WEBSITE
+INITIALIZATION
 ========================= */
 
 document.addEventListener("DOMContentLoaded", function() {
 
-renderProducts();
 updateCart();
+
+renderProducts();
 
 });
