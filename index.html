@@ -1,568 +1,902 @@
-/* =========================
-VELORA SCRIPT
-المنتجات لا يتم رسمها هنا
-========================= */
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
-const WHATSAPP = "201223562957";
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* =========================
-PRODUCTS DATA
-========================= */
+  <title>VELORA | Elegance in Every Detail</title>
 
-const products = [
-{
-id: 1,
-name: "خاتم أوراق",
-category: "خواتم",
-price: 280
-},
-{
-id: 2,
-name: "خاتم ناعم",
-category: "خواتم",
-price: 250
-},
-{
-id: 3,
-name: "سلسلة كلاسيك",
-category: "سلاسل",
-price: 320
-},
-{
-id: 4,
-name: "سلسلة فيولا",
-category: "سلاسل",
-price: 350
-},
-{
-id: 5,
-name: "أسورة لامعة",
-category: "أساور",
-price: 290
-},
-{
-id: 6,
-name: "أسورة ناعمة",
-category: "أساور",
-price: 270
-},
-{
-id: 7,
-name: "حلق كلاسيك",
-category: "حلق",
-price: 300
-},
-{
-id: 8,
-name: "حلق فيولا",
-category: "حلق",
-price: 330
-}
-];
+  <meta
+    name="description"
+    content="VELORA — إكسسوارات أنيقة مختارة بعناية لتكمّل إطلالتك."
+  >
 
-/* =========================
-CART
-========================= */
+  <meta name="theme-color" content="#171514">
 
-let cart = [];
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-/* =========================
-LOAD CART
-========================= */
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
-document.addEventListener("DOMContentLoaded", function () {
+  <link rel="stylesheet" href="style.css">
+</head>
 
-try {
-const savedCart = localStorage.getItem("veloraCart");
+<body>
 
-```
-if (savedCart) {
-  cart = JSON.parse(savedCart);
-}
-```
-
-} catch (error) {
-cart = [];
-}
-
-updateCart();
-setupSearch();
-});
-
-/* =========================
-SAVE CART
-========================= */
-
-function saveCart() {
-
-localStorage.setItem(
-"veloraCart",
-JSON.stringify(cart)
-);
-
-}
-
-/* =========================
-ADD TO CART
-========================= */
-
-function addToCart(productId) {
-
-const product = products.find(
-item => item.id === productId
-);
-
-if (!product) {
-return;
-}
-
-const existing = cart.find(
-item => item.id === productId
-);
-
-if (existing) {
-
-```
-existing.quantity += 1;
-```
-
-} else {
-
-```
-cart.push({
-  id: product.id,
-  name: product.name,
-  price: product.price,
-  quantity: 1
-});
-```
-
-}
-
-saveCart();
-updateCart();
-
-}
-
-/* =========================
-REMOVE FROM CART
-========================= */
-
-function removeFromCart(productId) {
-
-cart = cart.filter(
-item => item.id !== productId
-);
-
-saveCart();
-updateCart();
-
-}
-
-/* =========================
-CHANGE QUANTITY
-========================= */
-
-function changeQuantity(productId, amount) {
-
-const item = cart.find(
-product => product.id === productId
-);
-
-if (!item) {
-return;
-}
-
-item.quantity += amount;
-
-if (item.quantity <= 0) {
-
-```
-removeFromCart(productId);
-return;
-```
-
-}
-
-saveCart();
-updateCart();
-
-}
-
-/* =========================
-UPDATE CART
-========================= */
-
-function updateCart() {
-
-const cartCount = document.getElementById("cartCount");
-const cartItems = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-
-if (!cartCount || !cartItems || !cartTotal) {
-return;
-}
-
-let totalQuantity = 0;
-let totalPrice = 0;
-
-cart.forEach(item => {
-
-```
-totalQuantity += item.quantity;
-
-totalPrice +=
-  item.price * item.quantity;
-```
-
-});
-
-cartCount.textContent = totalQuantity;
-
-cartTotal.textContent =
-totalPrice.toLocaleString("ar-EG");
-
-if (cart.length === 0) {
-
-```
-cartItems.innerHTML = `
-  <div class="empty-cart">
-    <div>🛒</div>
-    <p>السلة فارغة حاليًا</p>
-    <small>
-      أضيفي بعض المنتجات للمتابعة.
-    </small>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <span>✦ شحن سريع</span>
+    <span>•</span>
+    <span>تغليف أنيق</span>
+    <span>•</span>
+    <span>طلب سهل عبر واتساب</span>
   </div>
-`;
-
-return;
-```
-
-}
-
-cartItems.innerHTML = cart.map(item => {
-
-```
-return `
-  <div class="cart-item">
-
-    <div class="cart-item-info">
-
-      <strong>
-        ${item.name}
-      </strong>
-
-      <small>
-        ${item.price.toLocaleString("ar-EG")} جنيه
-      </small>
-
-    </div>
 
 
-    <div class="cart-controls">
-
-      <button
-        type="button"
-        onclick="changeQuantity(${item.id}, 1)"
-      >
-        +
-      </button>
-
-      <span>
-        ${item.quantity}
-      </span>
-
-      <button
-        type="button"
-        onclick="changeQuantity(${item.id}, -1)"
-      >
-        −
-      </button>
-
-    </div>
-
-
-    <strong class="cart-item-total">
-      ${(item.price * item.quantity).toLocaleString("ar-EG")}
-      جنيه
-    </strong>
-
+  <!-- HEADER -->
+  <header class="header">
 
     <button
-      class="remove-item"
+      class="mobile-menu"
       type="button"
-      onclick="removeFromCart(${item.id})"
-      aria-label="حذف المنتج"
+      onclick="toggleMenu()"
+      aria-label="فتح القائمة"
     >
-      ×
+      ☰
     </button>
 
+    <a href="#home" class="brand">
+      <strong>VELORA</strong>
+      <span>✦</span>
+      <small>ELEGANCE IN EVERY DETAIL</small>
+    </a>
+
+    <button
+      class="cart-btn"
+      type="button"
+      onclick="openCart()"
+    >
+      <span>🛒</span>
+      <span>السلة</span>
+      <b id="cartCount">0</b>
+    </button>
+
+  </header>
+
+
+  <!-- NAVIGATION -->
+  <nav id="mainNav">
+
+    <a href="#home">الرئيسية</a>
+    <a href="#products">المتجر</a>
+    <a href="#categories">الأقسام</a>
+    <a href="#about">عن VELORA</a>
+    <a href="#contact">تواصل معنا</a>
+
+  </nav>
+
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+
+      <div class="hero-content">
+
+        <div class="hero-badge">
+          <span>✦</span>
+          NEW COLLECTION
+          <span>✦</span>
+        </div>
+
+        <p class="eyebrow">VELORA JEWELRY</p>
+
+        <h1>
+          أناقتك تبدأ من
+          <em>التفاصيل.</em>
+        </h1>
+
+        <p class="hero-description">
+          اكتشفي قطعًا مختارة بعناية من الإكسسوارات
+          التي تضيف لمسة من الأناقة لكل إطلالة.
+        </p>
+
+        <div class="hero-actions">
+
+          <a class="primary" href="#products">
+            تسوّقي الآن
+            <span>←</span>
+          </a>
+
+          <a class="secondary" href="#categories">
+            اكتشفي المجموعة
+          </a>
+
+        </div>
+
+        <div class="hero-trust">
+
+          <div>
+            <strong>✦</strong>
+            <span>
+              جودة مختارة
+              <small>بعناية</small>
+            </span>
+          </div>
+
+          <div>
+            <strong>🎁</strong>
+            <span>
+              تغليف أنيق
+              <small>لكل طلب</small>
+            </span>
+          </div>
+
+          <div>
+            <strong>💬</strong>
+            <span>
+              طلب سهل
+              <small>عبر واتساب</small>
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- HERO VISUAL -->
+      <div class="hero-visual">
+
+        <div class="hero-glow"></div>
+
+        <div class="hero-frame">
+
+          <div class="hero-frame-inner">
+
+            <div class="hero-symbol">✦</div>
+
+            <span class="hero-brand">VELORA</span>
+
+            <small>
+              ELEGANCE IN EVERY DETAIL
+            </small>
+
+          </div>
+
+        </div>
+
+        <div class="floating-card card-one">
+
+          <span>✦</span>
+
+          <div>
+            <strong>Premium</strong>
+            <small>Collection</small>
+          </div>
+
+        </div>
+
+        <div class="floating-card card-two">
+
+          <span>♡</span>
+
+          <div>
+            <strong>Made</strong>
+            <small>For You</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- BENEFITS -->
+    <section class="benefits">
+
+      <div class="benefit">
+        <strong>🎁</strong>
+        <div>
+          <b>تغليف أنيق</b>
+          <small>لكل طلب</small>
+        </div>
+      </div>
+
+      <div class="benefit">
+        <strong>✦</strong>
+        <div>
+          <b>جودة مختارة</b>
+          <small>منتجات مميزة</small>
+        </div>
+      </div>
+
+      <div class="benefit">
+        <strong>🚚</strong>
+        <div>
+          <b>شحن سريع</b>
+          <small>حسب التوفر</small>
+        </div>
+      </div>
+
+      <div class="benefit">
+        <strong>💬</strong>
+        <div>
+          <b>دعم مباشر</b>
+          <small>عبر واتساب</small>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section id="categories" class="section">
+
+      <div class="section-title">
+
+        <p class="eyebrow">SHOP BY CATEGORY</p>
+
+        <h2>اختاري ما يناسبك</h2>
+
+        <p>
+          اكتشفي مجموعتنا من الإكسسوارات الأنيقة.
+        </p>
+
+      </div>
+
+      <div class="categories">
+
+        <button
+          type="button"
+          onclick="filterProducts('خواتم')"
+        >
+          <span>💍</span>
+          خواتم
+        </button>
+
+        <button
+          type="button"
+          onclick="filterProducts('سلاسل')"
+        >
+          <span>📿</span>
+          سلاسل
+        </button>
+
+        <button
+          type="button"
+          onclick="filterProducts('أساور')"
+        >
+          <span>✨</span>
+          أساور
+        </button>
+
+        <button
+          type="button"
+          onclick="filterProducts('حلق')"
+        >
+          <span>💎</span>
+          حلق
+        </button>
+
+        <button
+          type="button"
+          onclick="filterProducts('الكل')"
+        >
+          <span>✦</span>
+          عرض الكل
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+    <section
+      id="products"
+      class="section products-section"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <p class="eyebrow">
+            VELORA COLLECTION
+          </p>
+
+          <h2>
+            اختياراتنا لكِ
+          </h2>
+
+          <p class="products-subtitle">
+            قطع أنيقة تضيف لمسة مميزة لكل إطلالة.
+          </p>
+
+        </div>
+
+        <div class="search-box">
+
+          <span>🔍</span>
+
+          <input
+            id="search"
+            type="search"
+            placeholder="ابحثي عن منتج..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- PRODUCT GRID -->
+      <div
+        id="productGrid"
+        class="products"
+      >
+
+        <!-- PRODUCT 1 -->
+        <article
+          class="product-card"
+          data-category="خواتم"
+        >
+
+          <div class="product-image">
+
+            <span>💍</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>خواتم</small>
+
+            <h3>
+              خاتم أوراق
+            </h3>
+
+            <p class="product-price">
+              280 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(1)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 2 -->
+        <article
+          class="product-card"
+          data-category="سلاسل"
+        >
+
+          <div class="product-image">
+
+            <span>📿</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>سلاسل</small>
+
+            <h3>
+              سلسلة فاني كليف
+            </h3>
+
+            <p class="product-price">
+              320 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(2)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 3 -->
+        <article
+          class="product-card"
+          data-category="أساور"
+        >
+
+          <div class="product-image">
+
+            <span>✨</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>أساور</small>
+
+            <h3>
+              أسورة فاني كليف
+            </h3>
+
+            <p class="product-price">
+              350 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(3)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 4 -->
+        <article
+          class="product-card"
+          data-category="حلق"
+        >
+
+          <div class="product-image">
+
+            <span>💎</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>حلق</small>
+
+            <h3>
+              حلق دائري فخم
+            </h3>
+
+            <p class="product-price">
+              300 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(4)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 5 -->
+        <article
+          class="product-card"
+          data-category="خواتم"
+        >
+
+          <div class="product-image">
+
+            <span>💍</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>خواتم</small>
+
+            <h3>
+              خاتم ناعم
+            </h3>
+
+            <p class="product-price">
+              240 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(5)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 6 -->
+        <article
+          class="product-card"
+          data-category="سلاسل"
+        >
+
+          <div class="product-image">
+
+            <span>📿</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>سلاسل</small>
+
+            <h3>
+              سلسلة نجمة
+            </h3>
+
+            <p class="product-price">
+              290 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(6)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 7 -->
+        <article
+          class="product-card"
+          data-category="أساور"
+        >
+
+          <div class="product-image">
+
+            <span>✨</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>أساور</small>
+
+            <h3>
+              أسورة رفيعة
+            </h3>
+
+            <p class="product-price">
+              260 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(7)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- PRODUCT 8 -->
+        <article
+          class="product-card"
+          data-category="حلق"
+        >
+
+          <div class="product-image">
+
+            <span>💎</span>
+
+          </div>
+
+          <div class="product-info">
+
+            <small>حلق</small>
+
+            <h3>
+              حلق لؤلؤ
+            </h3>
+
+            <p class="product-price">
+              330 جنيه
+            </p>
+
+            <button
+              class="primary full"
+              type="button"
+              onclick="addToCart(8)"
+            >
+              أضف للسلة
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section
+      id="about"
+      class="about"
+    >
+
+      <div class="about-content">
+
+        <p class="eyebrow">
+          ABOUT VELORA
+        </p>
+
+        <h2>
+          تفاصيل صغيرة،
+          <em>فرق كبير.</em>
+        </h2>
+
+        <p>
+          VELORA متجر إلكتروني للإكسسوارات الحريمي.
+          نختار قطعنا بعناية لنقدم لكِ مزيجًا من
+          الأناقة والبساطة والسعر المناسب، مع تجربة
+          طلب سهلة وسريعة.
+        </p>
+
+        <a
+          href="#products"
+          class="secondary"
+        >
+          اكتشفي المجموعة
+        </a>
+
+      </div>
+
+
+      <div class="about-card">
+
+        <div class="about-symbol">
+          ✦
+        </div>
+
+        <strong>
+          VELORA
+        </strong>
+
+        <span>
+          ELEGANCE IN EVERY DETAIL
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- WHY VELORA -->
+    <section class="trust">
+
+      <p class="eyebrow">
+        WHY VELORA
+      </p>
+
+      <h2>
+        تجربة مختلفة من أول طلب
+      </h2>
+
+      <div class="trust-grid">
+
+        <div>
+
+          <span>01</span>
+
+          <h3>
+            اختيارات أنيقة
+          </h3>
+
+          <p>
+            قطع مختارة بعناية لتناسب إطلالتك.
+          </p>
+
+        </div>
+
+
+        <div>
+
+          <span>02</span>
+
+          <h3>
+            طلب بسيط
+          </h3>
+
+          <p>
+            اختاري منتجاتك وأرسلي الطلب بسهولة.
+          </p>
+
+        </div>
+
+
+        <div>
+
+          <span>03</span>
+
+          <h3>
+            تواصل مباشر
+          </h3>
+
+          <p>
+            نحن متاحون للرد على استفساراتك.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta">
+
+      <p class="eyebrow">
+        NEED HELP?
+      </p>
+
+      <h2>
+        عندك سؤال عن أي قطعة؟
+      </h2>
+
+      <p>
+        تواصلي معنا مباشرة وسنساعدك.
+      </p>
+
+      <a
+        class="primary"
+        href="https://wa.me/201223562957"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        💬 تواصلي عبر واتساب
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer id="contact">
+
+    <div class="footer-brand">
+      VELORA
+    </div>
+
+    <p>
+      Elegance in Every Detail
+    </p>
+
+    <div class="footer-links">
+
+      <a href="#home">
+        الرئيسية
+      </a>
+
+      <a href="#products">
+        المتجر
+      </a>
+
+      <a href="#about">
+        عن VELORA
+      </a>
+
+      <a href="#contact">
+        تواصل معنا
+      </a>
+
+    </div>
+
+    <p class="copyright">
+      © 2026 VELORA — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+
+  <!-- FLOATING WHATSAPP -->
+  <a
+    class="whatsapp-float"
+    href="https://wa.me/201223562957"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="تواصل معنا عبر واتساب"
+  >
+    💬
+  </a>
+
+
+  <!-- CART -->
+  <div
+    id="cartModal"
+    class="modal hidden"
+  >
+
+    <div
+      class="modal-overlay"
+      onclick="closeCart()"
+    ></div>
+
+    <div class="modal-box">
+
+      <button
+        class="close"
+        type="button"
+        onclick="closeCart()"
+        aria-label="إغلاق السلة"
+      >
+        ×
+      </button>
+
+      <p class="eyebrow">
+        YOUR SHOPPING BAG
+      </p>
+
+      <h2>
+        سلة الطلب
+      </h2>
+
+      <div id="cartItems"></div>
+
+      <div class="total">
+
+        <span>
+          الإجمالي
+        </span>
+
+        <strong>
+          <b id="cartTotal">0</b>
+          جنيه
+        </strong>
+
+      </div>
+
+      <button
+        class="primary full"
+        type="button"
+        onclick="checkout()"
+      >
+        📲 إرسال الطلب عبر واتساب
+      </button>
+
+    </div>
+
   </div>
-`;
-```
 
-}).join("");
 
-}
+  <!-- JAVASCRIPT -->
+  <script src="script.js"></script>
 
-/* =========================
-OPEN CART
-========================= */
-
-function openCart() {
-
-const modal =
-document.getElementById("cartModal");
-
-if (!modal) {
-return;
-}
-
-modal.classList.remove("hidden");
-
-document.body.classList.add("cart-open");
-
-}
-
-/* =========================
-CLOSE CART
-========================= */
-
-function closeCart() {
-
-const modal =
-document.getElementById("cartModal");
-
-if (!modal) {
-return;
-}
-
-modal.classList.add("hidden");
-
-document.body.classList.remove("cart-open");
-
-}
-
-/* =========================
-CHECKOUT WHATSAPP
-========================= */
-
-function checkout() {
-
-if (cart.length === 0) {
-
-```
-alert("السلة فارغة، أضيفي منتجًا أولًا.");
-return;
-```
-
-}
-
-let message =
-"مرحبًا VELORA 👋\n\n";
-
-message +=
-"أريد طلب المنتجات التالية:\n\n";
-
-cart.forEach(item => {
-
-```
-message +=
-  `• ${item.name} × ${item.quantity} = ` +
-  `${item.price * item.quantity} جنيه\n`;
-```
-
-});
-
-const total = cart.reduce(
-(sum, item) =>
-sum + (item.price * item.quantity),
-0
-);
-
-message +=
-`\nالإجمالي: ${total} جنيه\n\n`;
-
-message +=
-"أرغب في تأكيد الطلب. شكراً ❤️";
-
-const url =
-`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
-
-window.open(
-url,
-"_blank"
-);
-
-}
-
-/* =========================
-FILTER PRODUCTS
-لا نعيد رسم المنتجات
-بل نخفي ونظهر الموجود
-========================= */
-
-function filterProducts(category) {
-
-const cards =
-document.querySelectorAll(
-".product-card"
-);
-
-cards.forEach(card => {
-
-```
-const cardCategory =
-  card.dataset.category;
-
-if (
-  category === "الكل" ||
-  cardCategory === category
-) {
-
-  card.style.display = "";
-
-} else {
-
-  card.style.display = "none";
-
-}
-```
-
-});
-
-const productsSection =
-document.getElementById("products");
-
-if (productsSection) {
-
-```
-productsSection.scrollIntoView({
-  behavior: "smooth"
-});
-```
-
-}
-
-}
-
-/* =========================
-SEARCH
-========================= */
-
-function setupSearch() {
-
-const search =
-document.getElementById("search");
-
-if (!search) {
-return;
-}
-
-search.addEventListener(
-"input",
-function () {
-
-```
-  const value =
-    search.value
-      .trim()
-      .toLowerCase();
-
-  const cards =
-    document.querySelectorAll(
-      ".product-card"
-    );
-
-  cards.forEach(card => {
-
-    const name =
-      card.querySelector("h3")?.textContent
-        .toLowerCase() || "";
-
-    const category =
-      card.dataset.category
-        ?.toLowerCase() || "";
-
-    if (
-      name.includes(value) ||
-      category.includes(value)
-    ) {
-
-      card.style.display = "";
-
-    } else {
-
-      card.style.display = "none";
-
-    }
-
-  });
-
-}
-```
-
-);
-
-}
-
-/* =========================
-MOBILE MENU
-========================= */
-
-function toggleMenu() {
-
-const nav =
-document.getElementById("mainNav");
-
-if (!nav) {
-return;
-}
-
-nav.classList.toggle("open");
-
-}
-
-/* =========================
-CLOSE MENU AFTER CLICK
-========================= */
-
-document.addEventListener(
-"click",
-function (event) {
-
-```
-const nav =
-  document.getElementById("mainNav");
-
-if (!nav) {
-  return;
-}
-
-const link =
-  event.target.closest("#mainNav a");
-
-if (link) {
-  nav.classList.remove("open");
-}
-```
-
-}
-);
-
-/* =========================
-ESC KEY
-========================= */
-
-document.addEventListener(
-"keydown",
-function (event) {
-
-```
-if (event.key === "Escape") {
-  closeCart();
-}
-```
-
-}
-);
+</body>
+</html>
