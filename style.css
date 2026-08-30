@@ -2335,3 +2335,228 @@ SMALL PHONES
   }
 
 }
+/* =========================
+   VELORA PREMIUM PRODUCT UPGRADE
+========================= */
+
+.products {
+  gap: 26px;
+}
+
+.product {
+  border-radius: 22px;
+  background: #fff;
+  border: 1px solid rgba(201,169,110,.18);
+  box-shadow: 0 10px 30px rgba(48,42,39,.055);
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+
+.product:hover {
+  transform: translateY(-9px);
+  border-color: rgba(201,169,110,.45);
+  box-shadow: 0 22px 50px rgba(48,42,39,.12);
+}
+
+/* صورة المنتج */
+
+.product-img {
+  height: 300px;
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      #ffffff 0%,
+      #faf3ee 42%,
+      transparent 72%
+    ),
+    linear-gradient(
+      135deg,
+      #f2e2d8,
+      #ead4c7
+    );
+}
+
+/* الصور الحقيقية */
+
+.product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+
+.product:hover .product-img img {
+  transform: scale(1.07);
+}
+
+/* لو المنتج بدون صورة */
+
+.product-placeholder {
+  width: 155px;
+  height: 155px;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.55)
+    );
+
+  box-shadow:
+    0 18px 40px rgba(75,48,38,.10),
+    inset 0 0 0 1px rgba(201,169,110,.12);
+
+  font-size: 78px;
+  transition: transform .5s ease;
+}
+
+.product:hover .product-placeholder {
+  transform: scale(1.08) rotate(2deg);
+}
+
+/* Badge */
+
+.product-badge {
+  top: 14px;
+  right: 14px;
+  padding: 7px 12px;
+
+  border-radius: 30px;
+
+  background: rgba(23,21,20,.92);
+  color: #fff;
+
+  font-size: 9px;
+  letter-spacing: .3px;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,.12);
+}
+
+.product-badge.best {
+  background: var(--gold);
+}
+
+/* المفضلة */
+
+.favorite-btn {
+  top: 13px;
+  left: 13px;
+
+  width: 38px;
+  height: 38px;
+
+  background: rgba(255,255,255,.88);
+  color: var(--text);
+
+  border: 1px solid rgba(201,169,110,.18);
+
+  box-shadow: 0 7px 18px rgba(0,0,0,.08);
+}
+
+.favorite-btn.active {
+  background: var(--rose);
+  color: #fff;
+  border-color: var(--rose);
+}
+
+/* معلومات المنتج */
+
+.product-info {
+  padding: 20px;
+}
+
+.product-top {
+  margin-bottom: 3px;
+}
+
+.product-info h3 {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.product-desc {
+  color: #8a817c;
+  line-height: 1.9;
+}
+
+/* السعر */
+
+.product-price strong {
+  font-family: "Playfair Display", serif;
+  font-size: 21px;
+}
+
+/* زر السلة */
+
+.add-btn {
+  min-height: 42px;
+  padding: 10px 15px;
+
+  border-radius: 12px;
+
+  background: var(--black);
+
+  box-shadow: 0 7px 18px rgba(23,21,20,.12);
+}
+
+.add-btn:hover {
+  background: var(--rose);
+  box-shadow: 0 9px 22px rgba(166,110,103,.22);
+}
+
+/* =========================
+   MOBILE PRODUCT CARDS
+========================= */
+
+@media (max-width: 800px) {
+
+  .products {
+    gap: 15px;
+  }
+
+  .product-img {
+    height: 215px;
+  }
+
+  .product-info {
+    padding: 14px;
+  }
+
+  .product-placeholder {
+    width: 115px;
+    height: 115px;
+    font-size: 60px;
+  }
+
+}
+
+@media (max-width: 430px) {
+
+  .product {
+    border-radius: 16px;
+  }
+
+  .product-img {
+    height: 170px;
+  }
+
+  .product-placeholder {
+    width: 88px;
+    height: 88px;
+    font-size: 47px;
+  }
+
+  .product-info {
+    padding: 11px;
+  }
+
+  .product-info h3 {
+    font-size: 13px;
+  }
+
+  .add-btn {
+    min-height: 36px;
+    padding: 8px 9px;
+  }
+
