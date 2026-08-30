@@ -762,3 +762,30 @@ footer p{
   object-fit:cover;
   display:block;
 }
+.quantity{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:8px 0;
+}
+
+.quantity button{
+  width:28px;
+  height:28px;
+  border:1px solid #dbc8bf;
+  background:#fff;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:17px;
+}
+
+.quantity button:hover{
+  background:#a66e67;
+  color:#fff;
+  border-color:#a66e67;
+}
+
+.quantity b{
+  min-width:20px;
+  text-align:center;
+}
