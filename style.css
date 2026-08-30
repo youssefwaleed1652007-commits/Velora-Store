@@ -649,3 +649,110 @@ footer p{
     font-size:35px;
   }
 }
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.secondary{
+  display:inline-block;
+  color:#302a27;
+  text-decoration:none;
+  border:1px solid #cdb5aa;
+  border-radius:30px;
+  padding:13px 25px;
+  margin-top:18px;
+  transition:.25s;
+}
+
+.secondary:hover{
+  background:#fff;
+  border-color:#a66e67;
+  color:#a66e67;
+}
+
+.hero-note{
+  margin-top:28px;
+  font-size:13px;
+  color:#776762;
+}
+
+.hero-card{
+  position:absolute;
+  left:9%;
+  width:330px;
+  height:390px;
+  border-radius:180px 180px 25px 25px;
+  background:linear-gradient(145deg,#fffaf5,#e7d1c1);
+  border:1px solid rgba(166,110,103,.25);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 25px 60px rgba(80,50,40,.12);
+  z-index:1;
+}
+
+.hero-jewel{
+  width:125px;
+  height:125px;
+  border:2px solid #a66e67;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:65px;
+  color:#a66e67;
+  margin-bottom:25px;
+  box-shadow:0 0 0 12px rgba(166,110,103,.06);
+}
+
+.hero-card span{
+  font-family:"Playfair Display",serif;
+  font-size:32px;
+  letter-spacing:5px;
+}
+
+.hero-card small{
+  margin-top:10px;
+  font-family:Arial,sans-serif;
+  font-size:9px;
+  letter-spacing:3px;
+  color:#777;
+}
+
+@media(max-width:800px){
+  .hero{
+    min-height:570px;
+  }
+
+  .hero-card{
+    display:none;
+  }
+
+  .hero-actions{
+    gap:8px;
+  }
+}
+
+@media(max-width:430px){
+  .hero{
+    min-height:500px;
+  }
+
+  .hero-note{
+    font-size:11px;
+  }
+
+  .secondary,
+  .primary{
+    padding:12px 20px;
+  }
+}
