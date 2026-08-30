@@ -1,0 +1,195 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VELORA | لوحة التحكم</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <div class="admin-container">
+
+        <!-- Header -->
+        <header class="admin-header">
+            <div>
+                <span class="admin-label">VELORA</span>
+                <h1>لوحة التحكم</h1>
+                <p>إدارة منتجات المتجر بسهولة</p>
+            </div>
+
+            <a href="index.html" class="store-btn">
+                🛍️ العودة للمتجر
+            </a>
+        </header>
+
+
+        <!-- Add Product -->
+        <section class="admin-card">
+
+            <div class="card-title">
+                <span>➕</span>
+                <div>
+                    <h2>إضافة منتج جديد</h2>
+                    <p>أدخل بيانات المنتج ليظهر في المتجر</p>
+                </div>
+            </div>
+
+            <form id="productForm">
+
+                <!-- Product Image -->
+                <div class="form-group">
+                    <label for="productImage">📸 صورة المنتج</label>
+
+                    <input
+                        type="file"
+                        id="productImage"
+                        accept="image/*"
+                    >
+
+                    <div id="imagePreview" class="image-preview">
+                        <span>لم يتم اختيار صورة</span>
+                    </div>
+                </div>
+
+
+                <!-- Product Name -->
+                <div class="form-group">
+                    <label for="productName">🏷️ اسم المنتج</label>
+
+                    <input
+                        type="text"
+                        id="productName"
+                        placeholder="مثال: خاتم أوراق"
+                        required
+                    >
+                </div>
+
+
+                <!-- Price -->
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="productPrice">💰 السعر</label>
+
+                        <input
+                            type="number"
+                            id="productPrice"
+                            placeholder="280"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="productCategory">📂 القسم</label>
+
+                        <select id="productCategory" required>
+                            <option value="">اختر القسم</option>
+                            <option value="خواتم">خواتم</option>
+                            <option value="سلاسل">سلاسل</option>
+                            <option value="أساور">أساور</option>
+                            <option value="حلقان">حلقان</option>
+                            <option value="إكسسوارات">إكسسوارات</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="productDescription">📝 وصف المنتج</label>
+
+                    <textarea
+                        id="productDescription"
+                        rows="4"
+                        placeholder="اكتب وصفًا مختصرًا للمنتج..."
+                    ></textarea>
+                </div>
+
+
+                <!-- Rating & Badge -->
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="productRating">⭐ التقييم</label>
+
+                        <input
+                            type="number"
+                            id="productRating"
+                            value="5"
+                            min="0"
+                            max="5"
+                            step="0.1"
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="productBadge">🔖 الشارة</label>
+
+                        <select id="productBadge">
+                            <option value="">بدون شارة</option>
+                            <option value="جديد">جديد</option>
+                            <option value="الأكثر مبيعًا">الأكثر مبيعًا</option>
+                            <option value="مميز">مميز</option>
+                            <option value="عرض خاص">عرض خاص</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <!-- Submit -->
+                <button type="submit" class="add-product-btn">
+                    ➕ إضافة المنتج
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Products List -->
+        <section class="admin-card">
+
+            <div class="card-title">
+                <span>📦</span>
+                <div>
+                    <h2>المنتجات الحالية</h2>
+                    <p>إدارة المنتجات الموجودة في المتجر</p>
+                </div>
+            </div>
+
+            <div id="productsList" class="products-list">
+
+                <div class="empty-products">
+                    <span>📦</span>
+                    <p>سيتم عرض المنتجات هنا</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- Admin JavaScript -->
+    <script src="admin.js"></script>
+
+</body>
+</html>
+```
