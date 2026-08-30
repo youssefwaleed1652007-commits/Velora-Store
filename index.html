@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VELORA | Elegance in Every Detail</title>
+  <meta name="description" content="VELORA - إكسسوارات حريمي أنيقة لكل مناسبة.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">✨ شحن سريع • تغليف أنيق • اطلب بسهولة عبر واتساب</div>
+
+  <header>
+    <div class="brand">VELORA<span>✦</span><small>ELEGANCE IN EVERY DETAIL</small></div>
+    <button class="cart-btn" onclick="openCart()">السلة <b id="cartCount">0</b></button>
+  </header>
+
+  <nav>
+    <a href="#home">الرئيسية</a>
+    <a href="#products">المنتجات</a>
+    <a href="#categories">الأقسام</a>
+    <a href="#about">عن VELORA</a>
+    <a href="#contact">تواصل معنا</a>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div>
+        <p class="eyebrow">VELORA</p>
+        <h1>أناقتك تبدأ من<br><em>التفاصيل.</em></h1>
+        <p>إكسسوارات حريمي مختارة بعناية لتكمّل إطلالتك.</p>
+        <a class="primary" href="#products">تسوّقي الآن</a>
+      </div>
+    </section>
+
+    <section class="benefits">
+      <div><strong>🎁</strong><span>تغليف أنيق<br><small>لكل طلب</small></span></div>
+      <div><strong>✦</strong><span>جودة مختارة<br><small>منتجات مميزة</small></span></div>
+      <div><strong>🚚</strong><span>شحن سريع<br><small>حسب التوفر</small></span></div>
+    </section>
+
+    <section id="categories" class="section">
+      <h2>تسوّقي حسب القسم</h2>
+      <div class="categories">
+        <button onclick="filterProducts('خواتم')">💍 خواتم</button>
+        <button onclick="filterProducts('سلاسل')">📿 سلاسل</button>
+        <button onclick="filterProducts('أساور')">✨ أساور</button>
+        <button onclick="filterProducts('حلق')">💎 حلق</button>
+        <button onclick="filterProducts('الكل')">عرض الكل</button>
+      </div>
+    </section>
+
+    <section id="products" class="section">
+      <div class="section-head">
+        <h2>منتجات مميزة</h2>
+        <input id="search" type="search" placeholder="ابحثي عن منتج..." oninput="renderProducts()">
+      </div>
+      <div id="productGrid" class="products"></div>
+    </section>
+
+    <section id="about" class="about">
+      <div>
+        <p class="eyebrow">ABOUT VELORA</p>
+        <h2>تفاصيل صغيرة، فرق كبير.</h2>
+        <p>VELORA متجر إلكتروني للإكسسوارات الحريمي. هدفنا تقديم اختيارات أنيقة وبسيطة بأسعار مناسبة، مع تجربة طلب سهلة وسريعة.</p>
+      </div>
+      <div class="about-card">VELORA<br><span>Elegance in Every Detail</span></div>
+    </section>
+
+    <section class="cta">
+      <h2>عندك سؤال عن أي قطعة؟</h2>
+      <p>تواصلي معنا مباشرة عبر واتساب.</p>
+      <a class="primary" id="whatsappLink" target="_blank">تواصلي عبر واتساب</a>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="footer-brand">VELORA</div>
+    <p>Elegance in Every Detail</p>
+    <p>© 2026 VELORA — جميع الحقوق محفوظة</p>
+  </footer>
+
+  <div id="cartModal" class="modal hidden">
+    <div class="modal-box">
+      <button class="close" onclick="closeCart()">×</button>
+      <h2>سلة الطلب</h2>
+      <div id="cartItems"></div>
+      <div class="total">الإجمالي: <b id="cartTotal">0</b> جنيه</div>
+      <button class="primary full" onclick="checkout()">إرسال الطلب عبر واتساب</button>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
