@@ -1,11 +1,11 @@
 const WHATSAPP = "201223562957";
 
 let cart = [];
-let activeCategory = "الكل";
 
 /* =========================
 PRODUCTS
-أضف أي عدد من المنتجات هنا
+البيانات تستخدم للسلة
+والتفاصيل فقط
 ========================= */
 
 const products = [
@@ -104,190 +104,114 @@ badge: "مميز",
 rating: 5,
 description: "لمسة ناعمة مستوحاة من جمال اللؤلؤ."
 }
-
 ];
 
 /* =========================
-RENDER PRODUCTS
+START
+مهم:
+لا يوجد renderProducts هنا
 ========================= */
 
-function renderProducts() {
+document.addEventListener("DOMContentLoaded", function () {
 
-const grid = document.getElementById("productGrid");
+updateCart();
 
-if (!grid) return;
+setupSearch();
 
-const searchInput = document.getElementById("search");
+});
 
-const query = searchInput
-? searchInput.value.trim().toLowerCase()
-: "";
+/* =========================
+SEARCH
+يبحث في المنتجات الموجودة
+داخل index.html
+========================= */
 
-const filteredProducts = products.filter(function(product) {
+function setupSearch() {
+
+const search =
+document.getElementById("search");
+
+if (!search) return;
+
+search.addEventListener("input", function () {
 
 ```
-const categoryMatch =
-  activeCategory === "الكل" ||
-  product.category === activeCategory;
+const query =
+  search.value.trim().toLowerCase();
 
-const searchMatch =
-  product.name.toLowerCase().includes(query);
+const cards =
+  document.querySelectorAll(".product-card");
 
-return categoryMatch && searchMatch;
+cards.forEach(function (card) {
+
+  const nameElement =
+    card.querySelector("h3");
+
+  const category =
+    card.dataset.category || "";
+
+  const name =
+    nameElement
+      ? nameElement.textContent.toLowerCase()
+      : "";
+
+  if (
+    name.includes(query) ||
+    category.toLowerCase().includes(query)
+  ) {
+
+    card.style.display = "";
+
+  } else {
+
+    card.style.display = "none";
+
+  }
+
+});
 ```
 
 });
 
-if (!filteredProducts.length) {
-
-```
-grid.innerHTML = `
-  <div class="empty-products">
-
-    <div>✦</div>
-
-    <h3>
-      لم نجد هذا المنتج
-    </h3>
-
-    <p>
-      جربي البحث باسم مختلف.
-    </p>
-
-  </div>
-`;
-
-return;
-```
-
-}
-
-grid.innerHTML = filteredProducts.map(function(product) {
-
-```
-const stars = "★".repeat(product.rating || 5);
-
-return `
-  <article class="product">
-
-    <div
-      class="product-img"
-      onclick="openProduct(${product.id})"
-    >
-
-      ${
-        product.badge
-          ? `
-            <span class="product-badge ${product.badge === "الأكثر مبيعًا" ? "best" : ""}">
-              ${product.badge}
-            </span>
-          `
-          : ""
-      }
-
-      <button
-        class="favorite-btn"
-        type="button"
-        aria-label="إضافة للمفضلة"
-        onclick="event.stopPropagation(); toggleFavorite(this)"
-      >
-        ♡
-      </button>
-
-      ${
-        product.image
-          ? `
-            <img
-              src="${product.image}"
-              alt="${product.name}"
-              loading="lazy"
-            >
-          `
-          : `
-            <div class="product-placeholder">
-              ${product.icon}
-            </div>
-          `
-      }
-
-    </div>
-
-
-    <div class="product-info">
-
-      <div class="product-top">
-
-        <span class="cat">
-          ${product.category}
-        </span>
-
-        <span class="rating">
-          ${stars}
-        </span>
-
-      </div>
-
-
-      <h3>
-        ${product.name}
-      </h3>
-
-
-      <p class="product-desc">
-        ${product.description}
-      </p>
-
-
-      <div class="product-bottom">
-
-        <div class="product-price">
-
-          <strong>
-            ${product.price}
-          </strong>
-
-          <span>
-            جنيه
-          </span>
-
-        </div>
-
-
-        <button
-          class="add-btn"
-          type="button"
-          onclick="addToCart(${product.id})"
-        >
-
-          أضف للسلة
-
-          <span>
-            +
-          </span>
-
-        </button>
-
-      </div>
-
-    </div>
-
-  </article>
-`;
-```
-
-}).join("");
-
 }
 
 /* =========================
-FILTER
+FILTER PRODUCTS
 ========================= */
 
 function filterProducts(category) {
 
-activeCategory = category;
+const cards =
+document.querySelectorAll(".product-card");
 
-renderProducts();
+cards.forEach(function (card) {
+
+```
+const cardCategory =
+  card.dataset.category;
+
+if (
+  category === "الكل" ||
+  cardCategory === category
+) {
+
+  card.style.display = "";
+
+} else {
+
+  card.style.display = "none";
+
+}
+```
+
+});
+
+const search =
+document.getElementById("search");
+
+if (search) {
+search.value = "";
+}
 
 const section =
 document.getElementById("products");
@@ -310,6 +234,8 @@ FAVORITES
 
 function toggleFavorite(button) {
 
+if (!button) return;
+
 button.classList.toggle("active");
 
 button.textContent =
@@ -326,15 +252,17 @@ PRODUCT DETAILS
 function openProduct(id) {
 
 const product =
-products.find(function(item) {
+products.find(function (item) {
 return item.id === id;
 });
 
 if (!product) return;
 
-const modal = document.createElement("div");
+const modal =
+document.createElement("div");
 
-modal.className = "modal product-details-modal";
+modal.className =
+"modal product-details-modal";
 
 modal.innerHTML = `
 
@@ -343,7 +271,6 @@ modal.innerHTML = `
   class="modal-overlay"
   onclick="this.parentElement.remove()"
 ></div>
-
 
 <div class="modal-box product-details-box">
 
@@ -354,7 +281,6 @@ modal.innerHTML = `
   >
     ×
   </button>
-
 
   <div class="product-details-image">
 
@@ -375,33 +301,27 @@ modal.innerHTML = `
 
   </div>
 
-
   <div class="product-details-content">
 
     <span class="cat">
       ${product.category}
     </span>
 
-
     <h2>
       ${product.name}
     </h2>
-
 
     <div class="rating">
       ${"★".repeat(product.rating || 5)}
     </div>
 
-
     <div class="details-price">
       ${product.price} جنيه
     </div>
 
-
     <p>
       ${product.description}
     </p>
-
 
     <div class="details-option">
 
@@ -431,7 +351,6 @@ modal.innerHTML = `
 
     </div>
 
-
     <div class="details-option">
 
       <strong>
@@ -451,7 +370,6 @@ modal.innerHTML = `
       </div>
 
     </div>
-
 
     <div class="details-quantity">
 
@@ -474,7 +392,6 @@ modal.innerHTML = `
       </button>
 
     </div>
-
 
     <button
       type="button"
@@ -504,12 +421,14 @@ SELECT OPTIONS
 
 function selectOption(button) {
 
+if (!button) return;
+
 const container =
 button.parentElement;
 
 container
 .querySelectorAll(".option")
-.forEach(function(item) {
+.forEach(function (item) {
 
 ```
   item.classList.remove("selected");
@@ -552,14 +471,14 @@ ADD TO CART
 function addToCart(id) {
 
 const product =
-products.find(function(item) {
+products.find(function (item) {
 return item.id === id;
 });
 
 if (!product) return;
 
 const existing =
-cart.find(function(item) {
+cart.find(function (item) {
 return item.id === id;
 });
 
@@ -611,7 +530,7 @@ const cartTotal =
 document.getElementById("cartTotal");
 
 const totalQuantity =
-cart.reduce(function(sum, item) {
+cart.reduce(function (sum, item) {
 
 ```
   return sum + item.qty;
@@ -620,7 +539,7 @@ cart.reduce(function(sum, item) {
 ```
 
 const totalPrice =
-cart.reduce(function(sum, item) {
+cart.reduce(function (sum, item) {
 
 ```
   return sum + item.price * item.qty;
@@ -629,13 +548,21 @@ cart.reduce(function(sum, item) {
 ```
 
 if (cartCount) {
+
+```
 cartCount.textContent =
-totalQuantity;
+  totalQuantity;
+```
+
 }
 
 if (cartTotal) {
+
+```
 cartTotal.textContent =
-totalPrice;
+  totalPrice.toLocaleString("ar-EG");
+```
+
 }
 
 if (!cartItems) return;
@@ -669,7 +596,7 @@ return;
 }
 
 cartItems.innerHTML =
-cart.map(function(item) {
+cart.map(function (item) {
 
 ```
   return `
@@ -683,7 +610,7 @@ cart.map(function(item) {
         </strong>
 
         <span class="cat">
-          ${item.price} جنيه للقطعة
+          ${item.price.toLocaleString("ar-EG")} جنيه للقطعة
         </span>
 
       </div>
@@ -713,7 +640,10 @@ cart.map(function(item) {
 
 
       <strong class="cart-price">
-        ${item.price * item.qty} جنيه
+
+        ${(item.price * item.qty).toLocaleString("ar-EG")}
+        جنيه
+
       </strong>
 
     </div>
@@ -732,7 +662,7 @@ CHANGE CART QUANTITY
 function changeQty(id, change) {
 
 const item =
-cart.find(function(product) {
+cart.find(function (product) {
 return product.id === id;
 });
 
@@ -744,7 +674,7 @@ if (item.qty <= 0) {
 
 ```
 cart =
-  cart.filter(function(product) {
+  cart.filter(function (product) {
     return product.id !== id;
   });
 ```
@@ -756,7 +686,7 @@ updateCart();
 }
 
 /* =========================
-CART
+OPEN CART
 ========================= */
 
 function openCart() {
@@ -772,6 +702,10 @@ updateCart();
 
 }
 
+/* =========================
+CLOSE CART
+========================= */
+
 function closeCart() {
 
 const modal =
@@ -784,7 +718,7 @@ modal.classList.add("hidden");
 }
 
 /* =========================
-WHATSAPP
+WHATSAPP CHECKOUT
 ========================= */
 
 function checkout() {
@@ -800,7 +734,7 @@ return;
 }
 
 const lines =
-cart.map(function(item) {
+cart.map(function (item) {
 
 ```
   return `• ${item.name} × ${item.qty} — ${item.price * item.qty} جنيه`;
@@ -809,7 +743,7 @@ cart.map(function(item) {
 ```
 
 const total =
-cart.reduce(function(sum, item) {
+cart.reduce(function (sum, item) {
 
 ```
   return sum + item.price * item.qty;
@@ -850,9 +784,13 @@ nav.classList.toggle("mobile-open");
 
 }
 
-document.addEventListener("click", function(event) {
+/* =========================
+CLOSE MOBILE MENU
+========================= */
 
-if (event.target.closest("nav a")) {
+document.addEventListener("click", function (event) {
+
+if (event.target.closest("#mainNav a")) {
 
 ```
 const nav =
@@ -871,22 +809,14 @@ if (nav) {
 ESC KEY
 ========================= */
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function (event) {
 
 if (event.key === "Escape") {
+
+```
 closeCart();
+```
+
 }
-
-});
-
-/* =========================
-START
-========================= */
-
-document.addEventListener("DOMContentLoaded", function() {
-
-renderProducts();
-
-updateCart();
 
 });
