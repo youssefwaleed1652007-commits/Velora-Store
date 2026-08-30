@@ -1,0 +1,401 @@
+```css
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+    --black: #171514;
+    --dark: #211f1e;
+    --gold: #c9a96e;
+    --gold-light: #e1c895;
+    --cream: #f7f3ec;
+    --white: #ffffff;
+    --gray: #77716b;
+    --border: #e5ded4;
+    --danger: #b94a48;
+    --shadow: 0 10px 35px rgba(23, 21, 20, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--cream);
+    color: var(--black);
+    min-height: 100vh;
+}
+
+/* =========================
+   Main Container
+========================= */
+
+.admin-container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+    padding: 40px 0 70px;
+}
+
+/* =========================
+   Header
+========================= */
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.admin-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    letter-spacing: 4px;
+    color: var(--gold);
+}
+
+.admin-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    margin: 5px 0;
+}
+
+.admin-header p {
+    color: var(--gray);
+    font-size: 14px;
+}
+
+.store-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background: var(--black);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.store-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+}
+
+/* =========================
+   Cards
+========================= */
+
+.admin-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-title > span {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.card-title h2 {
+    font-size: 21px;
+    margin-bottom: 2px;
+}
+
+.card-title p {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+/* =========================
+   Form
+========================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--black);
+    border-radius: 8px;
+    padding: 13px 14px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: 0.25s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.12);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* =========================
+   File Input
+========================= */
+
+input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+    background: var(--cream);
+}
+
+/* =========================
+   Image Preview
+========================= */
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    margin-top: 12px;
+    border: 1px dashed var(--gold);
+    border-radius: 10px;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--gray);
+    font-size: 12px;
+    text-align: center;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* =========================
+   Add Product Button
+========================= */
+
+.add-product-btn {
+    width: 100%;
+    border: none;
+    border-radius: 9px;
+    padding: 15px;
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-product-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+}
+
+/* =========================
+   Products List
+========================= */
+
+.products-list {
+    display: grid;
+    gap: 15px;
+}
+
+.empty-products {
+    text-align: center;
+    padding: 45px 20px;
+    color: var(--gray);
+}
+
+.empty-products span {
+    display: block;
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.empty-products p {
+    font-size: 14px;
+}
+
+/* =========================
+   Product Item
+========================= */
+
+.product-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+}
+
+.product-item-image {
+    width: 75px;
+    height: 75px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--cream);
+    flex-shrink: 0;
+}
+
+.product-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-item-info {
+    flex: 1;
+}
+
+.product-item-info h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.product-item-info p {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.product-item-price {
+    font-weight: 700;
+    color: var(--gold);
+    white-space: nowrap;
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.product-actions button {
+    border: none;
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.edit-btn {
+    background: var(--cream);
+    color: var(--black);
+}
+
+.edit-btn:hover {
+    background: var(--gold);
+}
+
+.delete-btn {
+    background: #f9e9e8;
+    color: var(--danger);
+}
+
+.delete-btn:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 700px) {
+
+    .admin-container {
+        width: 94%;
+        padding-top: 25px;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-header h1 {
+        font-size: 30px;
+    }
+
+    .store-btn {
+        width: 100%;
+    }
+
+    .admin-card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .product-item {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .product-item-info {
+        min-width: calc(100% - 95px);
+    }
+
+    .product-item-price {
+        width: 100%;
+        padding-right: 90px;
+    }
+
+    .product-actions {
+        width: 100%;
+    }
+
+    .product-actions button {
+        flex: 1;
+    }
+}
+```
