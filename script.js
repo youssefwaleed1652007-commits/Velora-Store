@@ -24,7 +24,9 @@ function renderProducts(){
   );
   document.getElementById("productGrid").innerHTML = list.map(p => `
     <article class="product">
-      <div class="product-img">${p.icon}</div>
+  <div class="product-img">
+    ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.icon}
+  </div>
       <div class="product-info">
         <span class="cat">${p.category}</span>
         <h3>${p.name}</h3>
