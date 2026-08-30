@@ -1,3 +1,4 @@
+alert("admin.js شغال");
 ```javascript
 // ================================
 // VELORA ADMIN PANEL
