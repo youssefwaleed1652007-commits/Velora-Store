@@ -165,17 +165,15 @@ grid.innerHTML = list.map(product => `
     style="cursor:pointer;"
   >
 
-    ${
-      product.image
-
-      ? `<img
-          src="${product.image}"
-          alt="${product.name}"
-          loading="lazy"
-        >`
-
-      : product.icon
-    }
+  ${
+  product.image
+    ? `<img
+        src="${product.image}"
+        alt="${product.name}"
+        loading="lazy"
+      >`
+    : `<div class="product-placeholder">${product.icon}</div>`
+}
 
   </div>
 
