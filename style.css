@@ -1832,3 +1832,33 @@ left:17px;
 .product-img:hover .product-placeholder{
   transform:scale(1.05);
 }
+.product-placeholder{
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:80px;
+background:
+radial-gradient(circle at center,#ffffff 0%,transparent 60%),
+linear-gradient(135deg,#f4e6dc,#ead7c9);
+}
+
+.empty-products{
+grid-column:1/-1;
+text-align:center;
+padding:60px 20px;
+}
+
+.empty-products div{
+font-size:50px;
+color:#c9a96e;
+}
+
+.empty-products h3{
+margin:10px 0;
+}
+
+.empty-products p{
+color:#777;
+}
