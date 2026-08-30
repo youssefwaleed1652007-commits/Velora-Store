@@ -2,8 +2,13 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>VELORA | Elegance in Every Detail</title>
 
@@ -12,33 +17,131 @@
     content="VELORA — إكسسوارات أنيقة مختارة بعناية لتكمّل إطلالتك."
   >
 
-  <meta name="theme-color" content="#171514">
+  <meta
+    name="theme-color"
+    content="#171514"
+  >
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- GOOGLE FONTS -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <!-- LOGO STYLE -->
+
+  <style>
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1;
+    }
+
+    .brand-text strong {
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    .brand-text small {
+      font-size: 8px;
+      letter-spacing: 1.8px;
+      margin-top: 7px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+
+      .brand {
+        gap: 5px;
+      }
+
+      .brand-logo {
+        width: 52px;
+        height: 52px;
+      }
+
+      .brand-text strong {
+        font-size: 20px;
+      }
+
+      .brand-text small {
+        font-size: 6px;
+        letter-spacing: 1px;
+        margin-top: 5px;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
-  <!-- TOP BAR -->
+
+  <!-- =========================
+       TOP BAR
+  ========================== -->
+
   <div class="topbar">
+
     <span>✦ شحن سريع</span>
+
     <span>•</span>
+
     <span>تغليف أنيق</span>
+
     <span>•</span>
+
     <span>طلب سهل عبر واتساب</span>
+
   </div>
 
 
-  <!-- HEADER -->
+  <!-- =========================
+       HEADER
+  ========================== -->
+
   <header class="header">
+
 
     <button
       class="mobile-menu"
@@ -49,281 +152,565 @@
       ☰
     </button>
 
-    <a href="#home" class="brand">
-      <strong>VELORA</strong>
-      <span>✦</span>
-      <small>ELEGANCE IN EVERY DETAIL</small>
+
+    <!-- VELORA LOGO -->
+
+    <a
+      href="#home"
+      class="brand"
+    >
+
+      <img
+        src="velora-logo.png"
+        class="brand-logo"
+        alt="VELORA Jewelry"
+      >
+
+      <div class="brand-text">
+
+        <strong>
+          VELORA
+        </strong>
+
+        <small>
+          ELEGANCE IN EVERY DETAIL
+        </small>
+
+      </div>
+
     </a>
+
+
+    <!-- CART -->
 
     <button
       class="cart-btn"
       type="button"
       onclick="openCart()"
     >
-      <span>🛒</span>
-      <span>السلة</span>
-      <b id="cartCount">0</b>
+
+      <span>
+        🛒
+      </span>
+
+      <span>
+        السلة
+      </span>
+
+      <b id="cartCount">
+        0
+      </b>
+
     </button>
+
 
   </header>
 
 
-  <!-- NAVIGATION -->
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
   <nav id="mainNav">
 
-    <a href="#home">الرئيسية</a>
-    <a href="#products">المتجر</a>
-    <a href="#categories">الأقسام</a>
-    <a href="#about">عن VELORA</a>
-    <a href="#contact">تواصل معنا</a>
+    <a href="#home">
+      الرئيسية
+    </a>
+
+    <a href="#products">
+      المتجر
+    </a>
+
+    <a href="#categories">
+      الأقسام
+    </a>
+
+    <a href="#about">
+      عن VELORA
+    </a>
+
+    <a href="#contact">
+      تواصل معنا
+    </a>
 
   </nav>
 
 
   <main>
 
-    <!-- HERO -->
-    <section class="hero" id="home">
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section
+      class="hero"
+      id="home"
+    >
+
 
       <div class="hero-content">
 
+
         <div class="hero-badge">
+
           <span>✦</span>
+
           NEW COLLECTION
+
           <span>✦</span>
+
         </div>
 
-        <p class="eyebrow">VELORA JEWELRY</p>
+
+        <p class="eyebrow">
+          VELORA JEWELRY
+        </p>
+
 
         <h1>
+
           أناقتك تبدأ من
-          <em>التفاصيل.</em>
+
+          <em>
+            التفاصيل.
+          </em>
+
         </h1>
 
+
         <p class="hero-description">
+
           اكتشفي قطعًا مختارة بعناية من الإكسسوارات
           التي تضيف لمسة من الأناقة لكل إطلالة.
+
         </p>
+
 
         <div class="hero-actions">
 
-          <a class="primary" href="#products">
+
+          <a
+            class="primary"
+            href="#products"
+          >
+
             تسوّقي الآن
-            <span>←</span>
+
+            <span>
+              ←
+            </span>
+
           </a>
 
-          <a class="secondary" href="#categories">
+
+          <a
+            class="secondary"
+            href="#categories"
+          >
+
             اكتشفي المجموعة
+
           </a>
+
 
         </div>
+
 
         <div class="hero-trust">
 
+
           <div>
-            <strong>✦</strong>
+
+            <strong>
+              ✦
+            </strong>
+
             <span>
+
               جودة مختارة
-              <small>بعناية</small>
+
+              <small>
+                بعناية
+              </small>
+
             </span>
+
           </div>
 
+
           <div>
-            <strong>🎁</strong>
+
+            <strong>
+              🎁
+            </strong>
+
             <span>
+
               تغليف أنيق
-              <small>لكل طلب</small>
+
+              <small>
+                لكل طلب
+              </small>
+
             </span>
+
           </div>
 
+
           <div>
-            <strong>💬</strong>
+
+            <strong>
+              💬
+            </strong>
+
             <span>
+
               طلب سهل
-              <small>عبر واتساب</small>
+
+              <small>
+                عبر واتساب
+              </small>
+
             </span>
+
           </div>
+
 
         </div>
+
 
       </div>
 
 
       <!-- HERO VISUAL -->
+
       <div class="hero-visual">
+
 
         <div class="hero-glow"></div>
 
+
         <div class="hero-frame">
+
 
           <div class="hero-frame-inner">
 
-            <div class="hero-symbol">✦</div>
 
-            <span class="hero-brand">VELORA</span>
+            <div class="hero-symbol">
+              ✦
+            </div>
+
+
+            <span class="hero-brand">
+              VELORA
+            </span>
+
 
             <small>
               ELEGANCE IN EVERY DETAIL
+            </small>
+
+
+          </div>
+
+
+        </div>
+
+
+        <div class="floating-card card-one">
+
+          <span>
+            ✦
+          </span>
+
+          <div>
+
+            <strong>
+              Premium
+            </strong>
+
+            <small>
+              Collection
             </small>
 
           </div>
 
         </div>
 
-        <div class="floating-card card-one">
-
-          <span>✦</span>
-
-          <div>
-            <strong>Premium</strong>
-            <small>Collection</small>
-          </div>
-
-        </div>
 
         <div class="floating-card card-two">
 
-          <span>♡</span>
+          <span>
+            ♡
+          </span>
 
           <div>
-            <strong>Made</strong>
-            <small>For You</small>
+
+            <strong>
+              Made
+            </strong>
+
+            <small>
+              For You
+            </small>
+
           </div>
 
         </div>
 
+
       </div>
+
 
     </section>
 
 
-    <!-- BENEFITS -->
+    <!-- =========================
+         BENEFITS
+    ========================== -->
+
     <section class="benefits">
 
-      <div class="benefit">
-        <strong>🎁</strong>
-        <div>
-          <b>تغليف أنيق</b>
-          <small>لكل طلب</small>
-        </div>
-      </div>
 
       <div class="benefit">
-        <strong>✦</strong>
+
+        <strong>
+          🎁
+        </strong>
+
         <div>
-          <b>جودة مختارة</b>
-          <small>منتجات مميزة</small>
+
+          <b>
+            تغليف أنيق
+          </b>
+
+          <small>
+            لكل طلب
+          </small>
+
         </div>
+
       </div>
 
-      <div class="benefit">
-        <strong>🚚</strong>
-        <div>
-          <b>شحن سريع</b>
-          <small>حسب التوفر</small>
-        </div>
-      </div>
 
       <div class="benefit">
-        <strong>💬</strong>
+
+        <strong>
+          ✦
+        </strong>
+
         <div>
-          <b>دعم مباشر</b>
-          <small>عبر واتساب</small>
+
+          <b>
+            جودة مختارة
+          </b>
+
+          <small>
+            منتجات مميزة
+          </small>
+
         </div>
+
       </div>
+
+
+      <div class="benefit">
+
+        <strong>
+          🚚
+        </strong>
+
+        <div>
+
+          <b>
+            شحن سريع
+          </b>
+
+          <small>
+            حسب التوفر
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <div class="benefit">
+
+        <strong>
+          💬
+        </strong>
+
+        <div>
+
+          <b>
+            دعم مباشر
+          </b>
+
+          <small>
+            عبر واتساب
+          </small>
+
+        </div>
+
+      </div>
+
 
     </section>
 
 
-    <!-- CATEGORIES -->
-    <section id="categories" class="section">
+    <!-- =========================
+         CATEGORIES
+    ========================== -->
+
+    <section
+      id="categories"
+      class="section"
+    >
+
 
       <div class="section-title">
 
-        <p class="eyebrow">SHOP BY CATEGORY</p>
 
-        <h2>اختاري ما يناسبك</h2>
+        <p class="eyebrow">
+          SHOP BY CATEGORY
+        </p>
+
+
+        <h2>
+          اختاري ما يناسبك
+        </h2>
+
 
         <p>
           اكتشفي مجموعتنا من الإكسسوارات الأنيقة.
         </p>
 
+
       </div>
 
+
       <div class="categories">
+
 
         <button
           type="button"
           onclick="filterProducts('خواتم')"
         >
-          <span>💍</span>
+
+          <span>
+            💍
+          </span>
+
           خواتم
+
         </button>
+
 
         <button
           type="button"
           onclick="filterProducts('سلاسل')"
         >
-          <span>📿</span>
+
+          <span>
+            📿
+          </span>
+
           سلاسل
+
         </button>
+
 
         <button
           type="button"
           onclick="filterProducts('أساور')"
         >
-          <span>✨</span>
+
+          <span>
+            ✨
+          </span>
+
           أساور
+
         </button>
+
 
         <button
           type="button"
           onclick="filterProducts('حلق')"
         >
-          <span>💎</span>
+
+          <span>
+            💎
+          </span>
+
           حلق
+
         </button>
+
 
         <button
           type="button"
           onclick="filterProducts('الكل')"
         >
-          <span>✦</span>
+
+          <span>
+            ✦
+          </span>
+
           عرض الكل
+
         </button>
 
+
       </div>
+
 
     </section>
 
 
-    <!-- PRODUCTS -->
+    <!-- =========================
+         PRODUCTS
+    ========================== -->
+
     <section
       id="products"
       class="section products-section"
     >
 
+
       <div class="section-head">
 
+
         <div>
+
 
           <p class="eyebrow">
             VELORA COLLECTION
           </p>
 
+
           <h2>
             اختياراتنا لكِ
           </h2>
+
 
           <p class="products-subtitle">
             قطع أنيقة تضيف لمسة مميزة لكل إطلالة.
           </p>
 
+
         </div>
+
 
         <div class="search-box">
 
-          <span>🔍</span>
+
+          <span>
+            🔍
+          </span>
+
 
           <input
             id="search"
@@ -332,18 +719,23 @@
             autocomplete="off"
           >
 
+
         </div>
+
 
       </div>
 
 
       <!-- PRODUCT GRID -->
+
       <div
         id="productGrid"
         class="products"
       >
 
+
         <!-- PRODUCT 1 -->
+
         <article
           class="product-card"
           data-category="خواتم"
@@ -351,13 +743,18 @@
 
           <div class="product-image">
 
-            <span>💍</span>
+            <span>
+              💍
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>خواتم</small>
+            <small>
+              خواتم
+            </small>
 
             <h3>
               خاتم أوراق
@@ -381,6 +778,7 @@
 
 
         <!-- PRODUCT 2 -->
+
         <article
           class="product-card"
           data-category="سلاسل"
@@ -388,13 +786,18 @@
 
           <div class="product-image">
 
-            <span>📿</span>
+            <span>
+              📿
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>سلاسل</small>
+            <small>
+              سلاسل
+            </small>
 
             <h3>
               سلسلة فاني كليف
@@ -418,6 +821,7 @@
 
 
         <!-- PRODUCT 3 -->
+
         <article
           class="product-card"
           data-category="أساور"
@@ -425,13 +829,18 @@
 
           <div class="product-image">
 
-            <span>✨</span>
+            <span>
+              ✨
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>أساور</small>
+            <small>
+              أساور
+            </small>
 
             <h3>
               أسورة فاني كليف
@@ -455,6 +864,7 @@
 
 
         <!-- PRODUCT 4 -->
+
         <article
           class="product-card"
           data-category="حلق"
@@ -462,13 +872,18 @@
 
           <div class="product-image">
 
-            <span>💎</span>
+            <span>
+              💎
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>حلق</small>
+            <small>
+              حلق
+            </small>
 
             <h3>
               حلق دائري فخم
@@ -492,6 +907,7 @@
 
 
         <!-- PRODUCT 5 -->
+
         <article
           class="product-card"
           data-category="خواتم"
@@ -499,13 +915,18 @@
 
           <div class="product-image">
 
-            <span>💍</span>
+            <span>
+              💍
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>خواتم</small>
+            <small>
+              خواتم
+            </small>
 
             <h3>
               خاتم ناعم
@@ -529,6 +950,7 @@
 
 
         <!-- PRODUCT 6 -->
+
         <article
           class="product-card"
           data-category="سلاسل"
@@ -536,13 +958,18 @@
 
           <div class="product-image">
 
-            <span>📿</span>
+            <span>
+              📿
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>سلاسل</small>
+            <small>
+              سلاسل
+            </small>
 
             <h3>
               سلسلة نجمة
@@ -566,6 +993,7 @@
 
 
         <!-- PRODUCT 7 -->
+
         <article
           class="product-card"
           data-category="أساور"
@@ -573,13 +1001,18 @@
 
           <div class="product-image">
 
-            <span>✨</span>
+            <span>
+              ✨
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>أساور</small>
+            <small>
+              أساور
+            </small>
 
             <h3>
               أسورة رفيعة
@@ -603,6 +1036,7 @@
 
 
         <!-- PRODUCT 8 -->
+
         <article
           class="product-card"
           data-category="حلق"
@@ -610,13 +1044,18 @@
 
           <div class="product-image">
 
-            <span>💎</span>
+            <span>
+              💎
+            </span>
 
           </div>
 
+
           <div class="product-info">
 
-            <small>حلق</small>
+            <small>
+              حلق
+            </small>
 
             <h3>
               حلق لؤلؤ
@@ -638,80 +1077,114 @@
 
         </article>
 
+
       </div>
+
 
     </section>
 
 
-    <!-- ABOUT -->
+    <!-- =========================
+         ABOUT VELORA
+    ========================== -->
+
     <section
       id="about"
       class="about"
     >
 
+
       <div class="about-content">
+
 
         <p class="eyebrow">
           ABOUT VELORA
         </p>
 
+
         <h2>
+
           تفاصيل صغيرة،
-          <em>فرق كبير.</em>
+
+          <em>
+            فرق كبير.
+          </em>
+
         </h2>
 
+
         <p>
+
           VELORA متجر إلكتروني للإكسسوارات الحريمي.
           نختار قطعنا بعناية لنقدم لكِ مزيجًا من
           الأناقة والبساطة والسعر المناسب، مع تجربة
           طلب سهلة وسريعة.
+
         </p>
+
 
         <a
           href="#products"
           class="secondary"
         >
+
           اكتشفي المجموعة
+
         </a>
+
 
       </div>
 
 
       <div class="about-card">
 
+
         <div class="about-symbol">
           ✦
         </div>
+
 
         <strong>
           VELORA
         </strong>
 
+
         <span>
           ELEGANCE IN EVERY DETAIL
         </span>
 
+
       </div>
+
 
     </section>
 
 
-    <!-- WHY VELORA -->
+    <!-- =========================
+         WHY VELORA
+    ========================== -->
+
     <section class="trust">
+
 
       <p class="eyebrow">
         WHY VELORA
       </p>
 
+
       <h2>
         تجربة مختلفة من أول طلب
       </h2>
 
+
       <div class="trust-grid">
+
 
         <div>
 
-          <span>01</span>
+          <span>
+            01
+          </span>
 
           <h3>
             اختيارات أنيقة
@@ -726,7 +1199,9 @@
 
         <div>
 
-          <span>02</span>
+          <span>
+            02
+          </span>
 
           <h3>
             طلب بسيط
@@ -741,7 +1216,9 @@
 
         <div>
 
-          <span>03</span>
+          <span>
+            03
+          </span>
 
           <h3>
             تواصل مباشر
@@ -753,25 +1230,34 @@
 
         </div>
 
+
       </div>
+
 
     </section>
 
 
-    <!-- CTA -->
+    <!-- =========================
+         CTA
+    ========================== -->
+
     <section class="cta">
+
 
       <p class="eyebrow">
         NEED HELP?
       </p>
 
+
       <h2>
         عندك سؤال عن أي قطعة؟
       </h2>
 
+
       <p>
         تواصلي معنا مباشرة وسنساعدك.
       </p>
+
 
       <a
         class="primary"
@@ -779,53 +1265,73 @@
         target="_blank"
         rel="noopener noreferrer"
       >
+
         💬 تواصلي عبر واتساب
+
       </a>
 
+
     </section>
+
 
   </main>
 
 
-  <!-- FOOTER -->
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
   <footer id="contact">
+
 
     <div class="footer-brand">
       VELORA
     </div>
 
+
     <p>
       Elegance in Every Detail
     </p>
 
+
     <div class="footer-links">
+
 
       <a href="#home">
         الرئيسية
       </a>
 
+
       <a href="#products">
         المتجر
       </a>
+
 
       <a href="#about">
         عن VELORA
       </a>
 
+
       <a href="#contact">
         تواصل معنا
       </a>
 
+
     </div>
+
 
     <p class="copyright">
       © 2026 VELORA — جميع الحقوق محفوظة
     </p>
 
+
   </footer>
 
 
-  <!-- FLOATING WHATSAPP -->
+  <!-- =========================
+       FLOATING WHATSAPP
+  ========================== -->
+
   <a
     class="whatsapp-float"
     href="https://wa.me/201223562957"
@@ -833,22 +1339,30 @@
     rel="noopener noreferrer"
     aria-label="تواصل معنا عبر واتساب"
   >
+
     💬
+
   </a>
 
 
-  <!-- CART -->
+  <!-- =========================
+       CART
+  ========================== -->
+
   <div
     id="cartModal"
     class="modal hidden"
   >
+
 
     <div
       class="modal-overlay"
       onclick="closeCart()"
     ></div>
 
+
     <div class="modal-box">
+
 
       <button
         class="close"
@@ -856,47 +1370,71 @@
         onclick="closeCart()"
         aria-label="إغلاق السلة"
       >
+
         ×
+
       </button>
+
 
       <p class="eyebrow">
         YOUR SHOPPING BAG
       </p>
 
+
       <h2>
         سلة الطلب
       </h2>
 
+
       <div id="cartItems"></div>
 
+
       <div class="total">
+
 
         <span>
           الإجمالي
         </span>
 
+
         <strong>
-          <b id="cartTotal">0</b>
+
+          <b id="cartTotal">
+            0
+          </b>
+
           جنيه
+
         </strong>
 
+
       </div>
+
 
       <button
         class="primary full"
         type="button"
         onclick="checkout()"
       >
+
         📲 إرسال الطلب عبر واتساب
+
       </button>
 
+
     </div>
+
 
   </div>
 
 
-  <!-- JAVASCRIPT -->
-  <script src="script.js"></script>
-<script src="./script.js"></script>
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script src="./script.js"></script>
+
+
 </body>
+
 </html>
