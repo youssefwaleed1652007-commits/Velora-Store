@@ -3,14 +3,14 @@
 const WHATSAPP = "201223562957";
 
 const products = [
-  {id:1,name:"خاتم أوراق",category:"خواتم",price:280,icon:"💍"},
-  {id:2,name:"سلسلة فاني كليف",category:"سلاسل",price:320,icon:"📿"},
-  {id:3,name:"أسوار فاني كليف",category:"أساور",price:350,icon:"✨"},
-  {id:4,name:"حلق دائري فخم",category:"حلق",price:300,icon:"💎"},
-  {id:5,name:"خاتم ناعم",category:"خواتم",price:240,icon:"💍"},
-  {id:6,name:"سلسلة نجمة",category:"سلاسل",price:290,icon:"📿"},
-  {id:7,name:"أسوار رفيع",category:"أساور",price:260,icon:"✨"},
-  {id:8,name:"حلق لؤلؤ",category:"حلق",price:330,icon:"💎"}
+  {id:1,name:"خاتم أوراق",category:"خواتم",price:280,icon:"💍",image:""},
+  {id:2,name:"سلسلة فاني كليف",category:"سلاسل",price:320,icon:"📿",image:""},
+  {id:3,name:"أسوار فاني كليف",category:"أساور",price:350,icon:"✨",image:""},
+  {id:4,name:"حلق دائري فخم",category:"حلق",price:300,icon:"💎",image:""},
+  {id:5,name:"خاتم ناعم",category:"خواتم",price:240,icon:"💍",image:""},
+  {id:6,name:"سلسلة نجمة",category:"سلاسل",price:290,icon:"📿",image:""},
+  {id:7,name:"أسوار رفيع",category:"أساور",price:260,icon:"✨",image:""},
+  {id:8,name:"حلق لؤلؤ",category:"حلق",price:330,icon:"💎",image:""}
 ];
 
 let activeCategory = "الكل";
