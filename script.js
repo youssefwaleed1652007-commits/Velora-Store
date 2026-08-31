@@ -1,4 +1,3 @@
-```javascript
 const WHATSAPP = "201223562957";
 
 let cart = [];
@@ -503,4 +502,3 @@ document.addEventListener("keydown", function(event) {
     closeCart();
   }
 });
-```
