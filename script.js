@@ -1,8 +1,27 @@
 ```javascript
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL = "https://nflcafxxjhinumvxyyxt.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+   SETTINGS
+========================= */
+
 const WHATSAPP = "201223562957";
 
 let cart = [];
 let activeCategory = "الكل";
+let products = [];
+
 
 /* =========================
    DEFAULT PRODUCTS
@@ -58,52 +77,75 @@ const defaultProducts = [
   }
 ];
 
+
 /* =========================
-   LOAD ADMIN PRODUCTS
+   LOAD PRODUCTS
 ========================= */
 
-function getAdminProducts() {
+async function loadProducts() {
+
+  // عرض المنتجات الأساسية فورًا
+  products = [...defaultProducts];
+
+  renderProducts();
 
   try {
 
-    const saved =
-      JSON.parse(localStorage.getItem("velora_products"));
+    const { data, error } =
+      await supabaseClient
+        .from("Velora")
+        .select("*")
+        .order("id", { ascending: true });
 
-    if (!Array.isArray(saved)) {
-      return [];
+    if (error) {
+
+      console.error(
+        "VELORA Supabase Error:",
+        error
+      );
+
+      return;
     }
 
-    return saved;
+    if (!Array.isArray(data)) {
+      return;
+    }
+
+    /*
+      إضافة منتجات Supabase
+      بدون تكرار المنتجات الأساسية
+    */
+
+    const databaseProducts =
+      data.filter(function(product) {
+
+        return !defaultProducts.some(function(defaultProduct) {
+
+          return Number(defaultProduct.id) ===
+                 Number(product.id);
+
+        });
+
+      });
+
+    products = [
+      ...defaultProducts,
+      ...databaseProducts
+    ];
+
+    renderProducts();
 
   } catch (error) {
 
     console.error(
-      "VELORA: Error loading admin products",
+      "VELORA connection error:",
       error
     );
 
-    return [];
   }
+
 }
 
-/* =========================
-   ALL PRODUCTS
-========================= */
-
-const adminProducts = getAdminProducts();
-
-const products = [
-  ...defaultProducts,
-  ...adminProducts.filter(function(adminProduct) {
-
-    return !defaultProducts.some(function(defaultProduct) {
-
-      return defaultProduct.id === adminProduct.id;
-
-    });
-
-  })
-];
 
 /* =========================
    RENDER PRODUCTS
@@ -131,19 +173,20 @@ function renderProducts() {
         activeCategory === "الكل" ||
         product.category === activeCategory;
 
-      const productName =
+      const name =
         String(product.name || "").toLowerCase();
 
-      const productDescription =
+      const description =
         String(product.description || "").toLowerCase();
 
       const searchMatch =
-        productName.includes(query) ||
-        productDescription.includes(query);
+        name.includes(query) ||
+        description.includes(query);
 
       return categoryMatch && searchMatch;
 
     });
+
 
   if (!filteredProducts.length) {
 
@@ -166,6 +209,7 @@ function renderProducts() {
     return;
   }
 
+
   grid.innerHTML =
     filteredProducts.map(function(product) {
 
@@ -180,6 +224,7 @@ function renderProducts() {
 
       const stars =
         "★".repeat(Math.round(rating));
+
 
       return `
 
@@ -210,13 +255,13 @@ function renderProducts() {
             </button>
 
             <img
-              src="${product.image}"
-              alt="${product.name}"
+              src="${product.image || ""}"
+              alt="${product.name || "VELORA"}"
               loading="lazy"
-              onerror="this.style.display='none'; this.parentElement.classList.add('image-error');"
             >
 
           </div>
+
 
           <div class="product-info">
 
@@ -232,20 +277,23 @@ function renderProducts() {
 
             </div>
 
+
             <h3>
-              ${product.name}
+              ${product.name || ""}
             </h3>
+
 
             <p class="product-desc">
               ${product.description || ""}
             </p>
+
 
             <div class="product-bottom">
 
               <div class="product-price">
 
                 <strong>
-                  ${product.price}
+                  ${product.price || 0}
                 </strong>
 
                 <span>
@@ -253,6 +301,7 @@ function renderProducts() {
                 </span>
 
               </div>
+
 
               <button
                 class="add-btn"
@@ -274,6 +323,7 @@ function renderProducts() {
     }).join("");
 
 }
+
 
 /* =========================
    FILTER
@@ -298,6 +348,7 @@ function filterProducts(category) {
 
 }
 
+
 /* =========================
    FAVORITES
 ========================= */
@@ -313,6 +364,7 @@ function toggleFavorite(button) {
 
 }
 
+
 /* =========================
    PRODUCT DETAILS
 ========================= */
@@ -322,11 +374,12 @@ function openProduct(id) {
   const product =
     products.find(function(item) {
 
-      return item.id === id;
+      return Number(item.id) === Number(id);
 
     });
 
   if (!product) return;
+
 
   const modal =
     document.createElement("div");
@@ -334,12 +387,14 @@ function openProduct(id) {
   modal.className =
     "modal product-details-modal";
 
+
   modal.innerHTML = `
 
     <div
       class="modal-overlay"
       onclick="this.parentElement.remove()"
     ></div>
+
 
     <div class="modal-box product-details-box">
 
@@ -351,14 +406,16 @@ function openProduct(id) {
         ×
       </button>
 
+
       <div class="product-details-image">
 
         <img
-          src="${product.image}"
-          alt="${product.name}"
+          src="${product.image || ""}"
+          alt="${product.name || ""}"
         >
 
       </div>
+
 
       <div class="product-details-content">
 
@@ -366,9 +423,11 @@ function openProduct(id) {
           ${product.category || ""}
         </span>
 
+
         <h2>
-          ${product.name}
+          ${product.name || ""}
         </h2>
+
 
         <div class="rating">
           ${"★".repeat(
@@ -384,13 +443,16 @@ function openProduct(id) {
           )}
         </div>
 
+
         <div class="details-price">
-          ${product.price} جنيه
+          ${product.price || 0} جنيه
         </div>
+
 
         <p>
           ${product.description || ""}
         </p>
+
 
         <div class="details-option">
 
@@ -420,6 +482,7 @@ function openProduct(id) {
 
         </div>
 
+
         <div class="details-option">
 
           <strong>
@@ -439,6 +502,7 @@ function openProduct(id) {
           </div>
 
         </div>
+
 
         <div class="details-quantity">
 
@@ -462,6 +526,7 @@ function openProduct(id) {
 
         </div>
 
+
         <button
           type="button"
           class="primary full"
@@ -479,9 +544,11 @@ function openProduct(id) {
 
   `;
 
+
   document.body.appendChild(modal);
 
 }
+
 
 /* =========================
    OPTIONS
@@ -503,6 +570,7 @@ function selectOption(button) {
   button.classList.add("selected");
 
 }
+
 
 /* =========================
    DETAILS QUANTITY
@@ -529,6 +597,7 @@ function changeDetailsQty(change) {
 
 }
 
+
 /* =========================
    ADD TO CART
 ========================= */
@@ -538,18 +607,20 @@ function addToCart(id) {
   const product =
     products.find(function(item) {
 
-      return item.id === id;
+      return Number(item.id) === Number(id);
 
     });
 
   if (!product) return;
 
+
   const existing =
     cart.find(function(item) {
 
-      return item.id === id;
+      return Number(item.id) === Number(id);
 
     });
+
 
   if (existing) {
 
@@ -565,7 +636,7 @@ function addToCart(id) {
 
       category: product.category,
 
-      price: product.price,
+      price: Number(product.price) || 0,
 
       qty: 1
 
@@ -573,11 +644,13 @@ function addToCart(id) {
 
   }
 
+
   updateCart();
 
   openCart();
 
 }
+
 
 /* =========================
    UPDATE CART
@@ -594,12 +667,14 @@ function updateCart() {
   const cartTotal =
     document.getElementById("cartTotal");
 
+
   const totalQuantity =
     cart.reduce(function(sum, item) {
 
       return sum + item.qty;
 
     }, 0);
+
 
   const totalPrice =
     cart.reduce(function(sum, item) {
@@ -608,12 +683,14 @@ function updateCart() {
 
     }, 0);
 
+
   if (cartCount) {
 
     cartCount.textContent =
       totalQuantity;
 
   }
+
 
   if (cartTotal) {
 
@@ -622,7 +699,9 @@ function updateCart() {
 
   }
 
+
   if (!cartItems) return;
+
 
   if (!cart.length) {
 
@@ -650,6 +729,7 @@ function updateCart() {
 
   }
 
+
   cartItems.innerHTML =
     cart.map(function(item) {
 
@@ -668,6 +748,7 @@ function updateCart() {
             </span>
 
           </div>
+
 
           <div class="quantity">
 
@@ -691,6 +772,7 @@ function updateCart() {
 
           </div>
 
+
           <strong class="cart-price">
             ${item.price * item.qty} جنيه
           </strong>
@@ -703,6 +785,7 @@ function updateCart() {
 
 }
 
+
 /* =========================
    CHANGE CART QUANTITY
 ========================= */
@@ -712,28 +795,32 @@ function changeQty(id, change) {
   const item =
     cart.find(function(product) {
 
-      return product.id === id;
+      return Number(product.id) === Number(id);
 
     });
 
   if (!item) return;
 
+
   item.qty += change;
+
 
   if (item.qty <= 0) {
 
     cart =
       cart.filter(function(product) {
 
-        return product.id !== id;
+        return Number(product.id) !== Number(id);
 
       });
 
   }
 
+
   updateCart();
 
 }
+
 
 /* =========================
    CART
@@ -752,6 +839,7 @@ function openCart() {
 
 }
 
+
 function closeCart() {
 
   const modal =
@@ -762,6 +850,7 @@ function closeCart() {
   modal.classList.add("hidden");
 
 }
+
 
 /* =========================
    WHATSAPP
@@ -777,6 +866,7 @@ function checkout() {
 
   }
 
+
   const lines =
     cart.map(function(item) {
 
@@ -784,12 +874,14 @@ function checkout() {
 
     }).join("\n");
 
+
   const total =
     cart.reduce(function(sum, item) {
 
       return sum + item.price * item.qty;
 
     }, 0);
+
 
   const message =
 `مرحبًا VELORA، أريد طلب:
@@ -802,12 +894,14 @@ ${lines}
 العنوان:
 رقم الهاتف:`;
 
+
   window.open(
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`,
     "_blank"
   );
 
 }
+
 
 /* =========================
    MOBILE MENU
@@ -823,6 +917,7 @@ function toggleMenu() {
   nav.classList.toggle("mobile-open");
 
 }
+
 
 document.addEventListener("click", function(event) {
 
@@ -841,6 +936,7 @@ document.addEventListener("click", function(event) {
 
 });
 
+
 /* =========================
    SEARCH
 ========================= */
@@ -855,6 +951,7 @@ document.addEventListener("input", function(event) {
 
 });
 
+
 /* =========================
    START
 ========================= */
@@ -865,7 +962,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
   updateCart();
 
+  loadProducts();
+
 });
+
 
 /* =========================
    ESC
