@@ -22,7 +22,7 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 850px;
       margin: 30px auto;
     }
 
@@ -82,6 +82,11 @@
       font-size: 15px;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .primary {
       width: 100%;
       margin-top: 20px;
@@ -100,6 +105,7 @@
       padding: 12px;
       border-radius: 10px;
       display: none;
+      line-height: 1.7;
     }
 
     .show {
@@ -108,30 +114,52 @@
 
     .product {
       border-top: 1px solid #3b3633;
-      padding: 15px 0;
+      padding: 18px 0;
       display: flex;
       gap: 15px;
       align-items: center;
     }
 
+    .product:first-child {
+      border-top: 0;
+    }
+
     .product img {
-      width: 70px;
-      height: 70px;
+      width: 85px;
+      height: 85px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 12px;
+      background: #171514;
+      flex-shrink: 0;
     }
 
     .product-info {
       flex: 1;
+      min-width: 0;
     }
 
     .product-info h3 {
-      margin: 0 0 5px;
+      margin: 0 0 6px;
     }
 
     .product-info p {
-      margin: 3px 0;
+      margin: 4px 0;
       color: #c9a96e;
+    }
+
+    .product-info small {
+      color: #aaa;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .edit {
+      background: #c9a96e;
+      color: #171514;
     }
 
     .delete {
@@ -139,8 +167,70 @@
       color: white;
     }
 
+    .cancel {
+      background: #3b3633;
+      color: #fff;
+      width: 100%;
+      margin-top: 10px;
+    }
+
     .hidden {
       display: none !important;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+    }
+
+    .refresh {
+      background: #3b3633;
+      color: #fff;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 10px;
+      color: #aaa;
+    }
+
+    @media (max-width: 650px) {
+
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        margin: 10px auto;
+      }
+
+      .box {
+        padding: 18px;
+      }
+
+      .product {
+        align-items: flex-start;
+      }
+
+      .product img {
+        width: 65px;
+        height: 65px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .actions button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -178,6 +268,7 @@
     >
 
     <button
+      id="loginButton"
       class="primary"
       onclick="login()"
     >
@@ -189,15 +280,18 @@
   </div>
 
 
-  <!-- ADMIN -->
+  <!-- ADMIN PANEL -->
 
   <div id="adminPanel" class="hidden">
+
+
+    <!-- ADD / EDIT -->
 
     <div class="box">
 
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
 
-        <h2>إضافة منتج</h2>
+        <h2 id="formTitle">إضافة منتج</h2>
 
         <button
           class="logout"
@@ -248,7 +342,10 @@
       ></textarea>
 
 
-      <label>صورة المنتج</label>
+      <label>
+        صورة المنتج
+        <span id="imageHint"></span>
+      </label>
 
       <input
         id="productImage"
@@ -258,10 +355,20 @@
 
 
       <button
+        id="saveButton"
         class="primary"
-        onclick="addProduct()"
+        onclick="saveProduct()"
       >
         إضافة المنتج
+      </button>
+
+
+      <button
+        id="cancelButton"
+        class="cancel hidden"
+        onclick="cancelEdit()"
+      >
+        إلغاء التعديل
       </button>
 
 
@@ -273,9 +380,22 @@
     </div>
 
 
+    <!-- PRODUCTS -->
+
     <div class="box">
 
-      <h2>المنتجات الحالية</h2>
+      <div class="section-title">
+
+        <h2>المنتجات الحالية</h2>
+
+        <button
+          class="refresh"
+          onclick="loadProducts()"
+        >
+          تحديث
+        </button>
+
+      </div>
 
       <div id="productsList">
         جاري التحميل...
@@ -290,9 +410,11 @@
 
 <script>
 
-const SUPABASE_URL = "https://nflcafxxjhinumvxyyxt.supabase.co";
+const SUPABASE_URL =
+  "https://nflcafxxjhinumvxyyxt.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
+const SUPABASE_KEY =
+  "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
 
 const supabaseClient =
   window.supabase.createClient(
@@ -301,25 +423,45 @@ const supabaseClient =
   );
 
 
+let editingProductId = null;
+
+
+/* =========================
+   STATUS
+========================= */
+
 function showStatus(id, message) {
 
   const element =
     document.getElementById(id);
 
+  if (!element) return;
+
   element.textContent = message;
 
   element.classList.add("show");
-
 }
 
+
+/* =========================
+   LOGIN
+========================= */
 
 async function login() {
 
   const email =
-    document.getElementById("email").value.trim();
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("password").value;
+    document
+      .getElementById("password")
+      .value;
+
+  const button =
+    document.getElementById("loginButton");
 
 
   if (!email || !password) {
@@ -330,8 +472,13 @@ async function login() {
     );
 
     return;
-
   }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "جاري الدخول...";
 
 
   const { error } =
@@ -344,7 +491,15 @@ async function login() {
     });
 
 
+  button.disabled = false;
+
+  button.textContent =
+    "دخول";
+
+
   if (error) {
+
+    console.error(error);
 
     showStatus(
       "loginStatus",
@@ -352,7 +507,6 @@ async function login() {
     );
 
     return;
-
   }
 
 
@@ -367,30 +521,34 @@ async function login() {
 
 
   loadProducts();
-
 }
 
+
+/* =========================
+   LOGOUT
+========================= */
 
 async function logout() {
 
   await supabaseClient.auth.signOut();
 
   location.reload();
-
 }
 
 
+/* =========================
+   CHECK LOGIN
+========================= */
+
 async function checkLogin() {
 
-  const {
-    data
-  } =
+  const result =
     await supabaseClient.auth.getSession();
 
 
   if (
-    data &&
-    data.session
+    result.data &&
+    result.data.session
   ) {
 
     document
@@ -404,13 +562,15 @@ async function checkLogin() {
 
 
     loadProducts();
-
   }
-
 }
 
 
-async function addProduct() {
+/* =========================
+   SAVE PRODUCT
+========================= */
+
+async function saveProduct() {
 
   const name =
     document
@@ -446,114 +606,461 @@ async function addProduct() {
       .files[0];
 
 
+  const saveButton =
+    document.getElementById("saveButton");
+
+
   if (
     !name ||
     !price ||
-    !category ||
+    !category
+  ) {
+
+    showStatus(
+      "addStatus",
+      "من فضلك املأ اسم المنتج والسعر والقسم."
+    );
+
+    return;
+  }
+
+
+  if (
+    editingProductId === null &&
     !file
   ) {
 
     showStatus(
       "addStatus",
-      "من فضلك املأ البيانات واختر صورة."
+      "من فضلك اختر صورة للمنتج."
     );
 
     return;
-
   }
 
 
-  showStatus(
-    "addStatus",
-    "جاري إضافة المنتج..."
-  );
+  saveButton.disabled = true;
+
+  saveButton.textContent =
+    editingProductId === null
+      ? "جاري إضافة المنتج..."
+      : "جاري حفظ التعديل...";
 
 
-  const fileName =
-    Date.now() +
-    "-" +
-    file.name.replace(
-      /[^a-zA-Z0-9.-]/g,
-      "-"
-    );
+  let imageUrl = null;
 
 
-  const filePath =
-    fileName;
+  /* =========================
+     UPLOAD NEW IMAGE
+  ========================= */
 
+  if (file) {
 
-  const upload =
-    await supabaseClient
-      .storage
-      .from("products")
-      .upload(
-        filePath,
-        file,
-        {
-          upsert: false
-        }
+    const fileName =
+      Date.now() +
+      "-" +
+      file.name.replace(
+        /[^a-zA-Z0-9.-]/g,
+        "-"
       );
 
 
-  if (upload.error) {
+    const upload =
+      await supabaseClient
+        .storage
+        .from("products")
+        .upload(
+          fileName,
+          file,
+          {
+            upsert: false
+          }
+        );
+
+
+    if (upload.error) {
+
+      console.error(
+        "Upload error:",
+        upload.error
+      );
+
+      showStatus(
+        "addStatus",
+        "حدث خطأ أثناء رفع الصورة."
+      );
+
+      saveButton.disabled = false;
+
+      saveButton.textContent =
+        editingProductId === null
+          ? "إضافة المنتج"
+          : "حفظ التعديل";
+
+      return;
+    }
+
+
+    const publicData =
+      supabaseClient
+        .storage
+        .from("products")
+        .getPublicUrl(fileName);
+
+
+    imageUrl =
+      publicData.data.publicUrl;
+  }
+
+
+  /* =========================
+     ADD PRODUCT
+  ========================= */
+
+  if (editingProductId === null) {
+
+    const insert =
+      await supabaseClient
+        .from("Velora")
+        .insert({
+
+          name: name,
+
+          price: price,
+
+          description: description,
+
+          category: category,
+
+          image: imageUrl
+
+        });
+
+
+    if (insert.error) {
+
+      console.error(
+        "Insert error:",
+        insert.error
+      );
+
+      showStatus(
+        "addStatus",
+        "حدث خطأ أثناء حفظ المنتج."
+      );
+
+      saveButton.disabled = false;
+
+      saveButton.textContent =
+        "إضافة المنتج";
+
+      return;
+    }
+
 
     showStatus(
       "addStatus",
-      "حدث خطأ أثناء رفع الصورة."
+      "تم إضافة المنتج بنجاح ✅"
     );
 
-    return;
+  }
+
+
+  /* =========================
+     UPDATE PRODUCT
+  ========================= */
+
+  else {
+
+    const updateData = {
+
+      name: name,
+
+      price: price,
+
+      description: description,
+
+      category: category
+
+    };
+
+
+    if (imageUrl) {
+
+      updateData.image =
+        imageUrl;
+
+    }
+
+
+    const update =
+      await supabaseClient
+        .from("Velora")
+        .update(updateData)
+        .eq("id", editingProductId);
+
+
+    if (update.error) {
+
+      console.error(
+        "Update error:",
+        update.error
+      );
+
+      showStatus(
+        "addStatus",
+        "حدث خطأ أثناء تعديل المنتج."
+      );
+
+      saveButton.disabled = false;
+
+      saveButton.textContent =
+        "حفظ التعديل";
+
+      return;
+    }
+
+
+    showStatus(
+      "addStatus",
+      "تم تعديل المنتج بنجاح ✅"
+    );
 
   }
+
+
+  resetForm();
+
+  await loadProducts();
+
+  saveButton.disabled = false;
+
+}
+
+
+/* =========================
+   LOAD PRODUCTS
+========================= */
+
+async function loadProducts() {
+
+  const list =
+    document.getElementById("productsList");
+
+
+  if (!list) return;
+
+
+  list.textContent =
+    "جاري التحميل...";
 
 
   const {
-    data: publicData
+    data,
+    error
   } =
-    supabaseClient
-      .storage
-      .from("products")
-      .getPublicUrl(filePath);
-
-
-  const imageUrl =
-    publicData.publicUrl;
-
-
-  const insert =
     await supabaseClient
       .from("Velora")
-      .insert({
-
-        name: name,
-
-        price: price,
-
-        description: description,
-
-        category: category,
-
-        image: imageUrl
-
+      .select("*")
+      .order("id", {
+        ascending: false
       });
 
 
-  if (insert.error) {
+  if (error) {
 
-    showStatus(
-      "addStatus",
-      "حدث خطأ أثناء حفظ المنتج."
+    console.error(
+      "Load products error:",
+      error
     );
 
-    return;
+    list.textContent =
+      "حدث خطأ في تحميل المنتجات.";
 
+    return;
   }
 
 
-  showStatus(
-    "addStatus",
-    "تم إضافة المنتج بنجاح ✅"
-  );
+  if (!data || !data.length) {
+
+    list.innerHTML =
+      '<div class="empty">لا توجد منتجات حاليًا.</div>';
+
+    return;
+  }
+
+
+  list.innerHTML =
+    data.map(function(product) {
+
+      return `
+
+        <div class="product">
+
+          <img
+            src="${product.image || ""}"
+            alt="${escapeHTML(product.name)}"
+          >
+
+          <div class="product-info">
+
+            <h3>
+              ${escapeHTML(product.name)}
+            </h3>
+
+            <p>
+              ${Number(product.price)} جنيه
+            </p>
+
+            <small>
+              ${escapeHTML(product.category)}
+            </small>
+
+          </div>
+
+          <div class="actions">
+
+            <button
+              class="edit"
+              onclick="editProduct(${product.id})"
+            >
+              تعديل
+            </button>
+
+            <button
+              class="delete"
+              onclick="deleteProduct(${product.id})"
+            >
+              حذف
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+}
+
+
+/* =========================
+   EDIT PRODUCT
+========================= */
+
+async function editProduct(id) {
+
+  const result =
+    await supabaseClient
+      .from("Velora")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+
+  if (result.error || !result.data) {
+
+    alert(
+      "تعذر تحميل بيانات المنتج."
+    );
+
+    return;
+  }
+
+
+  const product =
+    result.data;
+
+
+  editingProductId =
+    product.id;
+
+
+  document
+    .getElementById("productName")
+    .value =
+      product.name || "";
+
+
+  document
+    .getElementById("productPrice")
+    .value =
+      product.price || "";
+
+
+  document
+    .getElementById("productCategory")
+    .value =
+      product.category || "خواتم";
+
+
+  document
+    .getElementById("productDescription")
+    .value =
+      product.description || "";
+
+
+  document
+    .getElementById("formTitle")
+    .textContent =
+      "تعديل المنتج";
+
+
+  document
+    .getElementById("saveButton")
+    .textContent =
+      "حفظ التعديل";
+
+
+  document
+    .getElementById("cancelButton")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("imageHint")
+    .textContent =
+      " — اتركها فارغة للاحتفاظ بالصورة الحالية";
+
+
+  document
+    .getElementById("productImage")
+    .value = "";
+
+
+  document
+    .getElementById("addStatus")
+    .classList.remove("show");
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+/* =========================
+   CANCEL EDIT
+========================= */
+
+function cancelEdit() {
+
+  resetForm();
+
+  document
+    .getElementById("addStatus")
+    .classList.remove("show");
+}
+
+
+/* =========================
+   RESET FORM
+========================= */
+
+function resetForm() {
+
+  editingProductId = null;
 
 
   document
@@ -576,96 +1083,32 @@ async function addProduct() {
     .value = "";
 
 
-  loadProducts();
+  document
+    .getElementById("formTitle")
+    .textContent =
+      "إضافة منتج";
 
+
+  document
+    .getElementById("saveButton")
+    .textContent =
+      "إضافة المنتج";
+
+
+  document
+    .getElementById("cancelButton")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("imageHint")
+    .textContent = "";
 }
 
 
-async function loadProducts() {
-
-  const list =
-    document.getElementById("productsList");
-
-
-  list.textContent =
-    "جاري التحميل...";
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("Velora")
-      .select("*")
-      .order("id", {
-        ascending: false
-      });
-
-
-  if (error) {
-
-    list.textContent =
-      "حدث خطأ في تحميل المنتجات.";
-
-    return;
-
-  }
-
-
-  if (!data || !data.length) {
-
-    list.textContent =
-      "لا توجد منتجات حاليًا.";
-
-    return;
-
-  }
-
-
-  list.innerHTML =
-    data.map(function(product) {
-
-      return `
-
-        <div class="product">
-
-          <img
-            src="${product.image}"
-            alt="${product.name}"
-          >
-
-          <div class="product-info">
-
-            <h3>
-              ${product.name}
-            </h3>
-
-            <p>
-              ${product.price} جنيه
-            </p>
-
-            <small>
-              ${product.category}
-            </small>
-
-          </div>
-
-          <button
-            class="delete"
-            onclick="deleteProduct(${product.id})"
-          >
-            حذف
-          </button>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
+/* =========================
+   DELETE PRODUCT
+========================= */
 
 async function deleteProduct(id) {
 
@@ -678,30 +1121,65 @@ async function deleteProduct(id) {
   }
 
 
-  const {
-    error
-  } =
+  const result =
     await supabaseClient
       .from("Velora")
       .delete()
       .eq("id", id);
 
 
-  if (error) {
+  if (result.error) {
+
+    console.error(
+      "Delete error:",
+      result.error
+    );
 
     alert(
       "حدث خطأ أثناء حذف المنتج."
     );
 
     return;
+  }
+
+
+  if (
+    Number(editingProductId) === Number(id)
+  ) {
+
+    resetForm();
 
   }
 
 
-  loadProducts();
+  await loadProducts();
 
+
+  showStatus(
+    "addStatus",
+    "تم حذف المنتج بنجاح ✅"
+  );
 }
 
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+/* =========================
+   START
+========================= */
 
 checkLogin();
 
