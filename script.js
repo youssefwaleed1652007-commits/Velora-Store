@@ -1,13 +1,14 @@
+```javascript
 const WHATSAPP = "201223562957";
 
 let cart = [];
 let activeCategory = "الكل";
 
 /* =========================
-   PRODUCTS
+   DEFAULT PRODUCTS
 ========================= */
 
-const products = [
+const defaultProducts = [
   {
     id: 1,
     name: "أسورة Love فاخرة",
@@ -58,33 +59,91 @@ const products = [
 ];
 
 /* =========================
+   LOAD ADMIN PRODUCTS
+========================= */
+
+function getAdminProducts() {
+
+  try {
+
+    const saved =
+      JSON.parse(localStorage.getItem("velora_products"));
+
+    if (!Array.isArray(saved)) {
+      return [];
+    }
+
+    return saved;
+
+  } catch (error) {
+
+    console.error(
+      "VELORA: Error loading admin products",
+      error
+    );
+
+    return [];
+  }
+}
+
+/* =========================
+   ALL PRODUCTS
+========================= */
+
+const adminProducts = getAdminProducts();
+
+const products = [
+  ...defaultProducts,
+  ...adminProducts.filter(function(adminProduct) {
+
+    return !defaultProducts.some(function(defaultProduct) {
+
+      return defaultProduct.id === adminProduct.id;
+
+    });
+
+  })
+];
+
+/* =========================
    RENDER PRODUCTS
 ========================= */
 
 function renderProducts() {
 
-  const grid = document.getElementById("productGrid");
+  const grid =
+    document.getElementById("productGrid");
 
   if (!grid) return;
 
-  const searchInput = document.getElementById("search");
+  const searchInput =
+    document.getElementById("search");
 
-  const query = searchInput
-    ? searchInput.value.trim().toLowerCase()
-    : "";
+  const query =
+    searchInput
+      ? searchInput.value.trim().toLowerCase()
+      : "";
 
-  const filteredProducts = products.filter(function(product) {
+  const filteredProducts =
+    products.filter(function(product) {
 
-    const categoryMatch =
-      activeCategory === "الكل" ||
-      product.category === activeCategory;
+      const categoryMatch =
+        activeCategory === "الكل" ||
+        product.category === activeCategory;
 
-    const searchMatch =
-      product.name.toLowerCase().includes(query);
+      const productName =
+        String(product.name || "").toLowerCase();
 
-    return categoryMatch && searchMatch;
+      const productDescription =
+        String(product.description || "").toLowerCase();
 
-  });
+      const searchMatch =
+        productName.includes(query) ||
+        productDescription.includes(query);
+
+      return categoryMatch && searchMatch;
+
+    });
 
   if (!filteredProducts.length) {
 
@@ -107,100 +166,112 @@ function renderProducts() {
     return;
   }
 
-  grid.innerHTML = filteredProducts.map(function(product) {
+  grid.innerHTML =
+    filteredProducts.map(function(product) {
 
-    const stars = "★".repeat(product.rating || 5);
+      const rating =
+        Math.max(
+          0,
+          Math.min(
+            5,
+            Number(product.rating) || 5
+          )
+        );
 
-    return `
+      const stars =
+        "★".repeat(Math.round(rating));
 
-      <article class="product">
+      return `
 
-        <div
-          class="product-img"
-          onclick="openProduct(${product.id})"
-        >
+        <article class="product">
 
-          ${
-            product.badge
-              ? `
-                <span class="product-badge">
-                  ${product.badge}
-                </span>
-              `
-              : ""
-          }
-
-          <button
-            class="favorite-btn"
-            type="button"
-            aria-label="إضافة للمفضلة"
-            onclick="event.stopPropagation(); toggleFavorite(this)"
-          >
-            ♡
-          </button>
-
-          <img
-            src="${product.image}"
-            alt="${product.name}"
-            loading="lazy"
+          <div
+            class="product-img"
+            onclick="openProduct(${product.id})"
           >
 
-        </div>
+            ${
+              product.badge
+                ? `
+                  <span class="product-badge">
+                    ${product.badge}
+                  </span>
+                `
+                : ""
+            }
 
-        <div class="product-info">
+            <button
+              class="favorite-btn"
+              type="button"
+              aria-label="إضافة للمفضلة"
+              onclick="event.stopPropagation(); toggleFavorite(this)"
+            >
+              ♡
+            </button>
 
-          <div class="product-top">
-
-            <span class="cat">
-              ${product.category}
-            </span>
-
-            <span class="rating">
-              ${stars}
-            </span>
+            <img
+              src="${product.image}"
+              alt="${product.name}"
+              loading="lazy"
+              onerror="this.style.display='none'; this.parentElement.classList.add('image-error');"
+            >
 
           </div>
 
-          <h3>
-            ${product.name}
-          </h3>
+          <div class="product-info">
 
-          <p class="product-desc">
-            ${product.description}
-          </p>
+            <div class="product-top">
 
-          <div class="product-bottom">
+              <span class="cat">
+                ${product.category || ""}
+              </span>
 
-            <div class="product-price">
-
-              <strong>
-                ${product.price}
-              </strong>
-
-              <span>
-                جنيه
+              <span class="rating">
+                ${stars}
               </span>
 
             </div>
 
-            <button
-              class="add-btn"
-              type="button"
-              onclick="addToCart(${product.id})"
-            >
-              أضف للسلة
-              <span>+</span>
-            </button>
+            <h3>
+              ${product.name}
+            </h3>
+
+            <p class="product-desc">
+              ${product.description || ""}
+            </p>
+
+            <div class="product-bottom">
+
+              <div class="product-price">
+
+                <strong>
+                  ${product.price}
+                </strong>
+
+                <span>
+                  جنيه
+                </span>
+
+              </div>
+
+              <button
+                class="add-btn"
+                type="button"
+                onclick="addToCart(${product.id})"
+              >
+                أضف للسلة
+                <span>+</span>
+              </button>
+
+            </div>
 
           </div>
 
-        </div>
+        </article>
 
-      </article>
+      `;
 
-    `;
-
-  }).join("");
+    }).join("");
 
 }
 
@@ -250,7 +321,9 @@ function openProduct(id) {
 
   const product =
     products.find(function(item) {
+
       return item.id === id;
+
     });
 
   if (!product) return;
@@ -290,7 +363,7 @@ function openProduct(id) {
       <div class="product-details-content">
 
         <span class="cat">
-          ${product.category}
+          ${product.category || ""}
         </span>
 
         <h2>
@@ -298,7 +371,17 @@ function openProduct(id) {
         </h2>
 
         <div class="rating">
-          ${"★".repeat(product.rating || 5)}
+          ${"★".repeat(
+            Math.round(
+              Math.max(
+                0,
+                Math.min(
+                  5,
+                  Number(product.rating) || 5
+                )
+              )
+            )
+          )}
         </div>
 
         <div class="details-price">
@@ -306,7 +389,7 @@ function openProduct(id) {
         </div>
 
         <p>
-          ${product.description}
+          ${product.description || ""}
         </p>
 
         <div class="details-option">
@@ -454,14 +537,18 @@ function addToCart(id) {
 
   const product =
     products.find(function(item) {
+
       return item.id === id;
+
     });
 
   if (!product) return;
 
   const existing =
     cart.find(function(item) {
+
       return item.id === id;
+
     });
 
   if (existing) {
@@ -624,7 +711,9 @@ function changeQty(id, change) {
 
   const item =
     cart.find(function(product) {
+
       return product.id === id;
+
     });
 
   if (!item) return;
@@ -635,7 +724,9 @@ function changeQty(id, change) {
 
     cart =
       cart.filter(function(product) {
+
         return product.id !== id;
+
       });
 
   }
@@ -741,8 +832,24 @@ document.addEventListener("click", function(event) {
       document.getElementById("mainNav");
 
     if (nav) {
+
       nav.classList.remove("mobile-open");
+
     }
+
+  }
+
+});
+
+/* =========================
+   SEARCH
+========================= */
+
+document.addEventListener("input", function(event) {
+
+  if (event.target.id === "search") {
+
+    renderProducts();
 
   }
 
@@ -773,3 +880,4 @@ document.addEventListener("keydown", function(event) {
   }
 
 });
+```
