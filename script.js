@@ -1,150 +1,110 @@
 ```javascript
-/* =========================
-   SUPABASE
-========================= */
-
-const SUPABASE_URL = "https://nflcafxxjhinumvxyyxt.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-/* =========================
-   SETTINGS
-========================= */
-
 const WHATSAPP = "201223562957";
 
 let cart = [];
 let activeCategory = "الكل";
-let products = [];
-
 
 /* =========================
-   DEFAULT PRODUCTS
+   PRODUCTS
 ========================= */
 
-const defaultProducts = [
+const products = [
   {
     id: 1,
-    name: "أسورة Love فاخرة",
-    category: "أساور",
-    price: 350,
+    name: "خاتم أوراق",
+    category: "خواتم",
+    price: 280,
     image: "product-1.jpeg",
-    icon: "✨",
+    icon: "💍",
     badge: "مميز",
     rating: 5,
-    description: "أسورة ذهبية بتصميم أنيق وفاخر تضيف لمسة مميزة لإطلالتك."
+    description: "خاتم أنيق بتصميم أوراق ناعم ومميز."
   },
 
   {
     id: 2,
-    name: "خاتم Crystal فاخر",
-    category: "خواتم",
-    price: 280,
+    name: "سلسلة فاني كليف",
+    category: "سلاسل",
+    price: 320,
     image: "product-2.jpeg",
-    icon: "💍",
+    icon: "📿",
     badge: "جديد",
     rating: 5,
-    description: "خاتم بتصميم فاخر وحجر لامع مناسب للإطلالات المميزة."
+    description: "سلسلة فاخرة بتصميم أنيق تناسب مختلف الإطلالات."
   },
 
   {
     id: 3,
-    name: "أسورة Infinity",
+    name: "أسورة فاني كليف",
     category: "أساور",
     price: 350,
     image: "product-3.jpeg",
     icon: "✨",
     badge: "مميز",
     rating: 5,
-    description: "أسورة Infinity أنيقة بتصميم راقٍ ومميز."
+    description: "أسورة أنيقة بتصميم راقٍ تضيف لمسة فاخرة لإطلالتك."
   },
 
   {
     id: 4,
-    name: "أساور ذهبية رفيعة",
-    category: "أساور",
-    price: 260,
+    name: "حلق دائري فخم",
+    category: "حلق",
+    price: 300,
     image: "product-4.jpeg",
-    icon: "✨",
+    icon: "💎",
     badge: "جديد",
     rating: 5,
-    description: "مجموعة أساور ذهبية رفيعة بتصميم ناعم وأنيق."
+    description: "حلق دائري بتصميم فخم وأنيق."
+  },
+
+  {
+    id: 5,
+    name: "خاتم ناعم",
+    category: "خواتم",
+    price: 240,
+    image: "product-5.jpeg",
+    icon: "💍",
+    badge: "",
+    rating: 5,
+    description: "خاتم ناعم وبسيط مناسب للإطلالات اليومية."
+  },
+
+  {
+    id: 6,
+    name: "سلسلة نجمة",
+    category: "سلاسل",
+    price: 290,
+    image: "product-6.jpeg",
+    icon: "📿",
+    badge: "",
+    rating: 5,
+    description: "سلسلة بتصميم نجمة أنيق ومميز."
+  },
+
+  {
+    id: 7,
+    name: "أسورة رفيعة",
+    category: "أساور",
+    price: 260,
+    image: "product-7.jpeg",
+    icon: "✨",
+    badge: "",
+    rating: 5,
+    description: "أسورة رفيعة بتصميم بسيط وأنيق."
+  },
+
+  {
+    id: 8,
+    name: "حلق لؤلؤ",
+    category: "حلق",
+    price: 330,
+    image: "product-8.jpeg",
+    icon: "💎",
+    badge: "",
+    rating: 5,
+    description: "حلق بتفاصيل لؤلؤية أنيقة لإطلالة مميزة."
   }
 ];
-
-
-/* =========================
-   LOAD PRODUCTS
-========================= */
-
-async function loadProducts() {
-
-  // عرض المنتجات الأساسية فورًا
-  products = [...defaultProducts];
-
-  renderProducts();
-
-  try {
-
-    const { data, error } =
-      await supabaseClient
-        .from("Velora")
-        .select("*")
-        .order("id", { ascending: true });
-
-    if (error) {
-
-      console.error(
-        "VELORA Supabase Error:",
-        error
-      );
-
-      return;
-    }
-
-    if (!Array.isArray(data)) {
-      return;
-    }
-
-    /*
-      إضافة منتجات Supabase
-      بدون تكرار المنتجات الأساسية
-    */
-
-    const databaseProducts =
-      data.filter(function(product) {
-
-        return !defaultProducts.some(function(defaultProduct) {
-
-          return Number(defaultProduct.id) ===
-                 Number(product.id);
-
-        });
-
-      });
-
-    products = [
-      ...defaultProducts,
-      ...databaseProducts
-    ];
-
-    renderProducts();
-
-  } catch (error) {
-
-    console.error(
-      "VELORA connection error:",
-      error
-    );
-
-  }
-
-}
 
 
 /* =========================
@@ -153,39 +113,35 @@ async function loadProducts() {
 
 function renderProducts() {
 
-  const grid =
-    document.getElementById("productGrid");
+  const grid = document.getElementById("productGrid");
 
   if (!grid) return;
 
-  const searchInput =
-    document.getElementById("search");
+  const searchInput = document.getElementById("search");
 
-  const query =
-    searchInput
-      ? searchInput.value.trim().toLowerCase()
-      : "";
+  const query = searchInput
+    ? searchInput.value.trim().toLowerCase()
+    : "";
 
-  const filteredProducts =
-    products.filter(function(product) {
+  const filteredProducts = products.filter(function(product) {
 
-      const categoryMatch =
-        activeCategory === "الكل" ||
-        product.category === activeCategory;
+    const categoryMatch =
+      activeCategory === "الكل" ||
+      product.category === activeCategory;
 
-      const name =
-        String(product.name || "").toLowerCase();
+    const name =
+      String(product.name || "").toLowerCase();
 
-      const description =
-        String(product.description || "").toLowerCase();
+    const description =
+      String(product.description || "").toLowerCase();
 
-      const searchMatch =
-        name.includes(query) ||
-        description.includes(query);
+    const searchMatch =
+      name.includes(query) ||
+      description.includes(query);
 
-      return categoryMatch && searchMatch;
+    return categoryMatch && searchMatch;
 
-    });
+  });
 
 
   if (!filteredProducts.length) {
@@ -210,117 +166,107 @@ function renderProducts() {
   }
 
 
-  grid.innerHTML =
-    filteredProducts.map(function(product) {
+  grid.innerHTML = filteredProducts.map(function(product) {
 
-      const rating =
-        Math.max(
-          0,
-          Math.min(
-            5,
-            Number(product.rating) || 5
-          )
-        );
+    const stars =
+      "★".repeat(product.rating || 5);
 
-      const stars =
-        "★".repeat(Math.round(rating));
+    return `
 
+      <article class="product">
 
-      return `
+        <div
+          class="product-img"
+          onclick="openProduct(${product.id})"
+        >
 
-        <article class="product">
+          ${
+            product.badge
+              ? `
+                <span class="product-badge">
+                  ${product.badge}
+                </span>
+              `
+              : ""
+          }
 
-          <div
-            class="product-img"
-            onclick="openProduct(${product.id})"
+          <button
+            class="favorite-btn"
+            type="button"
+            aria-label="إضافة للمفضلة"
+            onclick="event.stopPropagation(); toggleFavorite(this)"
+          >
+            ♡
+          </button>
+
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+            loading="lazy"
+            onerror="this.style.display='none'; this.parentElement.classList.add('image-error')"
           >
 
-            ${
-              product.badge
-                ? `
-                  <span class="product-badge">
-                    ${product.badge}
-                  </span>
-                `
-                : ""
-            }
+        </div>
+
+
+        <div class="product-info">
+
+          <div class="product-top">
+
+            <span class="cat">
+              ${product.category}
+            </span>
+
+            <span class="rating">
+              ${stars}
+            </span>
+
+          </div>
+
+
+          <h3>
+            ${product.name}
+          </h3>
+
+
+          <p class="product-desc">
+            ${product.description}
+          </p>
+
+
+          <div class="product-bottom">
+
+            <div class="product-price">
+
+              <strong>
+                ${product.price}
+              </strong>
+
+              <span>
+                جنيه
+              </span>
+
+            </div>
+
 
             <button
-              class="favorite-btn"
+              class="add-btn"
               type="button"
-              aria-label="إضافة للمفضلة"
-              onclick="event.stopPropagation(); toggleFavorite(this)"
+              onclick="addToCart(${product.id})"
             >
-              ♡
+              أضف للسلة
+              <span>+</span>
             </button>
 
-            <img
-              src="${product.image || ""}"
-              alt="${product.name || "VELORA"}"
-              loading="lazy"
-            >
-
           </div>
 
+        </div>
 
-          <div class="product-info">
+      </article>
 
-            <div class="product-top">
+    `;
 
-              <span class="cat">
-                ${product.category || ""}
-              </span>
-
-              <span class="rating">
-                ${stars}
-              </span>
-
-            </div>
-
-
-            <h3>
-              ${product.name || ""}
-            </h3>
-
-
-            <p class="product-desc">
-              ${product.description || ""}
-            </p>
-
-
-            <div class="product-bottom">
-
-              <div class="product-price">
-
-                <strong>
-                  ${product.price || 0}
-                </strong>
-
-                <span>
-                  جنيه
-                </span>
-
-              </div>
-
-
-              <button
-                class="add-btn"
-                type="button"
-                onclick="addToCart(${product.id})"
-              >
-                أضف للسلة
-                <span>+</span>
-              </button>
-
-            </div>
-
-          </div>
-
-        </article>
-
-      `;
-
-    }).join("");
+  }).join("");
 
 }
 
@@ -374,7 +320,7 @@ function openProduct(id) {
   const product =
     products.find(function(item) {
 
-      return Number(item.id) === Number(id);
+      return item.id === id;
 
     });
 
@@ -410,8 +356,8 @@ function openProduct(id) {
       <div class="product-details-image">
 
         <img
-          src="${product.image || ""}"
-          alt="${product.name || ""}"
+          src="${product.image}"
+          alt="${product.name}"
         >
 
       </div>
@@ -420,37 +366,27 @@ function openProduct(id) {
       <div class="product-details-content">
 
         <span class="cat">
-          ${product.category || ""}
+          ${product.category}
         </span>
 
 
         <h2>
-          ${product.name || ""}
+          ${product.name}
         </h2>
 
 
         <div class="rating">
-          ${"★".repeat(
-            Math.round(
-              Math.max(
-                0,
-                Math.min(
-                  5,
-                  Number(product.rating) || 5
-                )
-              )
-            )
-          )}
+          ${"★".repeat(product.rating || 5)}
         </div>
 
 
         <div class="details-price">
-          ${product.price || 0} جنيه
+          ${product.price} جنيه
         </div>
 
 
         <p>
-          ${product.description || ""}
+          ${product.description}
         </p>
 
 
@@ -459,6 +395,7 @@ function openProduct(id) {
           <strong>
             اللون
           </strong>
+
 
           <div class="option-buttons">
 
@@ -469,6 +406,7 @@ function openProduct(id) {
             >
               ذهبي
             </button>
+
 
             <button
               type="button"
@@ -488,6 +426,7 @@ function openProduct(id) {
           <strong>
             المقاس
           </strong>
+
 
           <div class="option-buttons">
 
@@ -513,9 +452,11 @@ function openProduct(id) {
             −
           </button>
 
+
           <b id="detailsQty">
             1
           </b>
+
 
           <button
             type="button"
@@ -607,7 +548,7 @@ function addToCart(id) {
   const product =
     products.find(function(item) {
 
-      return Number(item.id) === Number(id);
+      return item.id === id;
 
     });
 
@@ -617,7 +558,7 @@ function addToCart(id) {
   const existing =
     cart.find(function(item) {
 
-      return Number(item.id) === Number(id);
+      return item.id === id;
 
     });
 
@@ -636,7 +577,7 @@ function addToCart(id) {
 
       category: product.category,
 
-      price: Number(product.price) || 0,
+      price: product.price,
 
       qty: 1
 
@@ -759,9 +700,11 @@ function updateCart() {
               −
             </button>
 
+
             <b>
               ${item.qty}
             </b>
+
 
             <button
               type="button"
@@ -795,7 +738,7 @@ function changeQty(id, change) {
   const item =
     cart.find(function(product) {
 
-      return Number(product.id) === Number(id);
+      return product.id === id;
 
     });
 
@@ -810,7 +753,7 @@ function changeQty(id, change) {
     cart =
       cart.filter(function(product) {
 
-        return Number(product.id) !== Number(id);
+        return product.id !== id;
 
       });
 
@@ -961,8 +904,6 @@ document.addEventListener("DOMContentLoaded", function() {
   renderProducts();
 
   updateCart();
-
-  loadProducts();
 
 });
 
