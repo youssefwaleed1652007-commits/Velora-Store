@@ -4,10 +4,6 @@ const WHATSAPP = "201223562957";
 let cart = [];
 let activeCategory = "الكل";
 
-/* =========================
-   PRODUCTS
-========================= */
-
 const products = [
   {
     id: 1,
@@ -15,116 +11,78 @@ const products = [
     category: "خواتم",
     price: 280,
     image: "product-1.jpeg",
-    icon: "💍",
-    badge: "مميز",
-    rating: 5,
-    description: "خاتم أنيق بتصميم أوراق ناعم ومميز."
+    description: "خاتم أنيق بتصميم أوراق."
   },
-
   {
     id: 2,
     name: "سلسلة فاني كليف",
     category: "سلاسل",
     price: 320,
     image: "product-2.jpeg",
-    icon: "📿",
-    badge: "جديد",
-    rating: 5,
-    description: "سلسلة فاخرة بتصميم أنيق تناسب مختلف الإطلالات."
+    description: "سلسلة أنيقة ومميزة."
   },
-
   {
     id: 3,
     name: "أسورة فاني كليف",
     category: "أساور",
     price: 350,
     image: "product-3.jpeg",
-    icon: "✨",
-    badge: "مميز",
-    rating: 5,
-    description: "أسورة أنيقة بتصميم راقٍ تضيف لمسة فاخرة لإطلالتك."
+    description: "أسورة أنيقة بتصميم راقٍ."
   },
-
   {
     id: 4,
     name: "حلق دائري فخم",
     category: "حلق",
     price: 300,
     image: "product-4.jpeg",
-    icon: "💎",
-    badge: "جديد",
-    rating: 5,
-    description: "حلق دائري بتصميم فخم وأنيق."
+    description: "حلق دائري بتصميم فخم."
   },
-
   {
     id: 5,
     name: "خاتم ناعم",
     category: "خواتم",
     price: 240,
     image: "product-5.jpeg",
-    icon: "💍",
-    badge: "",
-    rating: 5,
-    description: "خاتم ناعم وبسيط مناسب للإطلالات اليومية."
+    description: "خاتم ناعم وبسيط."
   },
-
   {
     id: 6,
     name: "سلسلة نجمة",
     category: "سلاسل",
     price: 290,
     image: "product-6.jpeg",
-    icon: "📿",
-    badge: "",
-    rating: 5,
-    description: "سلسلة بتصميم نجمة أنيق ومميز."
+    description: "سلسلة بتصميم نجمة."
   },
-
   {
     id: 7,
     name: "أسورة رفيعة",
     category: "أساور",
     price: 260,
     image: "product-7.jpeg",
-    icon: "✨",
-    badge: "",
-    rating: 5,
-    description: "أسورة رفيعة بتصميم بسيط وأنيق."
+    description: "أسورة رفيعة وأنيقة."
   },
-
   {
     id: 8,
     name: "حلق لؤلؤ",
     category: "حلق",
     price: 330,
     image: "product-8.jpeg",
-    icon: "💎",
-    badge: "",
-    rating: 5,
-    description: "حلق بتفاصيل لؤلؤية أنيقة لإطلالة مميزة."
+    description: "حلق بتفاصيل لؤلؤية."
   }
 ];
 
-
-/* =========================
-   RENDER PRODUCTS
-========================= */
-
 function renderProducts() {
-
   const grid = document.getElementById("productGrid");
 
   if (!grid) return;
 
-  const searchInput = document.getElementById("search");
+  const search = document.getElementById("search");
 
-  const query = searchInput
-    ? searchInput.value.trim().toLowerCase()
+  const query = search
+    ? search.value.trim().toLowerCase()
     : "";
 
-  const filteredProducts = products.filter(function(product) {
-
+  const filtered = products.filter(function(product) {
     const categoryMatch =
       activeCategory === "الكل" ||
       product.category === activeCategory;
@@ -140,392 +98,189 @@ function renderProducts() {
       description.includes(query);
 
     return categoryMatch && searchMatch;
-
   });
 
-
-  if (!filteredProducts.length) {
-
-    grid.innerHTML = `
-      <div class="empty-products">
-
-        <div>✦</div>
-
-        <h3>
-          لم نجد هذا المنتج
-        </h3>
-
-        <p>
-          جربي البحث باسم مختلف.
-        </p>
-
-      </div>
-    `;
+  if (!filtered.length) {
+    grid.innerHTML =
+      '<div class="empty-products">' +
+      '<div>✦</div>' +
+      '<h3>لم نجد هذا المنتج</h3>' +
+      '<p>جربي البحث باسم مختلف.</p>' +
+      '</div>';
 
     return;
   }
 
+  grid.innerHTML = filtered.map(function(product) {
+    return (
+      '<article class="product">' +
 
-  grid.innerHTML = filteredProducts.map(function(product) {
+        '<div class="product-img" onclick="openProduct(' +
+        product.id +
+        ')">' +
 
-    const stars =
-      "★".repeat(product.rating || 5);
+          '<span class="product-badge">مميز</span>' +
 
-    return `
+          '<button class="favorite-btn" type="button" ' +
+          'onclick="event.stopPropagation(); toggleFavorite(this)">' +
+          '♡' +
+          '</button>' +
 
-      <article class="product">
+          '<img src="' +
+          product.image +
+          '" alt="' +
+          product.name +
+          '" loading="lazy">' +
 
-        <div
-          class="product-img"
-          onclick="openProduct(${product.id})"
-        >
+        '</div>' +
 
-          ${
-            product.badge
-              ? `
-                <span class="product-badge">
-                  ${product.badge}
-                </span>
-              `
-              : ""
-          }
+        '<div class="product-info">' +
 
-          <button
-            class="favorite-btn"
-            type="button"
-            aria-label="إضافة للمفضلة"
-            onclick="event.stopPropagation(); toggleFavorite(this)"
-          >
-            ♡
-          </button>
+          '<div class="product-top">' +
 
-          <img
-            src="${product.image}"
-            alt="${product.name}"
-            loading="lazy"
-            onerror="this.style.display='none'; this.parentElement.classList.add('image-error')"
-          >
+            '<span class="cat">' +
+            product.category +
+            '</span>' +
 
-        </div>
+            '<span class="rating">★★★★★</span>' +
 
+          '</div>' +
 
-        <div class="product-info">
+          '<h3>' +
+          product.name +
+          '</h3>' +
 
-          <div class="product-top">
+          '<p class="product-desc">' +
+          product.description +
+          '</p>' +
 
-            <span class="cat">
-              ${product.category}
-            </span>
+          '<div class="product-bottom">' +
 
-            <span class="rating">
-              ${stars}
-            </span>
+            '<div class="product-price">' +
+              '<strong>' +
+              product.price +
+              '</strong>' +
+              '<span> جنيه</span>' +
+            '</div>' +
 
-          </div>
+            '<button class="add-btn" type="button" ' +
+            'onclick="addToCart(' +
+            product.id +
+            ')">' +
+            'أضف للسلة <span>+</span>' +
+            '</button>' +
 
+          '</div>' +
 
-          <h3>
-            ${product.name}
-          </h3>
+        '</div>' +
 
-
-          <p class="product-desc">
-            ${product.description}
-          </p>
-
-
-          <div class="product-bottom">
-
-            <div class="product-price">
-
-              <strong>
-                ${product.price}
-              </strong>
-
-              <span>
-                جنيه
-              </span>
-
-            </div>
-
-
-            <button
-              class="add-btn"
-              type="button"
-              onclick="addToCart(${product.id})"
-            >
-              أضف للسلة
-              <span>+</span>
-            </button>
-
-          </div>
-
-        </div>
-
-      </article>
-
-    `;
-
+      '</article>'
+    );
   }).join("");
-
 }
 
-
-/* =========================
-   FILTER
-========================= */
-
 function filterProducts(category) {
-
   activeCategory = category;
 
   renderProducts();
 
-  const section =
-    document.getElementById("products");
+  const section = document.getElementById("products");
 
   if (section) {
-
     section.scrollIntoView({
       behavior: "smooth"
     });
-
   }
-
 }
 
-
-/* =========================
-   FAVORITES
-========================= */
-
 function toggleFavorite(button) {
-
   button.classList.toggle("active");
 
   button.textContent =
     button.classList.contains("active")
       ? "♥"
       : "♡";
-
 }
 
-
-/* =========================
-   PRODUCT DETAILS
-========================= */
-
 function openProduct(id) {
-
-  const product =
-    products.find(function(item) {
-
-      return item.id === id;
-
-    });
+  const product = products.find(function(item) {
+    return item.id === id;
+  });
 
   if (!product) return;
 
+  const modal = document.createElement("div");
 
-  const modal =
-    document.createElement("div");
+  modal.className = "modal product-details-modal";
 
-  modal.className =
-    "modal product-details-modal";
+  modal.innerHTML =
+    '<div class="modal-overlay" onclick="this.parentElement.remove()"></div>' +
 
+    '<div class="modal-box product-details-box">' +
 
-  modal.innerHTML = `
+      '<button class="close" type="button" ' +
+      'onclick="this.closest(\'.modal\').remove()">×</button>' +
 
-    <div
-      class="modal-overlay"
-      onclick="this.parentElement.remove()"
-    ></div>
+      '<div class="product-details-image">' +
+        '<img src="' +
+        product.image +
+        '" alt="' +
+        product.name +
+        '">' +
+      '</div>' +
 
+      '<div class="product-details-content">' +
 
-    <div class="modal-box product-details-box">
+        '<span class="cat">' +
+        product.category +
+        '</span>' +
 
-      <button
-        class="close"
-        type="button"
-        onclick="this.closest('.modal').remove()"
-      >
-        ×
-      </button>
+        '<h2>' +
+        product.name +
+        '</h2>' +
 
+        '<div class="rating">★★★★★</div>' +
 
-      <div class="product-details-image">
+        '<div class="details-price">' +
+        product.price +
+        ' جنيه</div>' +
 
-        <img
-          src="${product.image}"
-          alt="${product.name}"
-        >
+        '<p>' +
+        product.description +
+        '</p>' +
 
-      </div>
+        '<div class="details-quantity">' +
 
+          '<button type="button" ' +
+          'onclick="changeDetailsQty(-1)">−</button>' +
 
-      <div class="product-details-content">
+          '<b id="detailsQty">1</b>' +
 
-        <span class="cat">
-          ${product.category}
-        </span>
+          '<button type="button" ' +
+          'onclick="changeDetailsQty(1)">+</button>' +
 
+        '</div>' +
 
-        <h2>
-          ${product.name}
-        </h2>
+        '<button class="primary full" type="button" ' +
+        'onclick="addToCart(' +
+        product.id +
+        '); this.closest(\'.modal\').remove()">' +
+        'أضف للسلة' +
+        '</button>' +
 
+      '</div>' +
 
-        <div class="rating">
-          ${"★".repeat(product.rating || 5)}
-        </div>
-
-
-        <div class="details-price">
-          ${product.price} جنيه
-        </div>
-
-
-        <p>
-          ${product.description}
-        </p>
-
-
-        <div class="details-option">
-
-          <strong>
-            اللون
-          </strong>
-
-
-          <div class="option-buttons">
-
-            <button
-              type="button"
-              class="option selected"
-              onclick="selectOption(this)"
-            >
-              ذهبي
-            </button>
-
-
-            <button
-              type="button"
-              class="option"
-              onclick="selectOption(this)"
-            >
-              فضي
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="details-option">
-
-          <strong>
-            المقاس
-          </strong>
-
-
-          <div class="option-buttons">
-
-            <button
-              type="button"
-              class="option selected"
-              onclick="selectOption(this)"
-            >
-              عادي
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="details-quantity">
-
-          <button
-            type="button"
-            onclick="changeDetailsQty(-1)"
-          >
-            −
-          </button>
-
-
-          <b id="detailsQty">
-            1
-          </b>
-
-
-          <button
-            type="button"
-            onclick="changeDetailsQty(1)"
-          >
-            +
-          </button>
-
-        </div>
-
-
-        <button
-          type="button"
-          class="primary full"
-          onclick="
-            addToCart(${product.id});
-            this.closest('.modal').remove();
-          "
-        >
-          أضف للسلة
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
+    '</div>';
 
   document.body.appendChild(modal);
-
 }
-
-
-/* =========================
-   OPTIONS
-========================= */
-
-function selectOption(button) {
-
-  const container =
-    button.parentElement;
-
-  container
-    .querySelectorAll(".option")
-    .forEach(function(item) {
-
-      item.classList.remove("selected");
-
-    });
-
-  button.classList.add("selected");
-
-}
-
-
-/* =========================
-   DETAILS QUANTITY
-========================= */
 
 function changeDetailsQty(change) {
-
-  const element =
-    document.getElementById("detailsQty");
+  const element = document.getElementById("detailsQty");
 
   if (!element) return;
 
-  let quantity =
-    parseInt(element.textContent) || 1;
+  let quantity = parseInt(element.textContent) || 1;
 
   quantity += change;
 
@@ -533,392 +288,219 @@ function changeDetailsQty(change) {
     quantity = 1;
   }
 
-  element.textContent =
-    quantity;
-
+  element.textContent = quantity;
 }
 
-
-/* =========================
-   ADD TO CART
-========================= */
-
 function addToCart(id) {
-
-  const product =
-    products.find(function(item) {
-
-      return item.id === id;
-
-    });
+  const product = products.find(function(item) {
+    return item.id === id;
+  });
 
   if (!product) return;
 
-
-  const existing =
-    cart.find(function(item) {
-
-      return item.id === id;
-
-    });
-
+  const existing = cart.find(function(item) {
+    return item.id === id;
+  });
 
   if (existing) {
-
     existing.qty++;
-
   } else {
-
     cart.push({
-
       id: product.id,
-
       name: product.name,
-
       category: product.category,
-
       price: product.price,
-
       qty: 1
-
     });
-
   }
-
 
   updateCart();
-
   openCart();
-
 }
 
-
-/* =========================
-   UPDATE CART
-========================= */
-
 function updateCart() {
+  const cartCount = document.getElementById("cartCount");
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
 
-  const cartCount =
-    document.getElementById("cartCount");
+  const totalQuantity = cart.reduce(function(sum, item) {
+    return sum + item.qty;
+  }, 0);
 
-  const cartItems =
-    document.getElementById("cartItems");
-
-  const cartTotal =
-    document.getElementById("cartTotal");
-
-
-  const totalQuantity =
-    cart.reduce(function(sum, item) {
-
-      return sum + item.qty;
-
-    }, 0);
-
-
-  const totalPrice =
-    cart.reduce(function(sum, item) {
-
-      return sum + item.price * item.qty;
-
-    }, 0);
-
+  const totalPrice = cart.reduce(function(sum, item) {
+    return sum + item.price * item.qty;
+  }, 0);
 
   if (cartCount) {
-
-    cartCount.textContent =
-      totalQuantity;
-
+    cartCount.textContent = totalQuantity;
   }
-
 
   if (cartTotal) {
-
-    cartTotal.textContent =
-      totalPrice;
-
+    cartTotal.textContent = totalPrice;
   }
-
 
   if (!cartItems) return;
 
-
   if (!cart.length) {
-
-    cartItems.innerHTML = `
-
-      <div class="cart-empty">
-
-        <div>
-          🛍️
-        </div>
-
-        <h3>
-          السلة فارغة
-        </h3>
-
-        <p>
-          أضيفي بعض القطع الجميلة للبدء.
-        </p>
-
-      </div>
-
-    `;
+    cartItems.innerHTML =
+      '<div class="cart-empty">' +
+      '<div>🛍️</div>' +
+      '<h3>السلة فارغة</h3>' +
+      '<p>أضيفي بعض القطع الجميلة للبدء.</p>' +
+      '</div>';
 
     return;
-
   }
 
+  cartItems.innerHTML = cart.map(function(item) {
+    return (
+      '<div class="cart-line">' +
 
-  cartItems.innerHTML =
-    cart.map(function(item) {
+        '<div class="cart-product">' +
+          '<strong>' +
+          item.name +
+          '</strong>' +
+          '<span class="cat">' +
+          item.price +
+          ' جنيه للقطعة</span>' +
+        '</div>' +
 
-      return `
+        '<div class="quantity">' +
 
-        <div class="cart-line">
+          '<button type="button" ' +
+          'onclick="changeQty(' +
+          item.id +
+          ', -1)">−</button>' +
 
-          <div class="cart-product">
+          '<b>' +
+          item.qty +
+          '</b>' +
 
-            <strong>
-              ${item.name}
-            </strong>
+          '<button type="button" ' +
+          'onclick="changeQty(' +
+          item.id +
+          ', 1)">+</button>' +
 
-            <span class="cat">
-              ${item.price} جنيه للقطعة
-            </span>
+        '</div>' +
 
-          </div>
+        '<strong class="cart-price">' +
+        item.price * item.qty +
+        ' جنيه</strong>' +
 
-
-          <div class="quantity">
-
-            <button
-              type="button"
-              onclick="changeQty(${item.id}, -1)"
-            >
-              −
-            </button>
-
-
-            <b>
-              ${item.qty}
-            </b>
-
-
-            <button
-              type="button"
-              onclick="changeQty(${item.id}, 1)"
-            >
-              +
-            </button>
-
-          </div>
-
-
-          <strong class="cart-price">
-            ${item.price * item.qty} جنيه
-          </strong>
-
-        </div>
-
-      `;
-
-    }).join("");
-
+      '</div>'
+    );
+  }).join("");
 }
 
-
-/* =========================
-   CHANGE CART QUANTITY
-========================= */
-
 function changeQty(id, change) {
-
-  const item =
-    cart.find(function(product) {
-
-      return product.id === id;
-
-    });
+  const item = cart.find(function(product) {
+    return product.id === id;
+  });
 
   if (!item) return;
 
-
   item.qty += change;
 
-
   if (item.qty <= 0) {
-
-    cart =
-      cart.filter(function(product) {
-
-        return product.id !== id;
-
-      });
-
+    cart = cart.filter(function(product) {
+      return product.id !== id;
+    });
   }
 
-
   updateCart();
-
 }
 
-
-/* =========================
-   CART
-========================= */
-
 function openCart() {
-
-  const modal =
-    document.getElementById("cartModal");
+  const modal = document.getElementById("cartModal");
 
   if (!modal) return;
 
   modal.classList.remove("hidden");
 
   updateCart();
-
 }
 
-
 function closeCart() {
-
-  const modal =
-    document.getElementById("cartModal");
+  const modal = document.getElementById("cartModal");
 
   if (!modal) return;
 
   modal.classList.add("hidden");
-
 }
-
-
-/* =========================
-   WHATSAPP
-========================= */
 
 function checkout() {
-
   if (!cart.length) {
-
     alert("السلة فارغة");
-
     return;
-
   }
 
+  const lines = cart.map(function(item) {
+    return (
+      "• " +
+      item.name +
+      " × " +
+      item.qty +
+      " — " +
+      item.price * item.qty +
+      " جنيه"
+    );
+  }).join("\n");
 
-  const lines =
-    cart.map(function(item) {
-
-      return `• ${item.name} × ${item.qty} — ${item.price * item.qty} جنيه`;
-
-    }).join("\n");
-
-
-  const total =
-    cart.reduce(function(sum, item) {
-
-      return sum + item.price * item.qty;
-
-    }, 0);
-
+  const total = cart.reduce(function(sum, item) {
+    return sum + item.price * item.qty;
+  }, 0);
 
   const message =
-`مرحبًا VELORA، أريد طلب:
-
-${lines}
-
-الإجمالي: ${total} جنيه
-
-الاسم:
-العنوان:
-رقم الهاتف:`;
-
+    "مرحبًا VELORA، أريد طلب:\n\n" +
+    lines +
+    "\n\nالإجمالي: " +
+    total +
+    " جنيه\n\n" +
+    "الاسم:\n" +
+    "العنوان:\n" +
+    "رقم الهاتف:";
 
   window.open(
-    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`,
+    "https://wa.me/" +
+    WHATSAPP +
+    "?text=" +
+    encodeURIComponent(message),
     "_blank"
   );
-
 }
 
-
-/* =========================
-   MOBILE MENU
-========================= */
-
 function toggleMenu() {
-
-  const nav =
-    document.getElementById("mainNav");
+  const nav = document.getElementById("mainNav");
 
   if (!nav) return;
 
   nav.classList.toggle("mobile-open");
-
 }
 
-
 document.addEventListener("click", function(event) {
-
   if (event.target.closest("nav a")) {
-
-    const nav =
-      document.getElementById("mainNav");
+    const nav = document.getElementById("mainNav");
 
     if (nav) {
-
       nav.classList.remove("mobile-open");
-
     }
-
   }
-
 });
-
-
-/* =========================
-   SEARCH
-========================= */
 
 document.addEventListener("input", function(event) {
-
   if (event.target.id === "search") {
-
     renderProducts();
-
   }
-
 });
-
-
-/* =========================
-   START
-========================= */
 
 document.addEventListener("DOMContentLoaded", function() {
-
   renderProducts();
-
   updateCart();
-
 });
 
-
-/* =========================
-   ESC
-========================= */
-
 document.addEventListener("keydown", function(event) {
-
   if (event.key === "Escape") {
-
     closeCart();
-
   }
-
 });
 ```
