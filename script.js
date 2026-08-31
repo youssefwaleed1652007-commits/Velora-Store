@@ -1,7 +1,7 @@
 const WHATSAPP = "201223562957";
 
 const SUPABASE_URL = "https://nflcafxxjhinumvxyyxt.supabase.co";
-const SUPABASE_KEY = "ضع هنا نفس Publishable Key الموجود في admin.html";
+const SUPABASE_KEY = "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
