@@ -2,195 +2,712 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>VELORA | لوحة التحكم</title>
+  <title>VELORA | Admin</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <link rel="stylesheet" href="admin.css">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #171514;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo h1 {
+      margin: 0;
+      letter-spacing: 5px;
+    }
+
+    .logo p {
+      color: #c9a96e;
+    }
+
+    .box {
+      background: #211f1e;
+      border: 1px solid #3b3633;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #4b4541;
+      background: #171514;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 20px;
+      background: #c9a96e;
+      color: #171514;
+      font-weight: bold;
+    }
+
+    .logout {
+      background: #3b3633;
+      color: #fff;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .product {
+      border-top: 1px solid #3b3633;
+      padding: 15px 0;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .product img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-info h3 {
+      margin: 0 0 5px;
+    }
+
+    .product-info p {
+      margin: 3px 0;
+      color: #c9a96e;
+    }
+
+    .delete {
+      background: #6b2929;
+      color: white;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="admin-container">
+<div class="container">
 
-        <!-- Header -->
-        <header class="admin-header">
-            <div>
-                <span class="admin-label">VELORA</span>
-                <h1>لوحة التحكم</h1>
-                <p>إدارة منتجات المتجر بسهولة</p>
-            </div>
-
-            <a href="index.html" class="store-btn">
-                🛍️ العودة للمتجر
-            </a>
-        </header>
+  <div class="logo">
+    <h1>VELORA</h1>
+    <p>ADMIN PANEL</p>
+  </div>
 
 
-        <!-- Add Product -->
-        <section class="admin-card">
+  <!-- LOGIN -->
 
-            <div class="card-title">
-                <span>➕</span>
-                <div>
-                    <h2>إضافة منتج جديد</h2>
-                    <p>أدخل بيانات المنتج ليظهر في المتجر</p>
-                </div>
-            </div>
+  <div id="loginBox" class="box">
 
-            <form id="productForm">
+    <h2>تسجيل دخول الإدارة</h2>
 
-                <!-- Product Image -->
-                <div class="form-group">
-                    <label for="productImage">📸 صورة المنتج</label>
+    <label>الإيميل</label>
 
-                    <input
-                        type="file"
-                        id="productImage"
-                        accept="image/*"
-                    >
+    <input
+      id="email"
+      type="email"
+      placeholder="admin@email.com"
+    >
 
-                    <div id="imagePreview" class="image-preview">
-                        <span>لم يتم اختيار صورة</span>
-                    </div>
-                </div>
+    <label>كلمة المرور</label>
 
+    <input
+      id="password"
+      type="password"
+      placeholder="كلمة المرور"
+    >
 
-                <!-- Product Name -->
-                <div class="form-group">
-                    <label for="productName">🏷️ اسم المنتج</label>
+    <button
+      class="primary"
+      onclick="login()"
+    >
+      دخول
+    </button>
 
-                    <input
-                        type="text"
-                        id="productName"
-                        placeholder="مثال: خاتم أوراق"
-                        required
-                    >
-                </div>
+    <div id="loginStatus" class="status"></div>
+
+  </div>
 
 
-                <!-- Price -->
-                <div class="form-row">
+  <!-- ADMIN -->
 
-                    <div class="form-group">
-                        <label for="productPrice">💰 السعر</label>
+  <div id="adminPanel" class="hidden">
 
-                        <input
-                            type="number"
-                            id="productPrice"
-                            placeholder="280"
-                            min="0"
-                            required
-                        >
-                    </div>
+    <div class="box">
 
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
 
-                    <!-- Category -->
-                    <div class="form-group">
-                        <label for="productCategory">📂 القسم</label>
+        <h2>إضافة منتج</h2>
 
-                        <select id="productCategory" required>
-                            <option value="">اختر القسم</option>
-                            <option value="خواتم">خواتم</option>
-                            <option value="سلاسل">سلاسل</option>
-                            <option value="أساور">أساور</option>
-                            <option value="حلقان">حلقان</option>
-                            <option value="إكسسوارات">إكسسوارات</option>
-                        </select>
-                    </div>
+        <button
+          class="logout"
+          onclick="logout()"
+        >
+          خروج
+        </button>
 
-                </div>
+      </div>
 
 
-                <!-- Description -->
-                <div class="form-group">
-                    <label for="productDescription">📝 وصف المنتج</label>
+      <label>اسم المنتج</label>
 
-                    <textarea
-                        id="productDescription"
-                        rows="4"
-                        placeholder="اكتب وصفًا مختصرًا للمنتج..."
-                    ></textarea>
-                </div>
+      <input
+        id="productName"
+        type="text"
+        placeholder="مثال: خاتم فاخر"
+      >
 
 
-                <!-- Rating & Badge -->
-                <div class="form-row">
+      <label>السعر</label>
 
-                    <div class="form-group">
-                        <label for="productRating">⭐ التقييم</label>
-
-                        <input
-                            type="number"
-                            id="productRating"
-                            value="5"
-                            min="0"
-                            max="5"
-                            step="0.1"
-                        >
-                    </div>
+      <input
+        id="productPrice"
+        type="number"
+        min="0"
+        placeholder="280"
+      >
 
 
-                    <div class="form-group">
-                        <label for="productBadge">🔖 الشارة</label>
+      <label>القسم</label>
 
-                        <select id="productBadge">
-                            <option value="">بدون شارة</option>
-                            <option value="جديد">جديد</option>
-                            <option value="الأكثر مبيعًا">الأكثر مبيعًا</option>
-                            <option value="مميز">مميز</option>
-                            <option value="عرض خاص">عرض خاص</option>
-                        </select>
-                    </div>
+      <select id="productCategory">
 
-                </div>
+        <option value="خواتم">خواتم</option>
+        <option value="سلاسل">سلاسل</option>
+        <option value="أساور">أساور</option>
+        <option value="حلق">حلق</option>
+
+      </select>
 
 
-                <!-- Submit -->
-                <button type="submit" class="add-product-btn">
-                    ➕ إضافة المنتج
-                </button>
+      <label>الوصف</label>
 
-            </form>
-
-        </section>
+      <textarea
+        id="productDescription"
+        placeholder="اكتب وصف المنتج..."
+      ></textarea>
 
 
-        <!-- Products List -->
-        <section class="admin-card">
+      <label>صورة المنتج</label>
 
-            <div class="card-title">
-                <span>📦</span>
-                <div>
-                    <h2>المنتجات الحالية</h2>
-                    <p>إدارة المنتجات الموجودة في المتجر</p>
-                </div>
-            </div>
+      <input
+        id="productImage"
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+      >
 
-            <div id="productsList" class="products-list">
 
-                <div class="empty-products">
-                    <span>📦</span>
-                    <p>سيتم عرض المنتجات هنا</p>
-                </div>
+      <button
+        class="primary"
+        onclick="addProduct()"
+      >
+        إضافة المنتج
+      </button>
 
-            </div>
 
-        </section>
+      <div
+        id="addStatus"
+        class="status"
+      ></div>
 
     </div>
 
 
-    <!-- Admin JavaScript -->
+    <div class="box">
+
+      <h2>المنتجات الحالية</h2>
+
+      <div id="productsList">
+        جاري التحميل...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
-alert("VELORA ADMIN JS WORKING");
+
+const SUPABASE_URL = "ضع SUPABASE_URL هنا";
+
+const SUPABASE_KEY = "ضع SUPABASE_PUBLISHABLE_KEY هنا";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+function showStatus(id, message) {
+
+  const element =
+    document.getElementById(id);
+
+  element.textContent = message;
+
+  element.classList.add("show");
+
+}
+
+
+async function login() {
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+
+  if (!email || !password) {
+
+    showStatus(
+      "loginStatus",
+      "اكتب الإيميل وكلمة المرور."
+    );
+
+    return;
+
+  }
+
+
+  const { error } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  if (error) {
+
+    showStatus(
+      "loginStatus",
+      "بيانات الدخول غير صحيحة."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("loginBox")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("adminPanel")
+    .classList.remove("hidden");
+
+
+  loadProducts();
+
+}
+
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  location.reload();
+
+}
+
+
+async function checkLogin() {
+
+  const {
+    data
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if (
+    data &&
+    data.session
+  ) {
+
+    document
+      .getElementById("loginBox")
+      .classList.add("hidden");
+
+
+    document
+      .getElementById("adminPanel")
+      .classList.remove("hidden");
+
+
+    loadProducts();
+
+  }
+
+}
+
+
+async function addProduct() {
+
+  const name =
+    document
+      .getElementById("productName")
+      .value
+      .trim();
+
+
+  const price =
+    Number(
+      document
+        .getElementById("productPrice")
+        .value
+    );
+
+
+  const category =
+    document
+      .getElementById("productCategory")
+      .value;
+
+
+  const description =
+    document
+      .getElementById("productDescription")
+      .value
+      .trim();
+
+
+  const file =
+    document
+      .getElementById("productImage")
+      .files[0];
+
+
+  if (
+    !name ||
+    !price ||
+    !category ||
+    !file
+  ) {
+
+    showStatus(
+      "addStatus",
+      "من فضلك املأ البيانات واختر صورة."
+    );
+
+    return;
+
+  }
+
+
+  showStatus(
+    "addStatus",
+    "جاري إضافة المنتج..."
+  );
+
+
+  const fileName =
+    Date.now() +
+    "-" +
+    file.name.replace(
+      /[^a-zA-Z0-9.-]/g,
+      "-"
+    );
+
+
+  const filePath =
+    fileName;
+
+
+  const upload =
+    await supabaseClient
+      .storage
+      .from("products")
+      .upload(
+        filePath,
+        file,
+        {
+          upsert: false
+        }
+      );
+
+
+  if (upload.error) {
+
+    showStatus(
+      "addStatus",
+      "حدث خطأ أثناء رفع الصورة."
+    );
+
+    return;
+
+  }
+
+
+  const {
+    data: publicData
+  } =
+    supabaseClient
+      .storage
+      .from("products")
+      .getPublicUrl(filePath);
+
+
+  const imageUrl =
+    publicData.publicUrl;
+
+
+  const insert =
+    await supabaseClient
+      .from("Velora")
+      .insert({
+
+        name: name,
+
+        price: price,
+
+        description: description,
+
+        category: category,
+
+        image: imageUrl
+
+      });
+
+
+  if (insert.error) {
+
+    showStatus(
+      "addStatus",
+      "حدث خطأ أثناء حفظ المنتج."
+    );
+
+    return;
+
+  }
+
+
+  showStatus(
+    "addStatus",
+    "تم إضافة المنتج بنجاح ✅"
+  );
+
+
+  document
+    .getElementById("productName")
+    .value = "";
+
+
+  document
+    .getElementById("productPrice")
+    .value = "";
+
+
+  document
+    .getElementById("productDescription")
+    .value = "";
+
+
+  document
+    .getElementById("productImage")
+    .value = "";
+
+
+  loadProducts();
+
+}
+
+
+async function loadProducts() {
+
+  const list =
+    document.getElementById("productsList");
+
+
+  list.textContent =
+    "جاري التحميل...";
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("Velora")
+      .select("*")
+      .order("id", {
+        ascending: false
+      });
+
+
+  if (error) {
+
+    list.textContent =
+      "حدث خطأ في تحميل المنتجات.";
+
+    return;
+
+  }
+
+
+  if (!data || !data.length) {
+
+    list.textContent =
+      "لا توجد منتجات حاليًا.";
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.map(function(product) {
+
+      return `
+
+        <div class="product">
+
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+          >
+
+          <div class="product-info">
+
+            <h3>
+              ${product.name}
+            </h3>
+
+            <p>
+              ${product.price} جنيه
+            </p>
+
+            <small>
+              ${product.category}
+            </small>
+
+          </div>
+
+          <button
+            class="delete"
+            onclick="deleteProduct(${product.id})"
+          >
+            حذف
+          </button>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+async function deleteProduct(id) {
+
+  if (
+    !confirm(
+      "هل تريد حذف هذا المنتج؟"
+    )
+  ) {
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("Velora")
+      .delete()
+      .eq("id", id);
+
+
+  if (error) {
+
+    alert(
+      "حدث خطأ أثناء حذف المنتج."
+    );
+
+    return;
+
+  }
+
+
+  loadProducts();
+
+}
+
+
+checkLogin();
+
 </script>
+
 </body>
 </html>
 ```
