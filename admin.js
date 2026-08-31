@@ -1,5 +1,4 @@
 alert("VELORA ADMIN JS WORKING");
-alert("admin.js شغال");
 ```javascript
 // ================================
 // VELORA ADMIN PANEL
