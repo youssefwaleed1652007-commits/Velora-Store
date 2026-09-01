@@ -1,11 +1,12 @@
 /* =========================================================
-   VELORA - MAIN SCRIPT
-   Supabase + Products + Search + Categories + Cart + WhatsApp
+   VELORA STORE
+   Supabase + Products + Details + Options + Cart + WhatsApp
 ========================================================= */
 
-const WHATSAPP = "201112989746";
+const WHATSAPP = "201223562957";
 
-const SUPABASE_URL = "https://nflcafxxjhinumvxyyxt.supabase.co";
+const SUPABASE_URL =
+  "https://nflcafxxjhinumvxyyxt.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
@@ -17,17 +18,42 @@ const supabaseClient =
   );
 
 
-/* =========================================================
-   GLOBAL DATA
-========================================================= */
-
 let products = [];
 let cart = [];
 let activeCategory = "الكل";
 
 
 /* =========================================================
-   LOAD PRODUCTS FROM SUPABASE
+   HELPERS
+========================================================= */
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function normalizeArray(value) {
+
+  if (Array.isArray(value)) {
+    return value
+      .map(function(item) {
+        return String(item).trim();
+      })
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+
+/* =========================================================
+   LOAD PRODUCTS
 ========================================================= */
 
 async function loadProducts() {
@@ -64,17 +90,18 @@ async function loadProducts() {
     grid.innerHTML =
       '<div class="empty-products">' +
         '<div>⚠️</div>' +
-        '<h3>حدث خطأ</h3>' +
-        '<p>تعذر تحميل المنتجات حاليًا.</p>' +
+        '<h3>تعذر تحميل المنتجات</h3>' +
+        '<p>حاول تحديث الصفحة مرة أخرى.</p>' +
       '</div>';
 
     return;
   }
 
 
-  products = Array.isArray(result.data)
-    ? result.data
-    : [];
+  products =
+    Array.isArray(result.data)
+      ? result.data
+      : [];
 
 
   renderProducts();
@@ -93,13 +120,13 @@ function renderProducts() {
   if (!grid) return;
 
 
-  const search =
+  const searchInput =
     document.getElementById("search");
 
 
   const query =
-    search
-      ? search.value.trim().toLowerCase()
+    searchInput
+      ? searchInput.value.trim().toLowerCase()
       : "";
 
 
@@ -108,7 +135,7 @@ function renderProducts() {
 
       const categoryMatch =
         activeCategory === "الكل" ||
-        product.category === activeCategory;
+        String(product.category || "") === activeCategory;
 
 
       const name =
@@ -121,12 +148,14 @@ function renderProducts() {
           .toLowerCase();
 
 
-      const searchMatch =
-        name.includes(query) ||
-        description.includes(query);
-
-
-      return categoryMatch && searchMatch;
+      return (
+        categoryMatch &&
+        (
+          !query ||
+          name.includes(query) ||
+          description.includes(query)
+        )
+      );
 
     });
 
@@ -157,16 +186,16 @@ function renderProducts() {
 
           <div
             class="product-image"
-            onclick="openProduct(${product.id})"
-            style="cursor:pointer;"
+            onclick="openProduct(${Number(product.id)})"
+            style="cursor:pointer; position:relative;"
           >
 
             ${
               image
                 ? `
                   <img
-                    src="${image}"
-                    alt="${escapeHTML(product.name)}"
+                    src="${escapeHTML(image)}"
+                    alt="${escapeHTML(product.name || "")}"
                     loading="lazy"
                     style="
                       width:100%;
@@ -174,7 +203,7 @@ function renderProducts() {
                       object-fit:cover;
                       display:block;
                     "
-                    onerror="this.style.display='none';"
+                    onerror="this.style.display='none'"
                   >
                 `
                 : `
@@ -186,7 +215,6 @@ function renderProducts() {
               class="favorite-btn"
               type="button"
               onclick="event.stopPropagation(); toggleFavorite(this)"
-              aria-label="إضافة للمفضلة"
             >
               ♡
             </button>
@@ -225,9 +253,9 @@ function renderProducts() {
             <button
               class="primary full"
               type="button"
-              onclick="addToCart(${product.id})"
+              onclick="openProduct(${Number(product.id)})"
             >
-              أضف للسلة
+              عرض التفاصيل
             </button>
 
           </div>
@@ -241,27 +269,13 @@ function renderProducts() {
 
 
 /* =========================================================
-   HTML SAFETY
-========================================================= */
-
-function escapeHTML(value) {
-
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-/* =========================================================
    CATEGORY FILTER
 ========================================================= */
 
 function filterProducts(category) {
 
-  activeCategory = category;
+  activeCategory =
+    category || "الكل";
 
   renderProducts();
 
@@ -288,9 +302,7 @@ function toggleFavorite(button) {
 
   if (!button) return;
 
-
   button.classList.toggle("active");
-
 
   button.textContent =
     button.classList.contains("active")
@@ -316,16 +328,35 @@ function openProduct(id) {
   if (!product) return;
 
 
+  const colors =
+    normalizeArray(product.colors);
+
+
+  const sizes =
+    normalizeArray(product.sizes);
+
+
+  let selectedColor =
+    colors.length
+      ? colors[0]
+      : "";
+
+
+  let selectedSize =
+    sizes.length
+      ? sizes[0]
+      : "";
+
+
+  let quantity = 1;
+
+
   const modal =
     document.createElement("div");
 
 
   modal.className =
     "modal product-details-modal";
-
-
-  const image =
-    product.image || "";
 
 
   modal.innerHTML = `
@@ -336,7 +367,10 @@ function openProduct(id) {
     ></div>
 
 
-    <div class="modal-box product-details-box">
+    <div
+      class="modal-box product-details-box"
+      style="max-height:90vh;overflow:auto;"
+    >
 
       <button
         class="close"
@@ -350,17 +384,17 @@ function openProduct(id) {
       <div class="product-details-image">
 
         ${
-          image
+          product.image
             ? `
               <img
-                src="${image}"
-                alt="${escapeHTML(product.name)}"
+                src="${escapeHTML(product.image)}"
+                alt="${escapeHTML(product.name || "")}"
               >
             `
             : `
               <div
                 style="
-                  height:100%;
+                  min-height:220px;
                   display:flex;
                   align-items:center;
                   justify-content:center;
@@ -397,15 +431,123 @@ function openProduct(id) {
         </div>
 
 
-        <p>
-          ${escapeHTML(
-            product.description ||
-            "قطعة أنيقة من مجموعة VELORA."
-          )}
-        </p>
+        ${
+          product.description
+            ? `
+              <p>
+                ${escapeHTML(product.description)}
+              </p>
+            `
+            : ""
+        }
 
 
-        <div class="details-quantity">
+        ${
+          colors.length
+            ? `
+              <div class="product-option-block">
+
+                <strong>
+                  اللون
+                </strong>
+
+                <div
+                  class="product-option-list"
+                  id="colorOptions"
+                  style="
+                    display:flex;
+                    flex-wrap:wrap;
+                    gap:8px;
+                    margin-top:10px;
+                  "
+                >
+
+                  ${colors.map(function(color, index) {
+
+                    return `
+                      <button
+                        type="button"
+                        class="option-btn ${index === 0 ? "selected" : ""}"
+                        data-value="${escapeHTML(color)}"
+                        onclick="selectProductOption(this, 'color')"
+                        style="
+                          padding:9px 14px;
+                          border:1px solid #c9a96e;
+                          border-radius:9px;
+                        "
+                      >
+                        ${escapeHTML(color)}
+                      </button>
+                    `;
+
+                  }).join("")}
+
+                </div>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        ${
+          sizes.length
+            ? `
+              <div class="product-option-block" style="margin-top:15px;">
+
+                <strong>
+                  المقاس
+                </strong>
+
+                <div
+                  class="product-option-list"
+                  id="sizeOptions"
+                  style="
+                    display:flex;
+                    flex-wrap:wrap;
+                    gap:8px;
+                    margin-top:10px;
+                  "
+                >
+
+                  ${sizes.map(function(size, index) {
+
+                    return `
+                      <button
+                        type="button"
+                        class="option-btn ${index === 0 ? "selected" : ""}"
+                        data-value="${escapeHTML(size)}"
+                        onclick="selectProductOption(this, 'size')"
+                        style="
+                          padding:9px 14px;
+                          border:1px solid #c9a96e;
+                          border-radius:9px;
+                        "
+                      >
+                        ${escapeHTML(size)}
+                      </button>
+                    `;
+
+                  }).join("")}
+
+                </div>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        <div
+          class="details-quantity"
+          style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:18px;
+            margin:20px 0;
+          "
+        >
 
           <button
             type="button"
@@ -433,7 +575,10 @@ function openProduct(id) {
         <button
           class="primary full"
           type="button"
-          onclick="addDetailsToCart(${product.id}); this.closest('.modal').remove()"
+          onclick="
+            addDetailsProductToCart(${Number(product.id)});
+            this.closest('.modal').remove();
+          "
         >
           أضف للسلة
         </button>
@@ -450,20 +595,74 @@ function openProduct(id) {
 
 
 /* =========================================================
-   PRODUCT DETAILS QUANTITY
+   SELECT OPTION
+========================================================= */
+
+function selectProductOption(button, type) {
+
+  if (!button) return;
+
+
+  const parent =
+    button.parentElement;
+
+
+  parent
+    .querySelectorAll(".option-btn")
+    .forEach(function(item) {
+
+      item.classList.remove(
+        "selected"
+      );
+
+    });
+
+
+  button.classList.add(
+    "selected"
+  );
+
+}
+
+
+/* =========================================================
+   GET SELECTED OPTION
+========================================================= */
+
+function getSelectedOption(selector) {
+
+  const element =
+    document.querySelector(
+      selector + " .option-btn.selected"
+    );
+
+
+  return element
+    ? element.getAttribute("data-value") || ""
+    : "";
+}
+
+
+/* =========================================================
+   DETAILS QUANTITY
 ========================================================= */
 
 function changeDetailsQty(change) {
 
   const element =
-    document.getElementById("detailsQty");
+    document.getElementById(
+      "detailsQty"
+    );
 
 
   if (!element) return;
 
 
   let quantity =
-    parseInt(element.textContent) || 1;
+    parseInt(
+      element.textContent,
+      10
+    ) || 1;
 
 
   quantity += change;
@@ -483,7 +682,7 @@ function changeDetailsQty(change) {
    ADD DETAILS PRODUCT TO CART
 ========================================================= */
 
-function addDetailsToCart(id) {
+function addDetailsProductToCart(id) {
 
   const product =
     products.find(function(item) {
@@ -496,30 +695,79 @@ function addDetailsToCart(id) {
   if (!product) return;
 
 
+  const colors =
+    normalizeArray(product.colors);
+
+
+  const sizes =
+    normalizeArray(product.sizes);
+
+
+  const color =
+    colors.length
+      ? getSelectedOption("#colorOptions")
+      : "";
+
+
+  const size =
+    sizes.length
+      ? getSelectedOption("#sizeOptions")
+      : "";
+
+
   const qtyElement =
-    document.getElementById("detailsQty");
+    document.getElementById(
+      "detailsQty"
+    );
 
 
-  const quantity =
+  const qty =
     qtyElement
       ? Math.max(
           1,
-          parseInt(qtyElement.textContent) || 1
+          parseInt(
+            qtyElement.textContent,
+            10
+          ) || 1
         )
       : 1;
 
 
-  const existing =
+  addConfiguredProductToCart(
+    product,
+    color,
+    size,
+    qty
+  );
+}
+
+
+/* =========================================================
+   ADD CONFIGURED PRODUCT
+========================================================= */
+
+function addConfiguredProductToCart(
+  product,
+  color,
+  size,
+  quantity
+) {
+
+  const sameItem =
     cart.find(function(item) {
 
-      return Number(item.id) === Number(id);
+      return (
+        Number(item.id) === Number(product.id) &&
+        item.color === color &&
+        item.size === size
+      );
 
     });
 
 
-  if (existing) {
+  if (sameItem) {
 
-    existing.qty += quantity;
+    sameItem.qty += quantity;
 
   } else {
 
@@ -531,9 +779,13 @@ function addDetailsToCart(id) {
 
       category: product.category,
 
-      price: Number(product.price) || 0,
+      price: Number(product.price || 0),
 
       image: product.image || "",
+
+      color: color,
+
+      size: size,
 
       qty: quantity
 
@@ -549,7 +801,7 @@ function addDetailsToCart(id) {
 
 
 /* =========================================================
-   ADD TO CART
+   ADD NORMAL PRODUCT
 ========================================================= */
 
 function addToCart(id) {
@@ -565,42 +817,31 @@ function addToCart(id) {
   if (!product) return;
 
 
-  const existing =
-    cart.find(function(item) {
-
-      return Number(item.id) === Number(id);
-
-    });
+  const colors =
+    normalizeArray(product.colors);
 
 
-  if (existing) {
+  const sizes =
+    normalizeArray(product.sizes);
 
-    existing.qty++;
 
-  } else {
+  if (
+    colors.length ||
+    sizes.length
+  ) {
 
-    cart.push({
+    openProduct(id);
 
-      id: product.id,
-
-      name: product.name,
-
-      category: product.category,
-
-      price: Number(product.price) || 0,
-
-      image: product.image || "",
-
-      qty: 1
-
-    });
-
+    return;
   }
 
 
-  updateCart();
-
-  openCart();
+  addConfiguredProductToCart(
+    product,
+    "",
+    "",
+    1
+  );
 }
 
 
@@ -611,15 +852,21 @@ function addToCart(id) {
 function updateCart() {
 
   const cartCount =
-    document.getElementById("cartCount");
+    document.getElementById(
+      "cartCount"
+    );
 
 
   const cartItems =
-    document.getElementById("cartItems");
+    document.getElementById(
+      "cartItems"
+    );
 
 
   const cartTotal =
-    document.getElementById("cartTotal");
+    document.getElementById(
+      "cartTotal"
+    );
 
 
   const totalQuantity =
@@ -633,8 +880,11 @@ function updateCart() {
   const totalPrice =
     cart.reduce(function(sum, item) {
 
-      return sum +
-        (Number(item.price) * item.qty);
+      return (
+        sum +
+        Number(item.price || 0) *
+        item.qty
+      );
 
     }, 0);
 
@@ -664,7 +914,9 @@ function updateCart() {
 
       <div class="cart-empty">
 
-        <div>🛍️</div>
+        <div>
+          🛍️
+        </div>
 
         <h3>
           السلة فارغة
@@ -683,23 +935,33 @@ function updateCart() {
 
 
   cartItems.innerHTML =
-    cart.map(function(item) {
+    cart.map(function(item, index) {
 
       return `
 
-        <div class="cart-line">
+        <div
+          class="cart-line"
+          style="padding:15px 0;border-bottom:1px solid rgba(255,255,255,.08);"
+        >
 
-          <div class="cart-product">
+          <div
+            class="cart-product"
+            style="
+              display:flex;
+              flex-direction:column;
+              gap:5px;
+            "
+          >
 
             ${
               item.image
                 ? `
                   <img
-                    src="${item.image}"
+                    src="${escapeHTML(item.image)}"
                     alt="${escapeHTML(item.name)}"
                     style="
-                      width:55px;
-                      height:55px;
+                      width:60px;
+                      height:60px;
                       object-fit:cover;
                       border-radius:10px;
                     "
@@ -714,6 +976,28 @@ function updateCart() {
             </strong>
 
 
+            ${
+              item.color
+                ? `
+                  <span>
+                    اللون: ${escapeHTML(item.color)}
+                  </span>
+                `
+                : ""
+            }
+
+
+            ${
+              item.size
+                ? `
+                  <span>
+                    المقاس: ${escapeHTML(item.size)}
+                  </span>
+                `
+                : ""
+            }
+
+
             <span class="cat">
               ${Number(item.price)} جنيه للقطعة
             </span>
@@ -725,7 +1009,7 @@ function updateCart() {
 
             <button
               type="button"
-              onclick="changeQty(${item.id}, -1)"
+              onclick="changeQty(${index}, -1)"
             >
               −
             </button>
@@ -738,7 +1022,7 @@ function updateCart() {
 
             <button
               type="button"
-              onclick="changeQty(${item.id}, 1)"
+              onclick="changeQty(${index}, 1)"
             >
               +
             </button>
@@ -747,7 +1031,11 @@ function updateCart() {
 
 
           <strong class="cart-price">
-            ${Number(item.price) * item.qty} جنيه
+            ${
+              Number(item.price) *
+              item.qty
+            }
+            جنيه
           </strong>
 
         </div>
@@ -762,30 +1050,27 @@ function updateCart() {
    CHANGE CART QUANTITY
 ========================================================= */
 
-function changeQty(id, change) {
+function changeQty(index, change) {
 
-  const item =
-    cart.find(function(product) {
-
-      return Number(product.id) === Number(id);
-
-    });
-
-
-  if (!item) return;
+  if (
+    !cart[index]
+  ) {
+    return;
+  }
 
 
-  item.qty += change;
+  cart[index].qty +=
+    change;
 
 
-  if (item.qty <= 0) {
+  if (
+    cart[index].qty <= 0
+  ) {
 
-    cart =
-      cart.filter(function(product) {
-
-        return Number(product.id) !== Number(id);
-
-      });
+    cart.splice(
+      index,
+      1
+    );
 
   }
 
@@ -801,13 +1086,17 @@ function changeQty(id, change) {
 function openCart() {
 
   const modal =
-    document.getElementById("cartModal");
+    document.getElementById(
+      "cartModal"
+    );
 
 
   if (!modal) return;
 
 
-  modal.classList.remove("hidden");
+  modal.classList.remove(
+    "hidden"
+  );
 
 
   updateCart();
@@ -821,25 +1110,31 @@ function openCart() {
 function closeCart() {
 
   const modal =
-    document.getElementById("cartModal");
+    document.getElementById(
+      "cartModal"
+    );
 
 
   if (!modal) return;
 
 
-  modal.classList.add("hidden");
+  modal.classList.add(
+    "hidden"
+  );
 }
 
 
 /* =========================================================
-   CHECKOUT WHATSAPP
+   WHATSAPP CHECKOUT
 ========================================================= */
 
 function checkout() {
 
   if (!cart.length) {
 
-    alert("السلة فارغة");
+    alert(
+      "السلة فارغة"
+    );
 
     return;
   }
@@ -848,18 +1143,44 @@ function checkout() {
   const lines =
     cart.map(function(item) {
 
-      return (
+      let line =
         "• " +
-        item.name +
-        " × " +
-        item.qty +
-        " — " +
+        item.name;
+
+
+      if (item.color) {
+
+        line +=
+          " | اللون: " +
+          item.color;
+
+      }
+
+
+      if (item.size) {
+
+        line +=
+          " | المقاس: " +
+          item.size;
+
+      }
+
+
+      line +=
+        " | الكمية: " +
+        item.qty;
+
+
+      line +=
+        " | " +
         (
           Number(item.price) *
           item.qty
         ) +
-        " جنيه"
-      );
+        " جنيه";
+
+
+      return line;
 
     }).join("\n");
 
@@ -867,11 +1188,11 @@ function checkout() {
   const total =
     cart.reduce(function(sum, item) {
 
-      return sum +
-        (
-          Number(item.price) *
-          item.qty
-        );
+      return (
+        sum +
+        Number(item.price) *
+        item.qty
+      );
 
     }, 0);
 
@@ -882,9 +1203,7 @@ function checkout() {
     lines +
 
     "\n\nالإجمالي: " +
-
     total +
-
     " جنيه\n\n" +
 
     "الاسم:\n" +
@@ -894,15 +1213,17 @@ function checkout() {
     "رقم الهاتف:";
 
 
-  const whatsappURL =
+  const url =
     "https://wa.me/" +
     WHATSAPP +
     "?text=" +
-    encodeURIComponent(message);
+    encodeURIComponent(
+      message
+    );
 
 
   window.open(
-    whatsappURL,
+    url,
     "_blank"
   );
 }
@@ -915,7 +1236,9 @@ function checkout() {
 function toggleMenu() {
 
   const nav =
-    document.getElementById("mainNav");
+    document.getElementById(
+      "mainNav"
+    );
 
 
   if (!nav) return;
@@ -927,20 +1250,20 @@ function toggleMenu() {
 }
 
 
-/* =========================================================
-   CLOSE MOBILE MENU
-========================================================= */
-
 document.addEventListener(
   "click",
   function(event) {
 
     if (
-      event.target.closest("nav a")
+      event.target.closest(
+        "nav a"
+      )
     ) {
 
       const nav =
-        document.getElementById("mainNav");
+        document.getElementById(
+          "mainNav"
+        );
 
 
       if (nav) {
@@ -966,7 +1289,8 @@ document.addEventListener(
   function(event) {
 
     if (
-      event.target.id === "search"
+      event.target.id ===
+      "search"
     ) {
 
       renderProducts();
@@ -978,7 +1302,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   ESCAPE KEY
+   ESCAPE
 ========================================================= */
 
 document.addEventListener(
@@ -986,23 +1310,22 @@ document.addEventListener(
   function(event) {
 
     if (
-      event.key === "Escape"
+      event.key ===
+      "Escape"
     ) {
 
       closeCart();
 
 
-      const productModal =
-        document.querySelector(
+      document
+        .querySelectorAll(
           ".product-details-modal"
+        )
+        .forEach(
+          function(modal) {
+            modal.remove();
+          }
         );
-
-
-      if (productModal) {
-
-        productModal.remove();
-
-      }
 
     }
 
@@ -1011,7 +1334,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   START WEBSITE
+   START
 ========================================================= */
 
 document.addEventListener(
