@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +39,7 @@
 
     .logo p {
       color: #c9a96e;
+      margin-top: 8px;
     }
 
     .box {
@@ -55,6 +57,7 @@
     label {
       display: block;
       margin: 15px 0 7px;
+      font-weight: bold;
     }
 
     input,
@@ -67,6 +70,13 @@
       background: #171514;
       color: #fff;
       font-size: 15px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #c9a96e;
     }
 
     textarea {
@@ -145,6 +155,7 @@
     }
 
     /* IMAGE PREVIEW */
+
     .preview-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -173,7 +184,7 @@
       bottom: 5px;
       right: 5px;
       left: 5px;
-      background: rgba(0,0,0,.65);
+      background: rgba(0, 0, 0, .65);
       border-radius: 6px;
       padding: 4px;
       font-size: 11px;
@@ -181,6 +192,7 @@
     }
 
     /* PRODUCTS */
+
     .product {
       border-top: 1px solid #3b3633;
       padding: 18px 0;
@@ -205,7 +217,7 @@
 
     .product-info {
       flex: 1;
-      min-width: 180px;
+      min-width: 200px;
     }
 
     .product-info h3 {
@@ -219,8 +231,19 @@
 
     .product-info small {
       display: block;
-      margin-top: 4px;
+      margin-top: 5px;
       color: #bbb;
+    }
+
+    .product-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #c9a96e;
+      color: #171514;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .product-actions {
@@ -261,16 +284,28 @@
     <p>ADMIN PANEL</p>
   </div>
 
+
   <!-- LOGIN -->
+
   <div id="loginBox" class="box">
 
     <h2>تسجيل دخول الإدارة</h2>
 
     <label>الإيميل</label>
-    <input id="email" type="email" placeholder="admin@email.com">
+
+    <input
+      id="email"
+      type="email"
+      placeholder="admin@email.com"
+    >
 
     <label>كلمة المرور</label>
-    <input id="password" type="password" placeholder="كلمة المرور">
+
+    <input
+      id="password"
+      type="password"
+      placeholder="كلمة المرور"
+    >
 
     <button
       id="loginButton"
@@ -280,17 +315,31 @@
       دخول
     </button>
 
-    <div id="loginStatus" class="status"></div>
+    <div
+      id="loginStatus"
+      class="status"
+    ></div>
+
   </div>
 
 
   <!-- ADMIN -->
-  <div id="adminPanel" class="hidden">
+
+  <div
+    id="adminPanel"
+    class="hidden"
+  >
+
+
+    <!-- PRODUCT FORM -->
 
     <div class="box">
 
       <div class="top-bar">
-        <h2 id="formTitle">إضافة منتج</h2>
+
+        <h2 id="formTitle">
+          إضافة منتج
+        </h2>
 
         <button
           class="logout"
@@ -298,10 +347,13 @@
         >
           خروج
         </button>
+
       </div>
 
 
-      <label>اسم المنتج</label>
+      <label>
+        اسم المنتج
+      </label>
 
       <input
         id="productName"
@@ -310,7 +362,9 @@
       >
 
 
-      <label>السعر</label>
+      <label>
+        السعر
+      </label>
 
       <input
         id="productPrice"
@@ -320,17 +374,67 @@
       >
 
 
-      <label>القسم</label>
+      <label>
+        القسم
+      </label>
 
       <select id="productCategory">
-        <option value="خواتم">خواتم</option>
-        <option value="سلاسل">سلاسل</option>
-        <option value="أساور">أساور</option>
-        <option value="حلق">حلق</option>
+
+        <option value="خواتم">
+          خواتم
+        </option>
+
+        <option value="سلاسل">
+          سلاسل
+        </option>
+
+        <option value="أساور">
+          أساور
+        </option>
+
+        <option value="حلق">
+          حلق
+        </option>
+
       </select>
 
 
-      <label>الوصف</label>
+      <label>
+        الشارة
+      </label>
+
+      <select id="productBadge">
+
+        <option value="">
+          بدون شارة
+        </option>
+
+        <option value="جديد">
+          جديد
+        </option>
+
+        <option value="الأكثر مبيعًا">
+          الأكثر مبيعًا
+        </option>
+
+        <option value="خصم">
+          خصم
+        </option>
+
+        <option value="مميز">
+          مميز
+        </option>
+
+      </select>
+
+      <div class="hint">
+        اختار الشارة التي تريد ظهورها على المنتج.
+      </div>
+
+
+      <label>
+        الوصف
+      </label>
 
       <textarea
         id="productDescription"
@@ -338,7 +442,9 @@
       ></textarea>
 
 
-      <label>الألوان المتاحة</label>
+      <label>
+        الألوان المتاحة
+      </label>
 
       <input
         id="productColors"
@@ -347,11 +453,13 @@
       >
 
       <div class="hint">
-        افصل كل لون بفاصلة.
+        افصل الألوان بفاصلة.
       </div>
 
 
-      <label>المقاسات المتاحة</label>
+      <label>
+        المقاسات المتاحة
+      </label>
 
       <input
         id="productSizes"
@@ -360,11 +468,13 @@
       >
 
       <div class="hint">
-        افصل كل مقاس بفاصلة. اتركه فارغًا لو المنتج بدون مقاس.
+        افصل المقاسات بفاصلة. اتركها فارغة إذا كان المنتج بدون مقاس.
       </div>
 
 
-      <label>صور المنتج</label>
+      <label>
+        صور المنتج
+      </label>
 
       <input
         id="productImages"
@@ -375,7 +485,7 @@
       >
 
       <div class="hint">
-        يمكنك اختيار أكثر من صورة مرة واحدة. أول صورة ستكون الصورة الأساسية.
+        يمكنك اختيار عدة صور. أول صورة ستكون الصورة الأساسية.
       </div>
 
 
@@ -418,11 +528,15 @@
     </div>
 
 
-    <!-- PRODUCTS LIST -->
+    <!-- PRODUCTS -->
+
     <div class="box">
 
       <div class="top-bar">
-        <h2>المنتجات الحالية</h2>
+
+        <h2>
+          المنتجات الحالية
+        </h2>
 
         <button
           class="refresh"
@@ -430,6 +544,7 @@
         >
           تحديث
         </button>
+
       </div>
 
 
@@ -449,8 +564,14 @@
 const SUPABASE_URL =
   "https://nflcafxxjhinumvxyyxt.supabase.co";
 
+
+/*
+  ضع هنا نفس Publishable Key الموجود عندك حاليًا.
+  لا تستخدم service_role.
+*/
 const SUPABASE_KEY =
-  "ضع نفس Publishable Key الموجود عندك";
+  "ضع Publishable Key هنا";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -491,13 +612,20 @@ function showStatus(id, message) {
 async function login() {
 
   const email =
-    document.getElementById("email").value.trim();
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("password").value;
+    document
+      .getElementById("password")
+      .value;
 
   const button =
-    document.getElementById("loginButton");
+    document.getElementById(
+      "loginButton"
+    );
 
 
   if (!email || !password) {
@@ -518,10 +646,11 @@ async function login() {
 
 
   const result =
-    await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+    await supabaseClient.auth
+      .signInWithPassword({
+        email: email,
+        password: password
+      });
 
 
   button.disabled = false;
@@ -576,7 +705,9 @@ async function logout() {
 async function checkLogin() {
 
   const result =
-    await supabaseClient.auth.getSession();
+    await supabaseClient
+      .auth
+      .getSession();
 
 
   if (
@@ -635,7 +766,7 @@ function normalizeImages(value) {
 
 
 /* =========================================================
-   PREVIEW SELECTED IMAGES
+   IMAGE PREVIEW
 ========================================================= */
 
 function previewImages(event) {
@@ -675,7 +806,11 @@ function previewImages(event) {
               >
 
               <span>
-                ${index === 0 ? "الصورة الأساسية" : "صورة إضافية"}
+                ${
+                  index === 0
+                    ? "الصورة الأساسية"
+                    : "صورة إضافية"
+                }
               </span>
 
             </div>
@@ -685,6 +820,7 @@ function previewImages(event) {
 
 
       reader.readAsDataURL(file);
+
     }
   );
 }
@@ -736,6 +872,7 @@ async function uploadImages(files) {
     if (upload.error) {
 
       throw upload.error;
+
     }
 
 
@@ -782,6 +919,12 @@ async function saveProduct() {
   const category =
     document
       .getElementById("productCategory")
+      .value;
+
+
+  const badge =
+    document
+      .getElementById("productBadge")
       .value;
 
 
@@ -845,7 +988,6 @@ async function saveProduct() {
 
   button.disabled = true;
 
-
   button.textContent =
     editingProductId === null
       ? "جاري إضافة المنتج..."
@@ -857,7 +999,7 @@ async function saveProduct() {
     let images = [];
 
 
-    /* NEW PRODUCT */
+    /* ADD */
 
     if (
       editingProductId === null
@@ -871,7 +1013,7 @@ async function saveProduct() {
     }
 
 
-    /* EDIT PRODUCT */
+    /* EDIT */
 
     else {
 
@@ -899,7 +1041,7 @@ async function saveProduct() {
     if (!images.length) {
 
       throw new Error(
-        "لا توجد صور للمنتج."
+        "لا توجد صور."
       );
     }
 
@@ -927,6 +1069,8 @@ async function saveProduct() {
               description,
 
             category: category,
+
+            badge: badge,
 
             colors: colors,
 
@@ -976,6 +1120,8 @@ async function saveProduct() {
               description,
 
             category: category,
+
+            badge: badge,
 
             colors: colors,
 
@@ -1090,84 +1236,97 @@ async function loadProducts() {
 
 
   list.innerHTML =
-    data.map(
-      function(product) {
+    data.map(function(product) {
 
-        const images =
-          normalizeImages(
-            product.images
-          );
-
-
-        const image =
-          images[0] ||
-          product.image ||
-          "";
+      const images =
+        normalizeImages(
+          product.images
+        );
 
 
-        return `
-
-          <div class="product">
-
-            <img
-              class="product-main-image"
-              src="${escapeHTML(image)}"
-              alt="${escapeHTML(product.name || "")}"
-            >
+      const image =
+        images[0] ||
+        product.image ||
+        "";
 
 
-            <div class="product-info">
+      return `
 
-              <h3>
-                ${escapeHTML(product.name || "")}
-              </h3>
+        <div class="product">
 
-              <p>
-                ${Number(product.price || 0)} جنيه
-              </p>
-
-              <small>
-                القسم:
-                ${escapeHTML(product.category || "")}
-              </small>
-
-              <small>
-                الصور:
-                ${images.length || (product.image ? 1 : 0)}
-              </small>
-
-            </div>
+          <img
+            class="product-main-image"
+            src="${escapeHTML(image)}"
+            alt="${escapeHTML(product.name || "")}"
+          >
 
 
-            <div class="product-actions">
+          <div class="product-info">
 
-              <button
-                class="edit"
-                onclick="editProduct(${product.id})"
-              >
-                ✏️ تعديل
-              </button>
+            <h3>
+              ${escapeHTML(product.name || "")}
+            </h3>
 
 
-              <button
-                class="delete"
-                onclick="deleteProduct(${product.id})"
-              >
-                🗑️ حذف
-              </button>
+            <p>
+              ${Number(product.price || 0)} جنيه
+            </p>
 
-            </div>
+
+            <small>
+              القسم:
+              ${escapeHTML(product.category || "")}
+            </small>
+
+
+            <small>
+              الصور:
+              ${images.length || (product.image ? 1 : 0)}
+            </small>
+
+
+            ${
+              product.badge
+                ? `
+                  <span class="product-badge">
+                    ${escapeHTML(product.badge)}
+                  </span>
+                `
+                : ""
+            }
 
           </div>
 
-        `;
-      }
-    ).join("");
+
+          <div class="product-actions">
+
+            <button
+              class="edit"
+              onclick="editProduct(${product.id})"
+            >
+              ✏️ تعديل
+            </button>
+
+
+            <button
+              class="delete"
+              onclick="deleteProduct(${product.id})"
+            >
+              🗑️ حذف
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
 }
 
 
 /* =========================================================
-   EDIT
+   EDIT PRODUCT
 ========================================================= */
 
 async function editProduct(id) {
@@ -1240,6 +1399,12 @@ async function editProduct(id) {
 
 
   document
+    .getElementById("productBadge")
+    .value =
+    product.badge || "";
+
+
+  document
     .getElementById("productDescription")
     .value =
     product.description || "";
@@ -1293,9 +1458,7 @@ async function editProduct(id) {
     .getElementById("currentImagesHint")
     .textContent =
     editingImages.length
-      ? "المنتج يحتوي على " +
-        editingImages.length +
-        " صورة. اختر صورًا جديدة لاستبدال المجموعة الحالية."
+      ? "الصورة الحالية محفوظة. اختيار صور جديدة سيستبدل المجموعة الحالية."
       : "";
 
 
@@ -1319,7 +1482,11 @@ async function editProduct(id) {
             >
 
             <span>
-              ${index === 0 ? "الصورة الأساسية" : "صورة إضافية"}
+              ${
+                index === 0
+                  ? "الصورة الأساسية"
+                  : "صورة إضافية"
+              }
             </span>
 
           </div>
@@ -1344,13 +1511,12 @@ async function editProduct(id) {
 
 
 /* =========================================================
-   RESET FORM
+   RESET
 ========================================================= */
 
 function resetForm() {
 
-  editingProductId =
-    null;
+  editingProductId = null;
 
   editingImages = [];
 
@@ -1370,6 +1536,11 @@ function resetForm() {
   document
     .getElementById("productCategory")
     .value = "خواتم";
+
+
+  document
+    .getElementById("productBadge")
+    .value = "";
 
 
   document
@@ -1423,7 +1594,7 @@ function resetForm() {
 
 
 /* =========================================================
-   CANCEL
+   CANCEL EDIT
 ========================================================= */
 
 function cancelEdit() {
@@ -1469,9 +1640,11 @@ async function deleteProduct(id) {
       result.error
     );
 
+
     alert(
       "حدث خطأ أثناء حذف المنتج."
     );
+
 
     return;
   }
@@ -1488,7 +1661,7 @@ async function deleteProduct(id) {
 
 
 /* =========================================================
-   HTML SAFETY
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHTML(value) {
