@@ -12,7 +12,7 @@ const SUPABASE_URL =
   لا تستخدم service_role.
 */
 const SUPABASE_KEY =
-  "ضع Publishable Key هنا";
+  "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
 
 
 const supabaseClient =
