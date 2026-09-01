@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +22,7 @@
     }
 
     .container {
-      max-width: 760px;
+      max-width: 900px;
       margin: 30px auto;
     }
 
@@ -83,6 +82,11 @@
       font-size: 15px;
     }
 
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
     .primary {
       width: 100%;
       margin-top: 20px;
@@ -91,8 +95,21 @@
       font-weight: bold;
     }
 
-    .logout {
+    .logout,
+    .refresh,
+    .cancel {
       background: #3b3633;
+      color: #fff;
+    }
+
+    .edit {
+      background: #c9a96e;
+      color: #171514;
+      font-weight: bold;
+    }
+
+    .delete {
+      background: #6b2929;
       color: #fff;
     }
 
@@ -100,28 +117,90 @@
       margin-top: 15px;
       padding: 12px;
       border-radius: 10px;
-      display: none;
       background: #2b2725;
+      display: none;
+      line-height: 1.7;
     }
 
-    .show {
+    .status.show {
       display: block;
     }
 
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hint {
+      color: #aaa;
+      font-size: 13px;
+      margin-top: 7px;
+      line-height: 1.6;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* IMAGE PREVIEW */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #3b3633;
+      background: #171514;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-item span {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      left: 5px;
+      background: rgba(0,0,0,.65);
+      border-radius: 6px;
+      padding: 4px;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    /* PRODUCTS */
     .product {
       border-top: 1px solid #3b3633;
-      padding: 15px 0;
+      padding: 18px 0;
       display: flex;
       gap: 15px;
       align-items: center;
       flex-wrap: wrap;
     }
 
-    .product img {
-      width: 80px;
-      height: 80px;
+    .product:first-child {
+      border-top: 0;
+    }
+
+    .product-main-image {
+      width: 85px;
+      height: 85px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 12px;
+      background: #171514;
+      flex-shrink: 0;
     }
 
     .product-info {
@@ -130,7 +209,7 @@
     }
 
     .product-info h3 {
-      margin: 0 0 5px;
+      margin: 0 0 6px;
     }
 
     .product-info p {
@@ -141,7 +220,7 @@
     .product-info small {
       display: block;
       margin-top: 4px;
-      color: #ddd;
+      color: #bbb;
     }
 
     .product-actions {
@@ -149,49 +228,13 @@
       gap: 8px;
     }
 
-    .delete {
-      background: #6b2929;
-      color: white;
-    }
-
-    .edit {
-      background: #c9a96e;
-      color: #171514;
-      font-weight: bold;
-    }
-
-    .cancel {
-      background: #3b3633;
-      color: white;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .hint {
-      color: #aaa;
-      font-size: 13px;
-      margin-top: 7px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       body {
         padding: 12px;
       }
 
-      .container {
-        margin: 10px auto;
-      }
-
       .box {
         padding: 18px;
-      }
-
-      .product {
-        align-items: flex-start;
       }
 
       .product-actions {
@@ -200,6 +243,10 @@
 
       .product-actions button {
         flex: 1;
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   </style>
@@ -214,30 +261,19 @@
     <p>ADMIN PANEL</p>
   </div>
 
-
   <!-- LOGIN -->
-
   <div id="loginBox" class="box">
 
     <h2>تسجيل دخول الإدارة</h2>
 
     <label>الإيميل</label>
-
-    <input
-      id="email"
-      type="email"
-      placeholder="admin@email.com"
-    >
+    <input id="email" type="email" placeholder="admin@email.com">
 
     <label>كلمة المرور</label>
-
-    <input
-      id="password"
-      type="password"
-      placeholder="كلمة المرور"
-    >
+    <input id="password" type="password" placeholder="كلمة المرور">
 
     <button
+      id="loginButton"
       class="primary"
       onclick="login()"
     >
@@ -245,24 +281,16 @@
     </button>
 
     <div id="loginStatus" class="status"></div>
-
   </div>
 
 
-  <!-- ADMIN PANEL -->
-
+  <!-- ADMIN -->
   <div id="adminPanel" class="hidden">
-
-
-    <!-- PRODUCT FORM -->
 
     <div class="box">
 
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-
-        <h2 id="formTitle">
-          إضافة منتج
-        </h2>
+      <div class="top-bar">
+        <h2 id="formTitle">إضافة منتج</h2>
 
         <button
           class="logout"
@@ -270,7 +298,6 @@
         >
           خروج
         </button>
-
       </div>
 
 
@@ -296,12 +323,10 @@
       <label>القسم</label>
 
       <select id="productCategory">
-
         <option value="خواتم">خواتم</option>
         <option value="سلاسل">سلاسل</option>
         <option value="أساور">أساور</option>
         <option value="حلق">حلق</option>
-
       </select>
 
 
@@ -313,55 +338,56 @@
       ></textarea>
 
 
-      <!-- COLORS -->
-
-      <label>
-        الألوان المتاحة
-      </label>
+      <label>الألوان المتاحة</label>
 
       <input
         id="productColors"
         type="text"
-        placeholder="مثال: ذهبي, فضي, روز جولد"
+        placeholder="ذهبي, فضي, روز جولد"
       >
 
       <div class="hint">
-        افصل بين كل لون والآخر بفاصلة.
+        افصل كل لون بفاصلة.
       </div>
 
 
-      <!-- SIZES -->
-
-      <label>
-        المقاسات المتاحة
-      </label>
+      <label>المقاسات المتاحة</label>
 
       <input
         id="productSizes"
         type="text"
-        placeholder="مثال: 6, 7, 8, 9"
+        placeholder="6, 7, 8, 9"
       >
 
       <div class="hint">
-        افصل بين كل مقاس والآخر بفاصلة. إذا كان المنتج بدون مقاس، اترك الحقل فارغًا.
+        افصل كل مقاس بفاصلة. اتركه فارغًا لو المنتج بدون مقاس.
       </div>
 
 
-      <!-- IMAGE -->
-
-      <label>
-        صورة المنتج
-      </label>
+      <label>صور المنتج</label>
 
       <input
-        id="productImage"
+        id="productImages"
         type="file"
         accept="image/jpeg,image/png,image/webp"
+        multiple
+        onchange="previewImages(event)"
       >
 
+      <div class="hint">
+        يمكنك اختيار أكثر من صورة مرة واحدة. أول صورة ستكون الصورة الأساسية.
+      </div>
+
+
       <div
-        id="currentImageText"
+        id="currentImagesHint"
         class="hint"
+      ></div>
+
+
+      <div
+        id="imagePreview"
+        class="preview-grid"
       ></div>
 
 
@@ -378,6 +404,7 @@
         id="cancelButton"
         class="cancel hidden"
         onclick="cancelEdit()"
+        style="width:100%;margin-top:10px;"
       >
         إلغاء التعديل
       </button>
@@ -391,13 +418,20 @@
     </div>
 
 
-    <!-- PRODUCTS -->
-
+    <!-- PRODUCTS LIST -->
     <div class="box">
 
-      <h2>
-        المنتجات الحالية
-      </h2>
+      <div class="top-bar">
+        <h2>المنتجات الحالية</h2>
+
+        <button
+          class="refresh"
+          onclick="loadProducts()"
+        >
+          تحديث
+        </button>
+      </div>
+
 
       <div id="productsList">
         جاري التحميل...
@@ -416,8 +450,7 @@ const SUPABASE_URL =
   "https://nflcafxxjhinumvxyyxt.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
-
+  "ضع نفس Publishable Key الموجود عندك";
 
 const supabaseClient =
   window.supabase.createClient(
@@ -428,7 +461,9 @@ const supabaseClient =
 
 let editingProductId = null;
 
-let editingProductImage = "";
+let editingImages = [];
+
+let selectedFiles = [];
 
 
 /* =========================================================
@@ -456,15 +491,13 @@ function showStatus(id, message) {
 async function login() {
 
   const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
+    document.getElementById("email").value.trim();
 
   const password =
-    document
-      .getElementById("password")
-      .value;
+    document.getElementById("password").value;
+
+  const button =
+    document.getElementById("loginButton");
 
 
   if (!email || !password) {
@@ -478,19 +511,28 @@ async function login() {
   }
 
 
-  const { error } =
+  button.disabled = true;
+
+  button.textContent =
+    "جاري الدخول...";
+
+
+  const result =
     await supabaseClient.auth.signInWithPassword({
-
       email: email,
-
       password: password
-
     });
 
 
-  if (error) {
+  button.disabled = false;
 
-    console.error(error);
+  button.textContent =
+    "دخول";
+
+
+  if (result.error) {
+
+    console.error(result.error);
 
     showStatus(
       "loginStatus",
@@ -528,20 +570,18 @@ async function logout() {
 
 
 /* =========================================================
-   CHECK LOGIN
+   SESSION
 ========================================================= */
 
 async function checkLogin() {
 
-  const {
-    data
-  } =
+  const result =
     await supabaseClient.auth.getSession();
 
 
   if (
-    data &&
-    data.session
+    result.data &&
+    result.data.session
   ) {
 
     document
@@ -560,7 +600,7 @@ async function checkLogin() {
 
 
 /* =========================================================
-   CONVERT COMMA TEXT TO ARRAY
+   ARRAY HELPERS
 ========================================================= */
 
 function textToArray(text) {
@@ -570,15 +610,9 @@ function textToArray(text) {
     .map(function(item) {
       return item.trim();
     })
-    .filter(function(item) {
-      return item.length > 0;
-    });
+    .filter(Boolean);
 }
 
-
-/* =========================================================
-   CONVERT ARRAY TO TEXT
-========================================================= */
 
 function arrayToText(value) {
 
@@ -587,6 +621,140 @@ function arrayToText(value) {
   }
 
   return value.join(", ");
+}
+
+
+function normalizeImages(value) {
+
+  if (Array.isArray(value)) {
+    return value.filter(Boolean);
+  }
+
+  return [];
+}
+
+
+/* =========================================================
+   PREVIEW SELECTED IMAGES
+========================================================= */
+
+function previewImages(event) {
+
+  selectedFiles =
+    Array.from(
+      event.target.files || []
+    );
+
+
+  const preview =
+    document.getElementById(
+      "imagePreview"
+    );
+
+
+  preview.innerHTML = "";
+
+
+  selectedFiles.forEach(
+    function(file, index) {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(e) {
+
+          preview.innerHTML += `
+
+            <div class="preview-item">
+
+              <img
+                src="${e.target.result}"
+                alt="صورة ${index + 1}"
+              >
+
+              <span>
+                ${index === 0 ? "الصورة الأساسية" : "صورة إضافية"}
+              </span>
+
+            </div>
+
+          `;
+        };
+
+
+      reader.readAsDataURL(file);
+    }
+  );
+}
+
+
+/* =========================================================
+   UPLOAD IMAGES
+========================================================= */
+
+async function uploadImages(files) {
+
+  const urls = [];
+
+
+  for (
+    const file of files
+  ) {
+
+    const safeName =
+      file.name.replace(
+        /[^a-zA-Z0-9.-]/g,
+        "-"
+      );
+
+
+    const fileName =
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2) +
+      "-" +
+      safeName;
+
+
+    const upload =
+      await supabaseClient
+        .storage
+        .from("products")
+        .upload(
+          fileName,
+          file,
+          {
+            upsert: false
+          }
+        );
+
+
+    if (upload.error) {
+
+      throw upload.error;
+    }
+
+
+    const publicData =
+      supabaseClient
+        .storage
+        .from("products")
+        .getPublicUrl(
+          fileName
+        );
+
+
+    urls.push(
+      publicData.data.publicUrl
+    );
+  }
+
+
+  return urls;
 }
 
 
@@ -640,10 +808,10 @@ async function saveProduct() {
     );
 
 
-  const file =
-    document
-      .getElementById("productImage")
-      .files[0];
+  const button =
+    document.getElementById(
+      "saveButton"
+    );
 
 
   if (
@@ -661,204 +829,205 @@ async function saveProduct() {
   }
 
 
-  showStatus(
-    "addStatus",
-    editingProductId
-      ? "جاري حفظ التعديل..."
-      : "جاري إضافة المنتج..."
-  );
-
-
-  let imageUrl =
-    editingProductImage;
-
-
-  /* =======================================================
-     UPLOAD NEW IMAGE
-  ======================================================= */
-
-  if (file) {
-
-    const fileName =
-      Date.now() +
-      "-" +
-      Math.random()
-        .toString(36)
-        .slice(2) +
-      "-" +
-      file.name.replace(
-        /[^a-zA-Z0-9.-]/g,
-        "-"
-      );
-
-
-    const upload =
-      await supabaseClient
-        .storage
-        .from("products")
-        .upload(
-          fileName,
-          file,
-          {
-            upsert: false
-          }
-        );
-
-
-    if (upload.error) {
-
-      console.error(
-        "Upload Error:",
-        upload.error
-      );
-
-      showStatus(
-        "addStatus",
-        "حدث خطأ أثناء رفع الصورة."
-      );
-
-      return;
-    }
-
-
-    const {
-      data: publicData
-    } =
-      supabaseClient
-        .storage
-        .from("products")
-        .getPublicUrl(fileName);
-
-
-    imageUrl =
-      publicData.publicUrl;
-  }
-
-
-  /* =======================================================
-     EDIT PRODUCT
-  ======================================================= */
-
-  if (editingProductId) {
-
-    const update =
-      await supabaseClient
-        .from("Velora")
-        .update({
-
-          name: name,
-
-          price: price,
-
-          description: description,
-
-          category: category,
-
-          colors: colors,
-
-          sizes: sizes,
-
-          image: imageUrl
-
-        })
-        .eq(
-          "id",
-          editingProductId
-        );
-
-
-    if (update.error) {
-
-      console.error(
-        "Update Error:",
-        update.error
-      );
-
-      showStatus(
-        "addStatus",
-        "حدث خطأ أثناء تعديل المنتج."
-      );
-
-      return;
-    }
-
+  if (
+    editingProductId === null &&
+    !selectedFiles.length
+  ) {
 
     showStatus(
       "addStatus",
-      "تم تعديل المنتج بنجاح ✅"
+      "اختر صورة واحدة على الأقل."
     );
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+
+  button.textContent =
+    editingProductId === null
+      ? "جاري إضافة المنتج..."
+      : "جاري حفظ التعديل...";
+
+
+  try {
+
+    let images = [];
+
+
+    /* NEW PRODUCT */
+
+    if (
+      editingProductId === null
+    ) {
+
+      images =
+        await uploadImages(
+          selectedFiles
+        );
+
+    }
+
+
+    /* EDIT PRODUCT */
+
+    else {
+
+      images =
+        editingImages.slice();
+
+
+      if (
+        selectedFiles.length
+      ) {
+
+        const newImages =
+          await uploadImages(
+            selectedFiles
+          );
+
+
+        images =
+          newImages;
+      }
+
+    }
+
+
+    if (!images.length) {
+
+      throw new Error(
+        "لا توجد صور للمنتج."
+      );
+    }
+
+
+    const primaryImage =
+      images[0];
+
+
+    /* UPDATE */
+
+    if (
+      editingProductId !== null
+    ) {
+
+      const result =
+        await supabaseClient
+          .from("Velora")
+          .update({
+
+            name: name,
+
+            price: price,
+
+            description:
+              description,
+
+            category: category,
+
+            colors: colors,
+
+            sizes: sizes,
+
+            image:
+              primaryImage,
+
+            images:
+              images
+
+          })
+          .eq(
+            "id",
+            editingProductId
+          );
+
+
+      if (result.error) {
+
+        throw result.error;
+      }
+
+
+      showStatus(
+        "addStatus",
+        "تم تعديل المنتج بنجاح ✅"
+      );
+
+    }
+
+
+    /* INSERT */
+
+    else {
+
+      const result =
+        await supabaseClient
+          .from("Velora")
+          .insert({
+
+            name: name,
+
+            price: price,
+
+            description:
+              description,
+
+            category: category,
+
+            colors: colors,
+
+            sizes: sizes,
+
+            image:
+              primaryImage,
+
+            images:
+              images
+
+          });
+
+
+      if (result.error) {
+
+        throw result.error;
+      }
+
+
+      showStatus(
+        "addStatus",
+        "تم إضافة المنتج بنجاح ✅"
+      );
+    }
 
 
     resetForm();
 
-    loadProducts();
-
-    return;
-  }
+    await loadProducts();
 
 
-  /* =======================================================
-     ADD PRODUCT
-  ======================================================= */
-
-  if (!imageUrl) {
-
-    showStatus(
-      "addStatus",
-      "من فضلك اختر صورة للمنتج."
-    );
-
-    return;
-  }
-
-
-  const insert =
-    await supabaseClient
-      .from("Velora")
-      .insert({
-
-        name: name,
-
-        price: price,
-
-        description: description,
-
-        category: category,
-
-        colors: colors,
-
-        sizes: sizes,
-
-        image: imageUrl
-
-      });
-
-
-  if (insert.error) {
+  } catch (error) {
 
     console.error(
-      "Insert Error:",
-      insert.error
+      "Save error:",
+      error
     );
+
 
     showStatus(
       "addStatus",
       "حدث خطأ أثناء حفظ المنتج."
     );
 
-    return;
   }
 
 
-  showStatus(
-    "addStatus",
-    "تم إضافة المنتج بنجاح ✅"
-  );
+  button.disabled = false;
 
-
-  resetForm();
-
-  loadProducts();
+  button.textContent =
+    "إضافة المنتج";
 }
 
 
@@ -869,7 +1038,9 @@ async function saveProduct() {
 async function loadProducts() {
 
   const list =
-    document.getElementById("productsList");
+    document.getElementById(
+      "productsList"
+    );
 
 
   if (!list) return;
@@ -879,24 +1050,24 @@ async function loadProducts() {
     "جاري التحميل...";
 
 
-  const {
-    data,
-    error
-  } =
+  const result =
     await supabaseClient
       .from("Velora")
       .select("*")
-      .order("id", {
-        ascending: false
-      });
+      .order(
+        "id",
+        {
+          ascending: false
+        }
+      );
 
 
-  if (error) {
+  if (result.error) {
 
     console.error(
-      "Load Error:",
-      error
+      result.error
     );
+
 
     list.textContent =
       "حدث خطأ في تحميل المنتجات.";
@@ -905,10 +1076,11 @@ async function loadProducts() {
   }
 
 
-  if (
-    !data ||
-    !data.length
-  ) {
+  const data =
+    result.data || [];
+
+
+  if (!data.length) {
 
     list.textContent =
       "لا توجد منتجات حاليًا.";
@@ -918,161 +1090,184 @@ async function loadProducts() {
 
 
   list.innerHTML =
-    data.map(function(product) {
+    data.map(
+      function(product) {
 
-      const colors =
-        Array.isArray(product.colors)
-          ? product.colors.join("، ")
-          : "لا يوجد";
-
-
-      const sizes =
-        Array.isArray(product.sizes)
-          ? product.sizes.join("، ")
-          : "لا يوجد";
+        const images =
+          normalizeImages(
+            product.images
+          );
 
 
-      return `
-
-        <div class="product">
-
-          <img
-            src="${product.image || ""}"
-            alt="${escapeHTML(product.name || "")}"
-          >
+        const image =
+          images[0] ||
+          product.image ||
+          "";
 
 
-          <div class="product-info">
+        return `
 
-            <h3>
-              ${escapeHTML(product.name || "")}
-            </h3>
+          <div class="product">
 
-
-            <p>
-              ${Number(product.price || 0)} جنيه
-            </p>
-
-
-            <small>
-              القسم: ${escapeHTML(product.category || "")}
-            </small>
+            <img
+              class="product-main-image"
+              src="${escapeHTML(image)}"
+              alt="${escapeHTML(product.name || "")}"
+            >
 
 
-            <small>
-              الألوان: ${escapeHTML(colors)}
-            </small>
+            <div class="product-info">
+
+              <h3>
+                ${escapeHTML(product.name || "")}
+              </h3>
+
+              <p>
+                ${Number(product.price || 0)} جنيه
+              </p>
+
+              <small>
+                القسم:
+                ${escapeHTML(product.category || "")}
+              </small>
+
+              <small>
+                الصور:
+                ${images.length || (product.image ? 1 : 0)}
+              </small>
+
+            </div>
 
 
-            <small>
-              المقاسات: ${escapeHTML(sizes)}
-            </small>
+            <div class="product-actions">
+
+              <button
+                class="edit"
+                onclick="editProduct(${product.id})"
+              >
+                ✏️ تعديل
+              </button>
+
+
+              <button
+                class="delete"
+                onclick="deleteProduct(${product.id})"
+              >
+                🗑️ حذف
+              </button>
+
+            </div>
 
           </div>
 
-
-          <div class="product-actions">
-
-            <button
-              class="edit"
-              onclick="editProduct(${product.id})"
-            >
-              ✏️ تعديل
-            </button>
-
-
-            <button
-              class="delete"
-              onclick="deleteProduct(${product.id})"
-            >
-              حذف
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
+        `;
+      }
+    ).join("");
 }
 
 
 /* =========================================================
-   EDIT PRODUCT
+   EDIT
 ========================================================= */
 
 async function editProduct(id) {
 
-  const {
-    data,
-    error
-  } =
+  const result =
     await supabaseClient
       .from("Velora")
       .select("*")
-      .eq("id", id)
+      .eq(
+        "id",
+        id
+      )
       .single();
 
 
-  if (error || !data) {
+  if (
+    result.error ||
+    !result.data
+  ) {
 
     alert(
-      "تعذر تحميل بيانات المنتج."
+      "تعذر تحميل المنتج."
     );
 
     return;
   }
 
 
+  const product =
+    result.data;
+
+
   editingProductId =
-    data.id;
+    product.id;
 
 
-  editingProductImage =
-    data.image || "";
+  editingImages =
+    normalizeImages(
+      product.images
+    );
+
+
+  if (
+    !editingImages.length &&
+    product.image
+  ) {
+
+    editingImages = [
+      product.image
+    ];
+  }
 
 
   document
     .getElementById("productName")
     .value =
-    data.name || "";
+    product.name || "";
 
 
   document
     .getElementById("productPrice")
     .value =
-    data.price || "";
+    product.price || "";
 
 
   document
     .getElementById("productCategory")
     .value =
-    data.category || "خواتم";
+    product.category || "خواتم";
 
 
   document
     .getElementById("productDescription")
     .value =
-    data.description || "";
+    product.description || "";
 
 
   document
     .getElementById("productColors")
     .value =
-    arrayToText(data.colors);
+    arrayToText(
+      product.colors
+    );
 
 
   document
     .getElementById("productSizes")
     .value =
-    arrayToText(data.sizes);
+    arrayToText(
+      product.sizes
+    );
 
 
   document
-    .getElementById("productImage")
+    .getElementById("productImages")
     .value =
     "";
+
+
+  selectedFiles = [];
 
 
   document
@@ -1089,36 +1284,62 @@ async function editProduct(id) {
 
   document
     .getElementById("cancelButton")
-    .classList.remove("hidden");
+    .classList.remove(
+      "hidden"
+    );
 
 
   document
-    .getElementById("currentImageText")
+    .getElementById("currentImagesHint")
     .textContent =
-    data.image
-      ? "الصورة الحالية محفوظة. اختر صورة جديدة فقط إذا كنت تريد تغييرها."
+    editingImages.length
+      ? "المنتج يحتوي على " +
+        editingImages.length +
+        " صورة. اختر صورًا جديدة لاستبدال المجموعة الحالية."
       : "";
+
+
+  const preview =
+    document.getElementById(
+      "imagePreview"
+    );
+
+
+  preview.innerHTML =
+    editingImages
+      .map(function(image, index) {
+
+        return `
+
+          <div class="preview-item">
+
+            <img
+              src="${escapeHTML(image)}"
+              alt="الصورة الحالية ${index + 1}"
+            >
+
+            <span>
+              ${index === 0 ? "الصورة الأساسية" : "صورة إضافية"}
+            </span>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+
+  document
+    .getElementById("addStatus")
+    .classList.remove(
+      "show"
+    );
 
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
-}
-
-
-/* =========================================================
-   CANCEL EDIT
-========================================================= */
-
-function cancelEdit() {
-
-  resetForm();
-
-  showStatus(
-    "addStatus",
-    "تم إلغاء التعديل."
-  );
 }
 
 
@@ -1131,8 +1352,9 @@ function resetForm() {
   editingProductId =
     null;
 
-  editingProductImage =
-    "";
+  editingImages = [];
+
+  selectedFiles = [];
 
 
   document
@@ -1166,8 +1388,18 @@ function resetForm() {
 
 
   document
-    .getElementById("productImage")
+    .getElementById("productImages")
     .value = "";
+
+
+  document
+    .getElementById("imagePreview")
+    .innerHTML = "";
+
+
+  document
+    .getElementById("currentImagesHint")
+    .textContent = "";
 
 
   document
@@ -1184,12 +1416,25 @@ function resetForm() {
 
   document
     .getElementById("cancelButton")
-    .classList.add("hidden");
+    .classList.add(
+      "hidden"
+    );
+}
 
+
+/* =========================================================
+   CANCEL
+========================================================= */
+
+function cancelEdit() {
+
+  resetForm();
 
   document
-    .getElementById("currentImageText")
-    .textContent = "";
+    .getElementById("addStatus")
+    .classList.remove(
+      "show"
+    );
 }
 
 
@@ -1208,9 +1453,7 @@ async function deleteProduct(id) {
   }
 
 
-  const {
-    error
-  } =
+  const result =
     await supabaseClient
       .from("Velora")
       .delete()
@@ -1220,11 +1463,10 @@ async function deleteProduct(id) {
       );
 
 
-  if (error) {
+  if (result.error) {
 
     console.error(
-      "Delete Error:",
-      error
+      result.error
     );
 
     alert(
@@ -1235,37 +1477,28 @@ async function deleteProduct(id) {
   }
 
 
-  loadProducts();
+  await loadProducts();
+
+
+  showStatus(
+    "addStatus",
+    "تم حذف المنتج بنجاح ✅"
+  );
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+   HTML SAFETY
 ========================================================= */
 
 function escapeHTML(value) {
 
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 
