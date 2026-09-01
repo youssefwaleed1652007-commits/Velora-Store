@@ -1,15 +1,10 @@
-/* =========================================================
-   VELORA STORE
-   Supabase + Products + Options + Cart + WhatsApp
-========================================================= */
-
 const WHATSAPP = "201223562957";
 
 const SUPABASE_URL =
   "https://nflcafxxjhinumvxyyxt.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
+  "ضع نفس Publishable Key الموجود عندك";
 
 const supabaseClient =
   window.supabase.createClient(
@@ -23,12 +18,7 @@ let cart = [];
 let activeCategory = "الكل";
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
-
 function escapeHTML(value) {
-
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -39,24 +29,38 @@ function escapeHTML(value) {
 
 
 function normalizeArray(value) {
-
   if (Array.isArray(value)) {
-
     return value
       .map(function(item) {
         return String(item).trim();
       })
       .filter(Boolean);
-
   }
 
   return [];
 }
 
 
-/* =========================================================
+function getProductImages(product) {
+
+  const images =
+    normalizeArray(product.images);
+
+  if (images.length) {
+    return images;
+  }
+
+  if (product.image) {
+    return [product.image];
+  }
+
+  return [];
+}
+
+
+/* =========================
    LOAD PRODUCTS
-========================================================= */
+========================= */
 
 async function loadProducts() {
 
@@ -68,9 +72,9 @@ async function loadProducts() {
 
   grid.innerHTML =
     '<div class="empty-products">' +
-      '<div>⏳</div>' +
-      '<h3>جاري تحميل المنتجات...</h3>' +
-      '<p>انتظري لحظات.</p>' +
+    '<div>⏳</div>' +
+    '<h3>جاري تحميل المنتجات...</h3>' +
+    '<p>انتظري لحظات.</p>' +
     '</div>';
 
 
@@ -93,9 +97,9 @@ async function loadProducts() {
 
     grid.innerHTML =
       '<div class="empty-products">' +
-        '<div>⚠️</div>' +
-        '<h3>تعذر تحميل المنتجات</h3>' +
-        '<p>حاول تحديث الصفحة مرة أخرى.</p>' +
+      '<div>⚠️</div>' +
+      '<h3>تعذر تحميل المنتجات</h3>' +
+      '<p>حاول تحديث الصفحة مرة أخرى.</p>' +
       '</div>';
 
 
@@ -104,18 +108,16 @@ async function loadProducts() {
 
 
   products =
-    Array.isArray(result.data)
-      ? result.data
-      : [];
+    result.data || [];
 
 
   renderProducts();
 }
 
 
-/* =========================================================
-   RENDER PRODUCTS
-========================================================= */
+/* =========================
+   RENDER
+========================= */
 
 function renderProducts() {
 
@@ -125,13 +127,13 @@ function renderProducts() {
   if (!grid) return;
 
 
-  const searchInput =
+  const search =
     document.getElementById("search");
 
 
   const query =
-    searchInput
-      ? searchInput.value.trim().toLowerCase()
+    search
+      ? search.value.trim().toLowerCase()
       : "";
 
 
@@ -140,7 +142,7 @@ function renderProducts() {
 
       const categoryMatch =
         activeCategory === "الكل" ||
-        String(product.category || "") === activeCategory;
+        product.category === activeCategory;
 
 
       const name =
@@ -161,7 +163,6 @@ function renderProducts() {
           description.includes(query)
         )
       );
-
     });
 
 
@@ -169,11 +170,10 @@ function renderProducts() {
 
     grid.innerHTML =
       '<div class="empty-products">' +
-        '<div>✦</div>' +
-        '<h3>لا توجد منتجات</h3>' +
-        '<p>سيتم إضافة المنتجات قريبًا.</p>' +
+      '<div>✦</div>' +
+      '<h3>لا توجد منتجات</h3>' +
+      '<p>سيتم إضافة المنتجات قريبًا.</p>' +
       '</div>';
-
 
     return;
   }
@@ -182,8 +182,12 @@ function renderProducts() {
   grid.innerHTML =
     filtered.map(function(product) {
 
+      const images =
+        getProductImages(product);
+
+
       const image =
-        product.image || "";
+        images[0] || "";
 
 
       return `
@@ -227,6 +231,28 @@ function renderProducts() {
             >
               ♡
             </button>
+
+
+            ${
+              images.length > 1
+                ? `
+                  <span
+                    style="
+                      position:absolute;
+                      bottom:10px;
+                      left:10px;
+                      background:rgba(0,0,0,.65);
+                      color:#fff;
+                      border-radius:8px;
+                      padding:5px 8px;
+                      font-size:12px;
+                    "
+                  >
+                    ${images.length} صور
+                  </span>
+                `
+                : ""
+            }
 
           </div>
 
@@ -277,9 +303,9 @@ function renderProducts() {
 }
 
 
-/* =========================================================
-   CATEGORY FILTER
-========================================================= */
+/* =========================
+   FILTER
+========================= */
 
 function filterProducts(category) {
 
@@ -304,9 +330,9 @@ function filterProducts(category) {
 }
 
 
-/* =========================================================
-   FAVORITES
-========================================================= */
+/* =========================
+   FAVORITE
+========================= */
 
 function toggleFavorite(button) {
 
@@ -323,9 +349,9 @@ function toggleFavorite(button) {
 }
 
 
-/* =========================================================
+/* =========================
    PRODUCT DETAILS
-========================================================= */
+========================= */
 
 function openProduct(id) {
 
@@ -338,6 +364,10 @@ function openProduct(id) {
 
 
   if (!product) return;
+
+
+  const images =
+    getProductImages(product);
 
 
   const colors =
@@ -377,7 +407,6 @@ function openProduct(id) {
       "
     >
 
-
       <button
         class="close"
         type="button"
@@ -386,17 +415,17 @@ function openProduct(id) {
           position:absolute;
           top:10px;
           right:10px;
-          z-index:10;
+          z-index:20;
         "
       >
         ×
       </button>
 
 
-      <!-- IMAGE -->
+      <!-- MAIN IMAGE -->
 
       <div
-        class="product-details-image"
+        id="galleryMain"
         style="
           width:100%;
           height:320px;
@@ -407,15 +436,16 @@ function openProduct(id) {
           overflow:hidden;
           background:#171514;
           border-radius:16px;
-          margin-bottom:20px;
+          margin-bottom:12px;
         "
       >
 
         ${
-          product.image
+          images.length
             ? `
               <img
-                src="${escapeHTML(product.image)}"
+                id="galleryMainImage"
+                src="${escapeHTML(images[0])}"
                 alt="${escapeHTML(product.name || "")}"
                 style="
                   width:100%;
@@ -435,13 +465,72 @@ function openProduct(id) {
       </div>
 
 
-      <!-- INFORMATION -->
+      <!-- THUMBNAILS -->
+
+      ${
+        images.length > 1
+          ? `
+            <div
+              id="galleryThumbs"
+              style="
+                display:flex;
+                gap:8px;
+                overflow-x:auto;
+                padding:4px 0 12px;
+              "
+            >
+
+              ${images.map(function(image, index) {
+
+                return `
+
+                  <button
+                    type="button"
+                    onclick="changeGalleryImage(${index})"
+                    style="
+                      width:65px;
+                      height:65px;
+                      padding:0;
+                      flex:0 0 65px;
+                      overflow:hidden;
+                      border:2px solid ${
+                        index === 0
+                          ? "#c9a96e"
+                          : "#3b3633"
+                      };
+                      border-radius:10px;
+                      background:#171514;
+                    "
+                  >
+
+                    <img
+                      src="${escapeHTML(image)}"
+                      alt="صورة ${index + 1}"
+                      style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        display:block;
+                      "
+                    >
+
+                  </button>
+
+                `;
+
+              }).join("")}
+
+            </div>
+          `
+          : ""
+      }
+
+
+      <!-- INFO -->
 
       <div
         class="product-details-content"
-        style="
-          text-align:right;
-        "
+        style="text-align:right;"
       >
 
         <span class="cat">
@@ -483,17 +572,12 @@ function openProduct(id) {
         }
 
 
-        <!-- COLOR -->
+        <!-- COLORS -->
 
         ${
           colors.length
             ? `
-
-              <div
-                style="
-                  margin-top:20px;
-                "
-              >
+              <div style="margin-top:20px;">
 
                 <strong>
                   اللون
@@ -554,23 +638,17 @@ function openProduct(id) {
                 </div>
 
               </div>
-
             `
             : ""
         }
 
 
-        <!-- SIZE -->
+        <!-- SIZES -->
 
         ${
           sizes.length
             ? `
-
-              <div
-                style="
-                  margin-top:20px;
-                "
-              >
+              <div style="margin-top:20px;">
 
                 <strong>
                   المقاس
@@ -631,7 +709,6 @@ function openProduct(id) {
                 </div>
 
               </div>
-
             `
             : ""
         }
@@ -660,9 +737,7 @@ function openProduct(id) {
 
           <b
             id="detailsQty"
-            style="
-              font-size:18px;
-            "
+            style="font-size:18px;"
           >
             1
           </b>
@@ -678,8 +753,6 @@ function openProduct(id) {
         </div>
 
 
-        <!-- ADD -->
-
         <button
           class="primary full"
           type="button"
@@ -694,15 +767,14 @@ function openProduct(id) {
           style="
             display:none;
             color:#d9a96e;
-            margin-top:12px;
             text-align:center;
+            margin-top:12px;
           "
         ></p>
 
       </div>
 
     </div>
-
   `;
 
 
@@ -710,9 +782,87 @@ function openProduct(id) {
 }
 
 
-/* =========================================================
+/* =========================
+   GALLERY
+========================= */
+
+function changeGalleryImage(index) {
+
+  const modal =
+    document.querySelector(
+      ".product-details-modal"
+    );
+
+
+  if (!modal) return;
+
+
+  const productName =
+    modal.querySelector(
+      ".product-details-content h2"
+    );
+
+
+  if (!productName) return;
+
+
+  const product =
+    products.find(function(item) {
+
+      return (
+        String(item.name) ===
+        String(productName.textContent)
+      );
+
+    });
+
+
+  if (!product) return;
+
+
+  const images =
+    getProductImages(product);
+
+
+  if (!images[index]) return;
+
+
+  const main =
+    document.getElementById(
+      "galleryMainImage"
+    );
+
+
+  if (main) {
+
+    main.src =
+      images[index];
+
+  }
+
+
+  const thumbs =
+    document.querySelectorAll(
+      "#galleryThumbs button"
+    );
+
+
+  thumbs.forEach(
+    function(button, i) {
+
+      button.style.borderColor =
+        i === index
+          ? "#c9a96e"
+          : "#3b3633";
+
+    }
+  );
+}
+
+
+/* =========================
    SELECT OPTION
-========================================================= */
+========================= */
 
 function selectProductOption(button) {
 
@@ -731,14 +881,11 @@ function selectProductOption(button) {
         "selected"
       );
 
-
       item.style.background =
         "transparent";
 
-
       item.style.color =
         "#fff";
-
     });
 
 
@@ -758,19 +905,19 @@ function selectProductOption(button) {
     button.style.background =
       "#c9a96e";
 
-
     button.style.color =
       "#171514";
-
   }
 }
 
 
-/* =========================================================
-   GET SELECTED OPTION
-========================================================= */
+/* =========================
+   GET OPTION
+========================= */
 
-function getSelectedOption(containerId) {
+function getSelectedOption(
+  containerId
+) {
 
   const container =
     document.getElementById(
@@ -787,20 +934,15 @@ function getSelectedOption(containerId) {
     );
 
 
-  if (!selected) return "";
-
-
-  return (
-    selected.getAttribute(
-      "data-value"
-    ) || ""
-  );
+  return selected
+    ? selected.getAttribute("data-value") || ""
+    : "";
 }
 
 
-/* =========================================================
-   DETAILS QUANTITY
-========================================================= */
+/* =========================
+   QUANTITY
+========================= */
 
 function changeDetailsQty(change) {
 
@@ -824,9 +966,7 @@ function changeDetailsQty(change) {
 
 
   if (quantity < 1) {
-
     quantity = 1;
-
   }
 
 
@@ -835,9 +975,9 @@ function changeDetailsQty(change) {
 }
 
 
-/* =========================================================
-   ADD DETAILS PRODUCT
-========================================================= */
+/* =========================
+   ADD DETAILS
+========================= */
 
 function addDetailsProductToCart(id) {
 
@@ -862,17 +1002,13 @@ function addDetailsProductToCart(id) {
 
   const color =
     colors.length
-      ? getSelectedOption(
-          "colorOptions"
-        )
+      ? getSelectedOption("colorOptions")
       : "";
 
 
   const size =
     sizes.length
-      ? getSelectedOption(
-          "sizeOptions"
-        )
+      ? getSelectedOption("sizeOptions")
       : "";
 
 
@@ -881,10 +1017,6 @@ function addDetailsProductToCart(id) {
       "optionError"
     );
 
-
-  /* =======================================================
-     REQUIRE COLOR
-  ======================================================= */
 
   if (
     colors.length &&
@@ -898,16 +1030,11 @@ function addDetailsProductToCart(id) {
 
       error.style.display =
         "block";
-
     }
 
     return;
   }
 
-
-  /* =======================================================
-     REQUIRE SIZE
-  ======================================================= */
 
   if (
     sizes.length &&
@@ -921,7 +1048,6 @@ function addDetailsProductToCart(id) {
 
       error.style.display =
         "block";
-
     }
 
     return;
@@ -961,16 +1087,14 @@ function addDetailsProductToCart(id) {
 
 
   if (modal) {
-
     modal.remove();
-
   }
 }
 
 
-/* =========================================================
-   ADD CONFIGURED PRODUCT
-========================================================= */
+/* =========================
+   ADD CONFIGURED
+========================= */
 
 function addConfiguredProductToCart(
   product,
@@ -999,11 +1123,14 @@ function addConfiguredProductToCart(
 
     cart.push({
 
-      id: product.id,
+      id:
+        product.id,
 
-      name: product.name,
+      name:
+        product.name,
 
-      category: product.category,
+      category:
+        product.category,
 
       price:
         Number(product.price || 0),
@@ -1031,9 +1158,9 @@ function addConfiguredProductToCart(
 }
 
 
-/* =========================================================
-   ADD SIMPLE PRODUCT
-========================================================= */
+/* =========================
+   SIMPLE ADD
+========================= */
 
 function addToCart(id) {
 
@@ -1076,9 +1203,9 @@ function addToCart(id) {
 }
 
 
-/* =========================================================
-   UPDATE CART
-========================================================= */
+/* =========================
+   CART
+========================= */
 
 function updateCart() {
 
@@ -1124,7 +1251,6 @@ function updateCart() {
 
     cartCount.textContent =
       totalQuantity;
-
   }
 
 
@@ -1132,7 +1258,6 @@ function updateCart() {
 
     cartTotal.textContent =
       totalPrice;
-
   }
 
 
@@ -1214,7 +1339,8 @@ function updateCart() {
               item.color
                 ? `
                   <span>
-                    اللون: ${escapeHTML(item.color)}
+                    اللون:
+                    ${escapeHTML(item.color)}
                   </span>
                 `
                 : ""
@@ -1225,7 +1351,8 @@ function updateCart() {
               item.size
                 ? `
                   <span>
-                    المقاس: ${escapeHTML(item.size)}
+                    المقاس:
+                    ${escapeHTML(item.size)}
                   </span>
                 `
                 : ""
@@ -1280,27 +1407,23 @@ function updateCart() {
 }
 
 
-/* =========================================================
-   CHANGE CART QUANTITY
-========================================================= */
+/* =========================
+   CHANGE QTY
+========================= */
 
 function changeQty(index, change) {
 
   if (!cart[index]) return;
 
 
-  cart[index].qty +=
-    change;
+  cart[index].qty += change;
 
 
   if (
     cart[index].qty <= 0
   ) {
 
-    cart.splice(
-      index,
-      1
-    );
+    cart.splice(index, 1);
 
   }
 
@@ -1309,9 +1432,9 @@ function changeQty(index, change) {
 }
 
 
-/* =========================================================
-   OPEN CART
-========================================================= */
+/* =========================
+   OPEN / CLOSE CART
+========================= */
 
 function openCart() {
 
@@ -1333,10 +1456,6 @@ function openCart() {
 }
 
 
-/* =========================================================
-   CLOSE CART
-========================================================= */
-
 function closeCart() {
 
   const modal =
@@ -1354,9 +1473,9 @@ function closeCart() {
 }
 
 
-/* =========================================================
-   WHATSAPP CHECKOUT
-========================================================= */
+/* =========================
+   WHATSAPP
+========================= */
 
 function checkout() {
 
@@ -1383,7 +1502,6 @@ function checkout() {
         line +=
           " | اللون: " +
           item.color;
-
       }
 
 
@@ -1392,7 +1510,6 @@ function checkout() {
         line +=
           " | المقاس: " +
           item.size;
-
       }
 
 
@@ -1457,9 +1574,9 @@ function checkout() {
 }
 
 
-/* =========================================================
+/* =========================
    MOBILE MENU
-========================================================= */
+========================= */
 
 function toggleMenu() {
 
@@ -1501,16 +1618,14 @@ document.addEventListener(
         );
 
       }
-
     }
-
   }
 );
 
 
-/* =========================================================
+/* =========================
    SEARCH
-========================================================= */
+========================= */
 
 document.addEventListener(
   "input",
@@ -1529,9 +1644,9 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
+/* =========================
+   ESCAPE
+========================= */
 
 document.addEventListener(
   "keydown",
@@ -1561,9 +1676,9 @@ document.addEventListener(
 );
 
 
-/* =========================================================
+/* =========================
    START
-========================================================= */
+========================= */
 
 document.addEventListener(
   "DOMContentLoaded",
