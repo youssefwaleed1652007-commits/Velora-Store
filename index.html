@@ -29,7 +29,7 @@
 
   <link
     rel="preconnect"
-    href="https://fonts.googleapis.com"
+    href="https://fonts.gstatic.com"
     crossorigin
   >
 
@@ -44,10 +44,6 @@
   >
 
   <style>
-
-    /* =========================
-       BRAND
-    ========================= */
 
     .brand {
       display: flex;
@@ -84,11 +80,6 @@
       white-space: nowrap;
     }
 
-
-    /* =========================
-       POLICIES
-    ========================= */
-
     .policies {
       padding-top: 70px;
       padding-bottom: 70px;
@@ -115,7 +106,7 @@
     .policy-card:hover {
       transform: translateY(-5px);
       border-color: rgba(201, 169, 110, .45);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, .15);
+      box-shadow: 0 15px 30px rgba(0,0,0,.15);
     }
 
     .policy-icon {
@@ -125,7 +116,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 14px;
-      background: rgba(201, 169, 110, .10);
+      background: rgba(201,169,110,.10);
       font-size: 24px;
       margin-bottom: 18px;
     }
@@ -141,10 +132,73 @@
       font-size: 14px;
     }
 
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 35px;
+    }
 
-    /* =========================
-       MOBILE BRAND
-    ========================= */
+    .review-card {
+      background: #211f1e;
+      border: 1px solid rgba(201,169,110,.16);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .review-stars {
+      color: #c9a96e;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .review-card p {
+      line-height: 1.9;
+      color: #ccc;
+      margin: 0 0 15px;
+    }
+
+    /* بيانات العميل */
+    .customer-form {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .customer-form h3 {
+      margin: 0 0 15px;
+    }
+
+    .customer-form input,
+    .customer-form textarea,
+    .customer-form select {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .customer-error {
+      display: none;
+      color: #d9a96e;
+      text-align: center;
+      margin: 10px 0 0;
+      line-height: 1.7;
+    }
+
+    .customer-error.show {
+      display: block;
+    }
+
+    @media (max-width: 900px) {
+
+      .policies-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
 
     @media (max-width: 700px) {
 
@@ -168,20 +222,6 @@
       }
 
     }
-
-
-    /* =========================
-       POLICIES RESPONSIVE
-    ========================= */
-
-    @media (max-width: 900px) {
-
-      .policies-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-    }
-
 
     @media (max-width: 600px) {
 
@@ -216,28 +256,20 @@
 <body>
 
 
-  <!-- =========================
-       TOP BAR
-  ========================== -->
+  <!-- TOPBAR -->
 
   <div class="topbar">
 
     <span>✦ شحن سريع</span>
-
     <span>•</span>
-
     <span>تغليف أنيق</span>
-
     <span>•</span>
-
     <span>طلب سهل عبر واتساب</span>
 
   </div>
 
 
-  <!-- =========================
-       HEADER
-  ========================== -->
+  <!-- HEADER -->
 
   <header class="header">
 
@@ -262,7 +294,6 @@
         alt="VELORA Jewelry"
       >
 
-
       <div class="brand-text">
 
         <strong>
@@ -278,8 +309,6 @@
     </a>
 
 
-    <!-- CART -->
-
     <button
       class="cart-btn"
       type="button"
@@ -287,13 +316,9 @@
       aria-label="فتح السلة"
     >
 
-      <span>
-        🛒
-      </span>
+      <span>🛒</span>
 
-      <span>
-        السلة
-      </span>
+      <span>السلة</span>
 
       <b id="cartCount">
         0
@@ -304,9 +329,7 @@
   </header>
 
 
-  <!-- =========================
-       NAVIGATION
-  ========================== -->
+  <!-- NAV -->
 
   <nav id="mainNav">
 
@@ -326,6 +349,10 @@
       عن VELORA
     </a>
 
+    <a href="#reviews">
+      التقييمات
+    </a>
+
     <a href="#contact">
       تواصل معنا
     </a>
@@ -336,9 +363,7 @@
   <main>
 
 
-    <!-- =========================
-         HERO
-    ========================== -->
+    <!-- HERO -->
 
     <section
       class="hero"
@@ -350,9 +375,7 @@
         <div class="hero-badge">
 
           <span>✦</span>
-
           NEW COLLECTION
-
           <span>✦</span>
 
         </div>
@@ -402,9 +425,7 @@
             class="secondary"
             href="#categories"
           >
-
             اكتشفي المجموعة
-
           </a>
 
         </div>
@@ -414,18 +435,11 @@
 
           <div>
 
-            <strong>
-              ✦
-            </strong>
+            <strong>✦</strong>
 
             <span>
-
               جودة مختارة
-
-              <small>
-                بعناية
-              </small>
-
+              <small>بعناية</small>
             </span>
 
           </div>
@@ -433,18 +447,11 @@
 
           <div>
 
-            <strong>
-              🎁
-            </strong>
+            <strong>🎁</strong>
 
             <span>
-
               تغليف أنيق
-
-              <small>
-                لكل طلب
-              </small>
-
+              <small>لكل طلب</small>
             </span>
 
           </div>
@@ -452,18 +459,11 @@
 
           <div>
 
-            <strong>
-              💬
-            </strong>
+            <strong>💬</strong>
 
             <span>
-
               طلب سهل
-
-              <small>
-                عبر واتساب
-              </small>
-
+              <small>عبر واتساب</small>
             </span>
 
           </div>
@@ -472,8 +472,6 @@
 
       </div>
 
-
-      <!-- HERO VISUAL -->
 
       <div class="hero-visual">
 
@@ -503,20 +501,11 @@
 
         <div class="floating-card card-one">
 
-          <span>
-            ✦
-          </span>
+          <span>✦</span>
 
           <div>
-
-            <strong>
-              Premium
-            </strong>
-
-            <small>
-              Collection
-            </small>
-
+            <strong>Premium</strong>
+            <small>Collection</small>
           </div>
 
         </div>
@@ -524,20 +513,11 @@
 
         <div class="floating-card card-two">
 
-          <span>
-            ♡
-          </span>
+          <span>♡</span>
 
           <div>
-
-            <strong>
-              Made
-            </strong>
-
-            <small>
-              For You
-            </small>
-
+            <strong>Made</strong>
+            <small>For You</small>
           </div>
 
         </div>
@@ -547,28 +527,17 @@
     </section>
 
 
-    <!-- =========================
-         BENEFITS
-    ========================== -->
+    <!-- BENEFITS -->
 
     <section class="benefits">
 
       <div class="benefit">
 
-        <strong>
-          🎁
-        </strong>
+        <strong>🎁</strong>
 
         <div>
-
-          <b>
-            تغليف أنيق
-          </b>
-
-          <small>
-            لكل طلب
-          </small>
-
+          <b>تغليف أنيق</b>
+          <small>لكل طلب</small>
         </div>
 
       </div>
@@ -576,20 +545,11 @@
 
       <div class="benefit">
 
-        <strong>
-          ✦
-        </strong>
+        <strong>✦</strong>
 
         <div>
-
-          <b>
-            جودة مختارة
-          </b>
-
-          <small>
-            منتجات مميزة
-          </small>
-
+          <b>جودة مختارة</b>
+          <small>منتجات مميزة</small>
         </div>
 
       </div>
@@ -597,20 +557,11 @@
 
       <div class="benefit">
 
-        <strong>
-          🚚
-        </strong>
+        <strong>🚚</strong>
 
         <div>
-
-          <b>
-            شحن سريع
-          </b>
-
-          <small>
-            حسب التوفر
-          </small>
-
+          <b>شحن سريع</b>
+          <small>حسب التوفر</small>
         </div>
 
       </div>
@@ -618,20 +569,11 @@
 
       <div class="benefit">
 
-        <strong>
-          💬
-        </strong>
+        <strong>💬</strong>
 
         <div>
-
-          <b>
-            دعم مباشر
-          </b>
-
-          <small>
-            عبر واتساب
-          </small>
-
+          <b>دعم مباشر</b>
+          <small>عبر واتساب</small>
         </div>
 
       </div>
@@ -639,9 +581,7 @@
     </section>
 
 
-    <!-- =========================
-         SHIPPING / PAYMENT / EXCHANGE
-    ========================== -->
+    <!-- POLICIES -->
 
     <section
       id="policies"
@@ -654,11 +594,9 @@
           SHOP WITH CONFIDENCE
         </p>
 
-
         <h2>
           كل اللي تحتاجيه قبل الطلب
         </h2>
-
 
         <p>
           تجربة شراء بسيطة وواضحة من أول اختيارك
@@ -758,15 +696,12 @@
 
         </div>
 
-
       </div>
 
     </section>
 
 
-    <!-- =========================
-         CATEGORIES
-    ========================== -->
+    <!-- CATEGORIES -->
 
     <section
       id="categories"
@@ -779,11 +714,9 @@
           SHOP BY CATEGORY
         </p>
 
-
         <h2>
           اختاري ما يناسبك
         </h2>
-
 
         <p>
           اكتشفي مجموعتنا من الإكسسوارات الأنيقة.
@@ -798,13 +731,8 @@
           type="button"
           onclick="filterProducts('خواتم')"
         >
-
-          <span>
-            💍
-          </span>
-
+          <span>💍</span>
           خواتم
-
         </button>
 
 
@@ -812,13 +740,8 @@
           type="button"
           onclick="filterProducts('سلاسل')"
         >
-
-          <span>
-            📿
-          </span>
-
+          <span>📿</span>
           سلاسل
-
         </button>
 
 
@@ -826,13 +749,8 @@
           type="button"
           onclick="filterProducts('أساور')"
         >
-
-          <span>
-            ✨
-          </span>
-
+          <span>✨</span>
           أساور
-
         </button>
 
 
@@ -840,13 +758,8 @@
           type="button"
           onclick="filterProducts('حلق')"
         >
-
-          <span>
-            💎
-          </span>
-
+          <span>💎</span>
           حلق
-
         </button>
 
 
@@ -854,13 +767,8 @@
           type="button"
           onclick="filterProducts('الكل')"
         >
-
-          <span>
-            ✦
-          </span>
-
+          <span>✦</span>
           عرض الكل
-
         </button>
 
       </div>
@@ -868,9 +776,7 @@
     </section>
 
 
-    <!-- =========================
-         PRODUCTS
-    ========================== -->
+    <!-- PRODUCTS -->
 
     <section
       id="products"
@@ -885,11 +791,9 @@
             VELORA COLLECTION
           </p>
 
-
           <h2>
             اختياراتنا لكِ
           </h2>
-
 
           <p class="products-subtitle">
             قطع أنيقة تضيف لمسة مميزة لكل إطلالة.
@@ -904,7 +808,6 @@
             🔍
           </span>
 
-
           <input
             id="search"
             type="search"
@@ -916,11 +819,6 @@
 
       </div>
 
-
-      <!--
-        المنتجات يتم تحميلها تلقائيًا من Supabase
-        عن طريق script.js
-      -->
 
       <div
         id="productGrid"
@@ -948,9 +846,7 @@
     </section>
 
 
-    <!-- =========================
-         ABOUT
-    ========================== -->
+    <!-- ABOUT -->
 
     <section
       id="about"
@@ -989,9 +885,7 @@
           href="#products"
           class="secondary"
         >
-
           اكتشفي المجموعة
-
         </a>
 
       </div>
@@ -1003,11 +897,9 @@
           ✦
         </div>
 
-
         <strong>
           VELORA
         </strong>
-
 
         <span>
           ELEGANCE IN EVERY DETAIL
@@ -1018,9 +910,7 @@
     </section>
 
 
-    <!-- =========================
-         WHY VELORA
-    ========================== -->
+    <!-- TRUST -->
 
     <section class="trust">
 
@@ -1036,12 +926,9 @@
 
       <div class="trust-grid">
 
-
         <div>
 
-          <span>
-            01
-          </span>
+          <span>01</span>
 
           <h3>
             اختيارات أنيقة
@@ -1056,9 +943,7 @@
 
         <div>
 
-          <span>
-            02
-          </span>
+          <span>02</span>
 
           <h3>
             طلب بسيط
@@ -1073,9 +958,7 @@
 
         <div>
 
-          <span>
-            03
-          </span>
+          <span>03</span>
 
           <h3>
             تواصل مباشر
@@ -1087,15 +970,12 @@
 
         </div>
 
-
       </div>
 
     </section>
 
 
-    <!-- =========================
-         REVIEWS
-    ========================== -->
+    <!-- REVIEWS -->
 
     <section
       id="reviews"
@@ -1108,61 +988,29 @@
           CUSTOMER LOVE
         </p>
 
-
         <h2>
           آراء عميلات VELORA
         </h2>
 
-
         <p>
-          آراء حقيقية من عميلاتنا بعد تجربة المنتجات.
+          مساحة جاهزة لآراء عميلاتك الحقيقية.
         </p>
 
       </div>
 
 
-      <div
-        class="reviews-grid"
-        style="
-          display:grid;
-          grid-template-columns:repeat(3,1fr);
-          gap:18px;
-          margin-top:35px;
-        "
-      >
+      <div class="reviews-grid">
 
 
-        <article
-          style="
-            background:#211f1e;
-            border:1px solid rgba(201,169,110,.16);
-            border-radius:18px;
-            padding:24px;
-          "
-        >
+        <article class="review-card">
 
-          <div
-            style="
-              color:#c9a96e;
-              letter-spacing:2px;
-              margin-bottom:12px;
-            "
-          >
+          <div class="review-stars">
             ★★★★★
           </div>
 
-
-          <p
-            style="
-              line-height:1.9;
-              color:#ccc;
-              margin:0 0 15px;
-            "
-          >
-            القطعة شكلها أنيق جدًا والتغليف كان جميل.
-            تجربة لطيفة جدًا.
+          <p>
+            مكان مخصص لتقييم حقيقي من عميلة بعد تجربة المنتج.
           </p>
-
 
           <strong>
             عميلة VELORA
@@ -1171,37 +1019,15 @@
         </article>
 
 
-        <article
-          style="
-            background:#211f1e;
-            border:1px solid rgba(201,169,110,.16);
-            border-radius:18px;
-            padding:24px;
-          "
-        >
+        <article class="review-card">
 
-          <div
-            style="
-              color:#c9a96e;
-              letter-spacing:2px;
-              margin-bottom:12px;
-            "
-          >
+          <div class="review-stars">
             ★★★★★
           </div>
 
-
-          <p
-            style="
-              line-height:1.9;
-              color:#ccc;
-              margin:0 0 15px;
-            "
-          >
-            الخامة والتصميم كانوا أفضل مما توقعت،
-            والطلب على واتساب كان سهل.
+          <p>
+            مكان مخصص لتقييم حقيقي من عميلة بعد تجربة المنتج.
           </p>
-
 
           <strong>
             عميلة VELORA
@@ -1210,53 +1036,28 @@
         </article>
 
 
-        <article
-          style="
-            background:#211f1e;
-            border:1px solid rgba(201,169,110,.16);
-            border-radius:18px;
-            padding:24px;
-          "
-        >
+        <article class="review-card">
 
-          <div
-            style="
-              color:#c9a96e;
-              letter-spacing:2px;
-              margin-bottom:12px;
-            "
-          >
+          <div class="review-stars">
             ★★★★★
           </div>
 
-
-          <p
-            style="
-              line-height:1.9;
-              color:#ccc;
-              margin:0 0 15px;
-            "
-          >
-            أكتر حاجة عجبتني إن الاختيارات واضحة
-            والطلب كان بسيط جدًا.
+          <p>
+            مكان مخصص لتقييم حقيقي من عميلة بعد تجربة المنتج.
           </p>
-
 
           <strong>
             عميلة VELORA
           </strong>
 
         </article>
-
 
       </div>
 
     </section>
 
 
-    <!-- =========================
-         CTA
-    ========================== -->
+    <!-- CTA -->
 
     <section class="cta">
 
@@ -1264,16 +1065,13 @@
         NEED HELP?
       </p>
 
-
       <h2>
         عندك سؤال عن أي قطعة؟
       </h2>
 
-
       <p>
         تواصلي معنا مباشرة وسنساعدك.
       </p>
-
 
       <a
         class="primary"
@@ -1281,9 +1079,7 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-
         💬 تواصلي عبر واتساب
-
       </a>
 
     </section>
@@ -1291,9 +1087,7 @@
   </main>
 
 
-  <!-- =========================
-       FOOTER
-  ========================== -->
+  <!-- FOOTER -->
 
   <footer id="contact">
 
@@ -1301,11 +1095,9 @@
       VELORA
     </div>
 
-
     <p>
       Elegance in Every Detail
     </p>
-
 
     <div class="footer-links">
 
@@ -1313,28 +1105,23 @@
         الرئيسية
       </a>
 
-
       <a href="#products">
         المتجر
       </a>
-
 
       <a href="#about">
         عن VELORA
       </a>
 
-
       <a href="#reviews">
         التقييمات
       </a>
-
 
       <a href="#contact">
         تواصل معنا
       </a>
 
     </div>
-
 
     <p class="copyright">
       © 2026 VELORA — جميع الحقوق محفوظة
@@ -1343,9 +1130,7 @@
   </footer>
 
 
-  <!-- =========================
-       WHATSAPP FLOAT
-  ========================== -->
+  <!-- WHATSAPP FLOAT -->
 
   <a
     class="whatsapp-float"
@@ -1354,15 +1139,11 @@
     rel="noopener noreferrer"
     aria-label="تواصل معنا عبر واتساب"
   >
-
     💬
-
   </a>
 
 
-  <!-- =========================
-       CART
-  ========================== -->
+  <!-- CART -->
 
   <div
     id="cartModal"
@@ -1400,6 +1181,85 @@
       <div id="cartItems"></div>
 
 
+      <!-- CUSTOMER FORM -->
+
+      <div class="customer-form">
+
+        <h3>
+          بيانات التوصيل
+        </h3>
+
+
+        <input
+          id="customerName"
+          type="text"
+          placeholder="الاسم بالكامل"
+          autocomplete="name"
+        >
+
+
+        <input
+          id="customerPhone"
+          type="tel"
+          placeholder="رقم الهاتف"
+          autocomplete="tel"
+        >
+
+
+        <select
+          id="customerGovernorate"
+        >
+
+          <option value="">
+            اختاري المحافظة
+          </option>
+
+          <option>القاهرة</option>
+          <option>الجيزة</option>
+          <option>القليوبية</option>
+          <option>الإسكندرية</option>
+          <option>البحيرة</option>
+          <option>الغربية</option>
+          <option>الدقهلية</option>
+          <option>الشرقية</option>
+          <option>المنوفية</option>
+          <option>كفر الشيخ</option>
+          <option>دمياط</option>
+          <option>بورسعيد</option>
+          <option>الإسماعيلية</option>
+          <option>السويس</option>
+          <option>شمال سيناء</option>
+          <option>جنوب سيناء</option>
+          <option>البحر الأحمر</option>
+          <option>الفيوم</option>
+          <option>بني سويف</option>
+          <option>المنيا</option>
+          <option>أسيوط</option>
+          <option>سوهاج</option>
+          <option>قنا</option>
+          <option>الأقصر</option>
+          <option>أسوان</option>
+          <option>الوادي الجديد</option>
+          <option>مطروح</option>
+
+        </select>
+
+
+        <textarea
+          id="customerAddress"
+          placeholder="العنوان بالتفصيل"
+          autocomplete="street-address"
+        ></textarea>
+
+
+        <p
+          id="customerFormError"
+          class="customer-error"
+        ></p>
+
+      </div>
+
+
       <div class="total">
 
         <span>
@@ -1425,9 +1285,7 @@
         type="button"
         onclick="checkout()"
       >
-
         📲 إرسال الطلب عبر واتساب
-
       </button>
 
     </div>
@@ -1435,9 +1293,7 @@
   </div>
 
 
-  <!-- =========================
-       SCRIPTS
-  ========================== -->
+  <!-- SCRIPTS -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
