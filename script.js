@@ -1,10 +1,19 @@
+/* =========================================================
+   VELORA STORE
+========================================================= */
+
 const WHATSAPP = "201223562957";
 
 const SUPABASE_URL =
   "https://nflcafxxjhinumvxyyxt.supabase.co";
 
+/*
+  ضع هنا نفس Publishable Key الموجود عندك حاليًا.
+  لا تستخدم service_role.
+*/
 const SUPABASE_KEY =
-  "sb_publishable_yoOuiG8GPwZbKcikdntB-g_k7K_06IQ";
+  "ضع Publishable Key هنا";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -14,7 +23,9 @@ const supabaseClient =
 
 
 let products = [];
+
 let cart = [];
+
 let activeCategory = "الكل";
 
 
@@ -39,7 +50,9 @@ function normalizeArray(value) {
 
     return value
       .map(function(item) {
+
         return String(item).trim();
+
       })
       .filter(Boolean);
 
@@ -58,12 +71,18 @@ function getProductImages(product) {
 
 
   if (images.length) {
+
     return images;
+
   }
 
 
   if (product.image) {
-    return [product.image];
+
+    return [
+      product.image
+    ];
+
   }
 
 
@@ -98,9 +117,12 @@ async function loadProducts() {
     await supabaseClient
       .from("Velora")
       .select("*")
-      .order("id", {
-        ascending: true
-      });
+      .order(
+        "id",
+        {
+          ascending: true
+        }
+      );
 
 
   if (result.error) {
@@ -286,7 +308,6 @@ function renderProducts() {
                 class="favorite-btn"
                 type="button"
                 onclick="event.stopPropagation(); toggleFavorite(this)"
-                aria-label="المفضلة"
               >
                 ♡
               </button>
@@ -397,7 +418,7 @@ function filterProducts(category) {
 
 
 /* =========================================================
-   FAVORITE
+   FAVORITES
 ========================================================= */
 
 function toggleFavorite(button) {
@@ -428,10 +449,12 @@ function openProduct(id) {
   const product =
     products.find(
       function(item) {
+
         return (
           Number(item.id) ===
           Number(id)
         );
+
       }
     );
 
@@ -536,7 +559,11 @@ function openProduct(id) {
               >
             `
             : `
-              <span style="font-size:70px;">
+              <span
+                style="
+                  font-size:70px;
+                "
+              >
                 ✦
               </span>
             `
@@ -567,7 +594,7 @@ function openProduct(id) {
 
                     <button
                       type="button"
-                      onclick="changeGalleryImage(${index})"
+                      onclick="changeGalleryImage(${Number(id)},${index})"
                       style="
                         width:65px;
                         height:65px;
@@ -608,7 +635,7 @@ function openProduct(id) {
       }
 
 
-      <!-- INFORMATION -->
+      <!-- INFO -->
 
       <div
         class="product-details-content"
@@ -649,10 +676,7 @@ function openProduct(id) {
         </h2>
 
 
-        <div
-          class="rating"
-          style="margin:8px 0;"
-        >
+        <div class="rating">
           ★★★★★
         </div>
 
@@ -681,7 +705,7 @@ function openProduct(id) {
         }
 
 
-        <!-- COLOR -->
+        <!-- COLORS -->
 
         ${
           colors.length
@@ -760,7 +784,7 @@ function openProduct(id) {
         }
 
 
-        <!-- SIZE -->
+        <!-- SIZES -->
 
         ${
           sizes.length
@@ -881,7 +905,7 @@ function openProduct(id) {
         <button
           class="primary full"
           type="button"
-          onclick="addDetailsProductToCart(${Number(product.id)})"
+          onclick="addDetailsProductToCart(${Number(id)})"
         >
           أضف للسلة
         </button>
@@ -911,36 +935,21 @@ function openProduct(id) {
 
 
 /* =========================================================
-   GALLERY
+   CHANGE GALLERY IMAGE
 ========================================================= */
 
-function changeGalleryImage(index) {
-
-  const modal =
-    document.querySelector(
-      ".product-details-modal"
-    );
-
-
-  if (!modal) return;
-
-
-  const title =
-    modal.querySelector(
-      ".product-details-content h2"
-    );
-
-
-  if (!title) return;
-
+function changeGalleryImage(
+  productId,
+  index
+) {
 
   const product =
     products.find(
       function(item) {
 
         return (
-          String(item.name) ===
-          String(title.textContent)
+          Number(item.id) ===
+          Number(productId)
         );
 
       }
@@ -1108,7 +1117,9 @@ function changeDetailsQty(
 
 
   if (quantity < 1) {
+
     quantity = 1;
+
   }
 
 
@@ -1118,7 +1129,7 @@ function changeDetailsQty(
 
 
 /* =========================================================
-   ADD DETAILS PRODUCT
+   ADD PRODUCT FROM DETAILS
 ========================================================= */
 
 function addDetailsProductToCart(
@@ -1187,6 +1198,7 @@ function addDetailsProductToCart(
 
       error.style.display =
         "block";
+
     }
 
     return;
@@ -1205,6 +1217,7 @@ function addDetailsProductToCart(
 
       error.style.display =
         "block";
+
     }
 
     return;
@@ -1244,7 +1257,9 @@ function addDetailsProductToCart(
 
 
   if (modal) {
+
     modal.remove();
+
   }
 }
 
@@ -1360,6 +1375,7 @@ function addToCart(id) {
     openProduct(id);
 
     return;
+
   }
 
 
@@ -1571,11 +1587,14 @@ function updateCart() {
 
 
             <strong class="cart-price">
+
               ${
                 Number(item.price) *
                 item.qty
               }
+
               جنيه
+
             </strong>
 
           </div>
@@ -1588,7 +1607,7 @@ function updateCart() {
 
 
 /* =========================================================
-   CHANGE CART QTY
+   CHANGE CART QUANTITY
 ========================================================= */
 
 function changeQty(
@@ -1661,7 +1680,7 @@ function closeCart() {
 
 
 /* =========================================================
-   WHATSAPP
+   CHECKOUT
 ========================================================= */
 
 function checkout() {
@@ -1673,6 +1692,81 @@ function checkout() {
     );
 
     return;
+  }
+
+
+  const name =
+    document
+      .getElementById(
+        "customerName"
+      )
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById(
+        "customerPhone"
+      )
+      .value
+      .trim();
+
+
+  const governorate =
+    document
+      .getElementById(
+        "customerGovernorate"
+      )
+      .value
+      .trim();
+
+
+  const address =
+    document
+      .getElementById(
+        "customerAddress"
+      )
+      .value
+      .trim();
+
+
+  const error =
+    document.getElementById(
+      "customerFormError"
+    );
+
+
+  if (
+    !name ||
+    !phone ||
+    !governorate ||
+    !address
+  ) {
+
+    if (error) {
+
+      error.textContent =
+        "من فضلك املأ جميع بيانات التوصيل.";
+
+      error.classList.add(
+        "show"
+      );
+
+    }
+
+    return;
+  }
+
+
+  if (error) {
+
+    error.textContent = "";
+
+    error.classList.remove(
+      "show"
+    );
+
   }
 
 
@@ -1739,7 +1833,7 @@ function checkout() {
 
 
   const message =
-    "مرحبًا VELORA، أريد طلب:\n\n" +
+    "مرحبًا VELORA، أريد تأكيد الطلب:\n\n" +
 
     lines +
 
@@ -1747,9 +1841,22 @@ function checkout() {
     total +
     " جنيه\n\n" +
 
-    "الاسم:\n" +
-    "العنوان:\n" +
-    "رقم الهاتف:";
+    "بيانات العميل:\n" +
+
+    "الاسم: " +
+    name +
+    "\n" +
+
+    "رقم الهاتف: " +
+    phone +
+    "\n" +
+
+    "المحافظة: " +
+    governorate +
+    "\n" +
+
+    "العنوان: " +
+    address;
 
 
   const url =
