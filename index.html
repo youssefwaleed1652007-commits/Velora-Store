@@ -22,8 +22,6 @@
     content="#171514"
   >
 
-  <!-- GOOGLE FONTS -->
-
   <link
     rel="preconnect"
     href="https://fonts.googleapis.com"
@@ -40,16 +38,16 @@
     rel="stylesheet"
   >
 
-  <!-- CSS -->
-
   <link
     rel="stylesheet"
     href="style.css"
   >
 
-  <!-- LOGO STYLE -->
-
   <style>
+
+    /* =========================
+       BRAND
+    ========================= */
 
     .brand {
       display: flex;
@@ -86,6 +84,68 @@
       white-space: nowrap;
     }
 
+
+    /* =========================
+       POLICIES
+    ========================= */
+
+    .policies {
+      padding-top: 70px;
+      padding-bottom: 70px;
+    }
+
+    .policies-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 35px;
+    }
+
+    .policy-card {
+      background: #211f1e;
+      border: 1px solid rgba(201, 169, 110, .16);
+      border-radius: 18px;
+      padding: 24px 20px;
+      transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+    }
+
+    .policy-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(201, 169, 110, .45);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, .15);
+    }
+
+    .policy-icon {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: rgba(201, 169, 110, .10);
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .policy-card h3 {
+      margin: 0 0 10px;
+    }
+
+    .policy-card p {
+      margin: 0;
+      color: #aaa;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+
+    /* =========================
+       MOBILE BRAND
+    ========================= */
+
     @media (max-width: 700px) {
 
       .brand {
@@ -105,6 +165,45 @@
         font-size: 6px;
         letter-spacing: 1px;
         margin-top: 5px;
+      }
+
+    }
+
+
+    /* =========================
+       POLICIES RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+
+      .policies-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+      .policies {
+        padding-top: 45px;
+        padding-bottom: 45px;
+      }
+
+      .policies-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .policy-card {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .policy-icon {
+        margin-bottom: 0;
+        flex-shrink: 0;
       }
 
     }
@@ -142,7 +241,6 @@
 
   <header class="header">
 
-
     <button
       class="mobile-menu"
       type="button"
@@ -152,8 +250,6 @@
       ☰
     </button>
 
-
-    <!-- VELORA LOGO -->
 
     <a
       href="#home"
@@ -165,6 +261,7 @@
         class="brand-logo"
         alt="VELORA Jewelry"
       >
+
 
       <div class="brand-text">
 
@@ -187,6 +284,7 @@
       class="cart-btn"
       type="button"
       onclick="openCart()"
+      aria-label="فتح السلة"
     >
 
       <span>
@@ -202,7 +300,6 @@
       </b>
 
     </button>
-
 
   </header>
 
@@ -248,9 +345,7 @@
       id="home"
     >
 
-
       <div class="hero-content">
-
 
         <div class="hero-badge">
 
@@ -289,7 +384,6 @@
 
         <div class="hero-actions">
 
-
           <a
             class="primary"
             href="#products"
@@ -313,12 +407,10 @@
 
           </a>
 
-
         </div>
 
 
         <div class="hero-trust">
-
 
           <div>
 
@@ -376,9 +468,7 @@
 
           </div>
 
-
         </div>
-
 
       </div>
 
@@ -387,33 +477,26 @@
 
       <div class="hero-visual">
 
-
         <div class="hero-glow"></div>
 
 
         <div class="hero-frame">
 
-
           <div class="hero-frame-inner">
-
 
             <div class="hero-symbol">
               ✦
             </div>
 
-
             <span class="hero-brand">
               VELORA
             </span>
-
 
             <small>
               ELEGANCE IN EVERY DETAIL
             </small>
 
-
           </div>
-
 
         </div>
 
@@ -459,9 +542,7 @@
 
         </div>
 
-
       </div>
-
 
     </section>
 
@@ -471,7 +552,6 @@
     ========================== -->
 
     <section class="benefits">
-
 
       <div class="benefit">
 
@@ -556,6 +636,130 @@
 
       </div>
 
+    </section>
+
+
+    <!-- =========================
+         SHIPPING / PAYMENT / EXCHANGE
+    ========================== -->
+
+    <section
+      id="policies"
+      class="section policies"
+    >
+
+      <div class="section-title">
+
+        <p class="eyebrow">
+          SHOP WITH CONFIDENCE
+        </p>
+
+
+        <h2>
+          كل اللي تحتاجيه قبل الطلب
+        </h2>
+
+
+        <p>
+          تجربة شراء بسيطة وواضحة من أول اختيارك
+          للقطعة حتى استلامها.
+        </p>
+
+      </div>
+
+
+      <div class="policies-grid">
+
+
+        <div class="policy-card">
+
+          <div class="policy-icon">
+            🚚
+          </div>
+
+          <div>
+
+            <h3>
+              الشحن
+            </h3>
+
+            <p>
+              شحن لجميع المحافظات حسب المنطقة والتوفر،
+              ويتم تأكيد تفاصيل الشحن معك عبر واتساب.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="policy-card">
+
+          <div class="policy-icon">
+            💳
+          </div>
+
+          <div>
+
+            <h3>
+              الدفع
+            </h3>
+
+            <p>
+              يتم الاتفاق على طريقة الدفع المناسبة
+              وتأكيد تفاصيل الطلب قبل التجهيز.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="policy-card">
+
+          <div class="policy-icon">
+            🔄
+          </div>
+
+          <div>
+
+            <h3>
+              الاستبدال
+            </h3>
+
+            <p>
+              في حالة وجود مشكلة بالمنتج، تواصلي معنا
+              عبر واتساب لمعرفة شروط وإجراءات الاستبدال.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="policy-card">
+
+          <div class="policy-icon">
+            💬
+          </div>
+
+          <div>
+
+            <h3>
+              دعم مباشر
+            </h3>
+
+            <p>
+              لو عندك أي سؤال عن المنتج أو المقاس أو اللون،
+              تواصلي معنا قبل إتمام الطلب.
+            </p>
+
+          </div>
+
+        </div>
+
+
+      </div>
 
     </section>
 
@@ -569,9 +773,7 @@
       class="section"
     >
 
-
       <div class="section-title">
-
 
         <p class="eyebrow">
           SHOP BY CATEGORY
@@ -587,12 +789,10 @@
           اكتشفي مجموعتنا من الإكسسوارات الأنيقة.
         </p>
 
-
       </div>
 
 
       <div class="categories">
-
 
         <button
           type="button"
@@ -663,9 +863,7 @@
 
         </button>
 
-
       </div>
-
 
     </section>
 
@@ -679,12 +877,9 @@
       class="section products-section"
     >
 
-
       <div class="section-head">
 
-
         <div>
-
 
           <p class="eyebrow">
             VELORA COLLECTION
@@ -700,12 +895,10 @@
             قطع أنيقة تضيف لمسة مميزة لكل إطلالة.
           </p>
 
-
         </div>
 
 
         <div class="search-box">
-
 
           <span>
             🔍
@@ -719,373 +912,44 @@
             autocomplete="off"
           >
 
-
         </div>
-
 
       </div>
 
 
-      <!-- PRODUCT GRID -->
+      <!--
+        المنتجات يتم تحميلها تلقائيًا من Supabase
+        عن طريق script.js
+      -->
 
       <div
         id="productGrid"
         class="products"
       >
 
+        <div class="empty-products">
 
-        <!-- PRODUCT 1 -->
-
-        <article
-          class="product-card"
-          data-category="خواتم"
-        >
-
-          <div class="product-image">
-
-            <span>
-              💍
-            </span>
-
+          <div>
+            ⏳
           </div>
 
-
-          <div class="product-info">
-
-            <small>
-              خواتم
-            </small>
-
-            <h3>
-              خاتم أوراق
-            </h3>
-
-            <p class="product-price">
-              280 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(1)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 2 -->
-
-        <article
-          class="product-card"
-          data-category="سلاسل"
-        >
-
-          <div class="product-image">
-
-            <span>
-              📿
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              سلاسل
-            </small>
-
-            <h3>
-              سلسلة فاني كليف
-            </h3>
-
-            <p class="product-price">
-              320 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(2)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 3 -->
-
-        <article
-          class="product-card"
-          data-category="أساور"
-        >
-
-          <div class="product-image">
-
-            <span>
-              ✨
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              أساور
-            </small>
-
-            <h3>
-              أسورة فاني كليف
-            </h3>
-
-            <p class="product-price">
-              350 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(3)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 4 -->
-
-        <article
-          class="product-card"
-          data-category="حلق"
-        >
-
-          <div class="product-image">
-
-            <span>
-              💎
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              حلق
-            </small>
-
-            <h3>
-              حلق دائري فخم
-            </h3>
-
-            <p class="product-price">
-              300 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(4)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 5 -->
-
-        <article
-          class="product-card"
-          data-category="خواتم"
-        >
-
-          <div class="product-image">
-
-            <span>
-              💍
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              خواتم
-            </small>
-
-            <h3>
-              خاتم ناعم
-            </h3>
-
-            <p class="product-price">
-              240 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(5)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 6 -->
-
-        <article
-          class="product-card"
-          data-category="سلاسل"
-        >
-
-          <div class="product-image">
-
-            <span>
-              📿
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              سلاسل
-            </small>
-
-            <h3>
-              سلسلة نجمة
-            </h3>
-
-            <p class="product-price">
-              290 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(6)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 7 -->
-
-        <article
-          class="product-card"
-          data-category="أساور"
-        >
-
-          <div class="product-image">
-
-            <span>
-              ✨
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              أساور
-            </small>
-
-            <h3>
-              أسورة رفيعة
-            </h3>
-
-            <p class="product-price">
-              260 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(7)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- PRODUCT 8 -->
-
-        <article
-          class="product-card"
-          data-category="حلق"
-        >
-
-          <div class="product-image">
-
-            <span>
-              💎
-            </span>
-
-          </div>
-
-
-          <div class="product-info">
-
-            <small>
-              حلق
-            </small>
-
-            <h3>
-              حلق لؤلؤ
-            </h3>
-
-            <p class="product-price">
-              330 جنيه
-            </p>
-
-            <button
-              class="primary full"
-              type="button"
-              onclick="addToCart(8)"
-            >
-              أضف للسلة
-            </button>
-
-          </div>
-
-        </article>
-
+          <h3>
+            جاري تحميل المنتجات...
+          </h3>
+
+          <p>
+            انتظري لحظات.
+          </p>
+
+        </div>
 
       </div>
-
 
     </section>
 
 
     <!-- =========================
-         ABOUT VELORA
+         ABOUT
     ========================== -->
 
     <section
@@ -1093,9 +957,7 @@
       class="about"
     >
 
-
       <div class="about-content">
-
 
         <p class="eyebrow">
           ABOUT VELORA
@@ -1132,12 +994,10 @@
 
         </a>
 
-
       </div>
 
 
       <div class="about-card">
-
 
         <div class="about-symbol">
           ✦
@@ -1153,9 +1013,7 @@
           ELEGANCE IN EVERY DETAIL
         </span>
 
-
       </div>
-
 
     </section>
 
@@ -1165,7 +1023,6 @@
     ========================== -->
 
     <section class="trust">
-
 
       <p class="eyebrow">
         WHY VELORA
@@ -1233,6 +1090,166 @@
 
       </div>
 
+    </section>
+
+
+    <!-- =========================
+         REVIEWS
+    ========================== -->
+
+    <section
+      id="reviews"
+      class="section"
+    >
+
+      <div class="section-title">
+
+        <p class="eyebrow">
+          CUSTOMER LOVE
+        </p>
+
+
+        <h2>
+          آراء عميلات VELORA
+        </h2>
+
+
+        <p>
+          آراء حقيقية من عميلاتنا بعد تجربة المنتجات.
+        </p>
+
+      </div>
+
+
+      <div
+        class="reviews-grid"
+        style="
+          display:grid;
+          grid-template-columns:repeat(3,1fr);
+          gap:18px;
+          margin-top:35px;
+        "
+      >
+
+
+        <article
+          style="
+            background:#211f1e;
+            border:1px solid rgba(201,169,110,.16);
+            border-radius:18px;
+            padding:24px;
+          "
+        >
+
+          <div
+            style="
+              color:#c9a96e;
+              letter-spacing:2px;
+              margin-bottom:12px;
+            "
+          >
+            ★★★★★
+          </div>
+
+
+          <p
+            style="
+              line-height:1.9;
+              color:#ccc;
+              margin:0 0 15px;
+            "
+          >
+            القطعة شكلها أنيق جدًا والتغليف كان جميل.
+            تجربة لطيفة جدًا.
+          </p>
+
+
+          <strong>
+            عميلة VELORA
+          </strong>
+
+        </article>
+
+
+        <article
+          style="
+            background:#211f1e;
+            border:1px solid rgba(201,169,110,.16);
+            border-radius:18px;
+            padding:24px;
+          "
+        >
+
+          <div
+            style="
+              color:#c9a96e;
+              letter-spacing:2px;
+              margin-bottom:12px;
+            "
+          >
+            ★★★★★
+          </div>
+
+
+          <p
+            style="
+              line-height:1.9;
+              color:#ccc;
+              margin:0 0 15px;
+            "
+          >
+            الخامة والتصميم كانوا أفضل مما توقعت،
+            والطلب على واتساب كان سهل.
+          </p>
+
+
+          <strong>
+            عميلة VELORA
+          </strong>
+
+        </article>
+
+
+        <article
+          style="
+            background:#211f1e;
+            border:1px solid rgba(201,169,110,.16);
+            border-radius:18px;
+            padding:24px;
+          "
+        >
+
+          <div
+            style="
+              color:#c9a96e;
+              letter-spacing:2px;
+              margin-bottom:12px;
+            "
+          >
+            ★★★★★
+          </div>
+
+
+          <p
+            style="
+              line-height:1.9;
+              color:#ccc;
+              margin:0 0 15px;
+            "
+          >
+            أكتر حاجة عجبتني إن الاختيارات واضحة
+            والطلب كان بسيط جدًا.
+          </p>
+
+
+          <strong>
+            عميلة VELORA
+          </strong>
+
+        </article>
+
+
+      </div>
 
     </section>
 
@@ -1242,7 +1259,6 @@
     ========================== -->
 
     <section class="cta">
-
 
       <p class="eyebrow">
         NEED HELP?
@@ -1261,7 +1277,7 @@
 
       <a
         class="primary"
-        href="https://wa.me/201112989746"
+        href="https://wa.me/201223562957"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -1270,9 +1286,7 @@
 
       </a>
 
-
     </section>
-
 
   </main>
 
@@ -1282,7 +1296,6 @@
   ========================== -->
 
   <footer id="contact">
-
 
     <div class="footer-brand">
       VELORA
@@ -1295,7 +1308,6 @@
 
 
     <div class="footer-links">
-
 
       <a href="#home">
         الرئيسية
@@ -1312,10 +1324,14 @@
       </a>
 
 
+      <a href="#reviews">
+        التقييمات
+      </a>
+
+
       <a href="#contact">
         تواصل معنا
       </a>
-
 
     </div>
 
@@ -1324,17 +1340,16 @@
       © 2026 VELORA — جميع الحقوق محفوظة
     </p>
 
-
   </footer>
 
 
   <!-- =========================
-       FLOATING WHATSAPP
+       WHATSAPP FLOAT
   ========================== -->
 
   <a
     class="whatsapp-float"
-    href="https://wa.me/201112989746"
+    href="https://wa.me/201223562957"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="تواصل معنا عبر واتساب"
@@ -1354,7 +1369,6 @@
     class="modal hidden"
   >
 
-
     <div
       class="modal-overlay"
       onclick="closeCart()"
@@ -1363,16 +1377,13 @@
 
     <div class="modal-box">
 
-
       <button
         class="close"
         type="button"
         onclick="closeCart()"
         aria-label="إغلاق السلة"
       >
-
         ×
-
       </button>
 
 
@@ -1391,7 +1402,6 @@
 
       <div class="total">
 
-
         <span>
           الإجمالي
         </span>
@@ -1407,7 +1417,6 @@
 
         </strong>
 
-
       </div>
 
 
@@ -1421,19 +1430,19 @@
 
       </button>
 
-
     </div>
-
 
   </div>
 
 
   <!-- =========================
-       JAVASCRIPT
+       SCRIPTS
   ========================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="script.js"></script>
+
 </body>
 
 </html>
