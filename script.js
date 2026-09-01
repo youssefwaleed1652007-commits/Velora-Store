@@ -1,6 +1,6 @@
 /* =========================================================
    VELORA STORE
-   Supabase + Products + Details + Options + Cart + WhatsApp
+   Supabase + Products + Options + Cart + WhatsApp
 ========================================================= */
 
 const WHATSAPP = "201223562957";
@@ -17,6 +17,7 @@ const supabaseClient =
     SUPABASE_KEY
   );
 
+
 let products = [];
 let cart = [];
 let activeCategory = "الكل";
@@ -27,6 +28,7 @@ let activeCategory = "الكل";
 ========================================================= */
 
 function escapeHTML(value) {
+
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -37,12 +39,15 @@ function escapeHTML(value) {
 
 
 function normalizeArray(value) {
+
   if (Array.isArray(value)) {
+
     return value
       .map(function(item) {
         return String(item).trim();
       })
       .filter(Boolean);
+
   }
 
   return [];
@@ -60,12 +65,14 @@ async function loadProducts() {
 
   if (!grid) return;
 
+
   grid.innerHTML =
     '<div class="empty-products">' +
       '<div>⏳</div>' +
       '<h3>جاري تحميل المنتجات...</h3>' +
       '<p>انتظري لحظات.</p>' +
     '</div>';
+
 
   const result =
     await supabaseClient
@@ -75,12 +82,14 @@ async function loadProducts() {
         ascending: true
       });
 
+
   if (result.error) {
 
     console.error(
       "Supabase Error:",
       result.error
     );
+
 
     grid.innerHTML =
       '<div class="empty-products">' +
@@ -89,13 +98,16 @@ async function loadProducts() {
         '<p>حاول تحديث الصفحة مرة أخرى.</p>' +
       '</div>';
 
+
     return;
   }
+
 
   products =
     Array.isArray(result.data)
       ? result.data
       : [];
+
 
   renderProducts();
 }
@@ -112,13 +124,16 @@ function renderProducts() {
 
   if (!grid) return;
 
+
   const searchInput =
     document.getElementById("search");
+
 
   const query =
     searchInput
       ? searchInput.value.trim().toLowerCase()
       : "";
+
 
   const filtered =
     products.filter(function(product) {
@@ -127,13 +142,16 @@ function renderProducts() {
         activeCategory === "الكل" ||
         String(product.category || "") === activeCategory;
 
+
       const name =
         String(product.name || "")
           .toLowerCase();
 
+
       const description =
         String(product.description || "")
           .toLowerCase();
+
 
       return (
         categoryMatch &&
@@ -143,6 +161,7 @@ function renderProducts() {
           description.includes(query)
         )
       );
+
     });
 
 
@@ -155,6 +174,7 @@ function renderProducts() {
         '<p>سيتم إضافة المنتجات قريبًا.</p>' +
       '</div>';
 
+
     return;
   }
 
@@ -164,6 +184,7 @@ function renderProducts() {
 
       const image =
         product.image || "";
+
 
       return `
 
@@ -191,13 +212,13 @@ function renderProducts() {
                       object-fit:cover;
                       display:block;
                     "
-                    onerror="this.style.display='none'"
                   >
                 `
                 : `
                   <span>✦</span>
                 `
             }
+
 
             <button
               class="favorite-btn"
@@ -265,10 +286,13 @@ function filterProducts(category) {
   activeCategory =
     category || "الكل";
 
+
   renderProducts();
+
 
   const section =
     document.getElementById("products");
+
 
   if (section) {
 
@@ -288,7 +312,9 @@ function toggleFavorite(button) {
 
   if (!button) return;
 
+
   button.classList.toggle("active");
+
 
   button.textContent =
     button.classList.contains("active")
@@ -305,8 +331,11 @@ function openProduct(id) {
 
   const product =
     products.find(function(item) {
+
       return Number(item.id) === Number(id);
+
     });
+
 
   if (!product) return;
 
@@ -314,12 +343,14 @@ function openProduct(id) {
   const colors =
     normalizeArray(product.colors);
 
+
   const sizes =
     normalizeArray(product.sizes);
 
 
   const modal =
     document.createElement("div");
+
 
   modal.className =
     "modal product-details-modal";
@@ -336,7 +367,8 @@ function openProduct(id) {
     <div
       class="modal-box product-details-box"
       style="
-        width:min(94vw, 560px);
+        position:relative;
+        width:min(94vw,560px);
         max-height:92vh;
         overflow-y:auto;
         overflow-x:hidden;
@@ -344,6 +376,7 @@ function openProduct(id) {
         border-radius:20px;
       "
     >
+
 
       <button
         class="close"
@@ -353,14 +386,14 @@ function openProduct(id) {
           position:absolute;
           top:10px;
           right:10px;
-          z-index:5;
+          z-index:10;
         "
       >
         ×
       </button>
 
 
-      <!-- PRODUCT IMAGE -->
+      <!-- IMAGE -->
 
       <div
         class="product-details-image"
@@ -393,25 +426,16 @@ function openProduct(id) {
               >
             `
             : `
-              <div
-                style="
-                  width:100%;
-                  height:100%;
-                  display:flex;
-                  align-items:center;
-                  justify-content:center;
-                  font-size:70px;
-                "
-              >
+              <span style="font-size:70px;">
                 ✦
-              </div>
+              </span>
             `
         }
 
       </div>
 
 
-      <!-- PRODUCT INFORMATION -->
+      <!-- INFORMATION -->
 
       <div
         class="product-details-content"
@@ -430,10 +454,7 @@ function openProduct(id) {
         </h2>
 
 
-        <div
-          class="rating"
-          style="margin:8px 0;"
-        >
+        <div class="rating">
           ★★★★★
         </div>
 
@@ -446,7 +467,8 @@ function openProduct(id) {
             margin:10px 0;
           "
         >
-          ${Number(product.price || 0)} جنيه
+          ${Number(product.price || 0)}
+          جنيه
         </div>
 
 
@@ -461,19 +483,22 @@ function openProduct(id) {
         }
 
 
-        <!-- COLORS -->
+        <!-- COLOR -->
 
         ${
           colors.length
             ? `
+
               <div
-                class="product-option-block"
-                style="margin-top:18px;"
+                style="
+                  margin-top:20px;
+                "
               >
 
                 <strong>
                   اللون
                 </strong>
+
 
                 <div
                   id="colorOptions"
@@ -485,24 +510,43 @@ function openProduct(id) {
                   "
                 >
 
-                  ${colors.map(function(color, index) {
+                  <button
+                    type="button"
+                    class="option-btn"
+                    data-value=""
+                    onclick="selectProductOption(this)"
+                    style="
+                      padding:9px 14px;
+                      border:1px solid #777;
+                      border-radius:9px;
+                      background:transparent;
+                      color:#fff;
+                    "
+                  >
+                    اختر اللون
+                  </button>
+
+
+                  ${colors.map(function(color) {
 
                     return `
+
                       <button
                         type="button"
-                        class="option-btn ${index === 0 ? "selected" : ""}"
+                        class="option-btn"
                         data-value="${escapeHTML(color)}"
                         onclick="selectProductOption(this)"
                         style="
                           padding:9px 14px;
                           border:1px solid #c9a96e;
                           border-radius:9px;
-                          background:${index === 0 ? "#c9a96e" : "transparent"};
-                          color:${index === 0 ? "#171514" : "#fff"};
+                          background:transparent;
+                          color:#fff;
                         "
                       >
                         ${escapeHTML(color)}
                       </button>
+
                     `;
 
                   }).join("")}
@@ -510,24 +554,28 @@ function openProduct(id) {
                 </div>
 
               </div>
+
             `
             : ""
         }
 
 
-        <!-- SIZES -->
+        <!-- SIZE -->
 
         ${
           sizes.length
             ? `
+
               <div
-                class="product-option-block"
-                style="margin-top:18px;"
+                style="
+                  margin-top:20px;
+                "
               >
 
                 <strong>
                   المقاس
                 </strong>
+
 
                 <div
                   id="sizeOptions"
@@ -539,24 +587,43 @@ function openProduct(id) {
                   "
                 >
 
-                  ${sizes.map(function(size, index) {
+                  <button
+                    type="button"
+                    class="option-btn"
+                    data-value=""
+                    onclick="selectProductOption(this)"
+                    style="
+                      padding:9px 14px;
+                      border:1px solid #777;
+                      border-radius:9px;
+                      background:transparent;
+                      color:#fff;
+                    "
+                  >
+                    اختر المقاس
+                  </button>
+
+
+                  ${sizes.map(function(size) {
 
                     return `
+
                       <button
                         type="button"
-                        class="option-btn ${index === 0 ? "selected" : ""}"
+                        class="option-btn"
                         data-value="${escapeHTML(size)}"
                         onclick="selectProductOption(this)"
                         style="
                           padding:9px 14px;
                           border:1px solid #c9a96e;
                           border-radius:9px;
-                          background:${index === 0 ? "#c9a96e" : "transparent"};
-                          color:${index === 0 ? "#171514" : "#fff"};
+                          background:transparent;
+                          color:#fff;
                         "
                       >
                         ${escapeHTML(size)}
                       </button>
+
                     `;
 
                   }).join("")}
@@ -564,6 +631,7 @@ function openProduct(id) {
                 </div>
 
               </div>
+
             `
             : ""
         }
@@ -578,7 +646,7 @@ function openProduct(id) {
             align-items:center;
             justify-content:center;
             gap:20px;
-            margin:22px 0;
+            margin:24px 0;
           "
         >
 
@@ -592,7 +660,9 @@ function openProduct(id) {
 
           <b
             id="detailsQty"
-            style="font-size:18px;"
+            style="
+              font-size:18px;
+            "
           >
             1
           </b>
@@ -608,18 +678,26 @@ function openProduct(id) {
         </div>
 
 
-        <!-- ADD TO CART -->
+        <!-- ADD -->
 
         <button
           class="primary full"
           type="button"
-          onclick="
-            addDetailsProductToCart(${Number(product.id)});
-            this.closest('.modal').remove();
-          "
+          onclick="addDetailsProductToCart(${Number(product.id)})"
         >
           أضف للسلة
         </button>
+
+
+        <p
+          id="optionError"
+          style="
+            display:none;
+            color:#d9a96e;
+            margin-top:12px;
+            text-align:center;
+          "
+        ></p>
 
       </div>
 
@@ -633,7 +711,7 @@ function openProduct(id) {
 
 
 /* =========================================================
-   SELECT PRODUCT OPTION
+   SELECT OPTION
 ========================================================= */
 
 function selectProductOption(button) {
@@ -653,8 +731,10 @@ function selectProductOption(button) {
         "selected"
       );
 
+
       item.style.background =
         "transparent";
+
 
       item.style.color =
         "#fff";
@@ -666,11 +746,23 @@ function selectProductOption(button) {
     "selected"
   );
 
-  button.style.background =
-    "#c9a96e";
 
-  button.style.color =
-    "#171514";
+  const value =
+    button.getAttribute(
+      "data-value"
+    );
+
+
+  if (value) {
+
+    button.style.background =
+      "#c9a96e";
+
+
+    button.style.color =
+      "#171514";
+
+  }
 }
 
 
@@ -678,21 +770,31 @@ function selectProductOption(button) {
    GET SELECTED OPTION
 ========================================================= */
 
-function getSelectedOption(id) {
+function getSelectedOption(containerId) {
 
   const container =
-    document.getElementById(id);
+    document.getElementById(
+      containerId
+    );
+
 
   if (!container) return "";
+
 
   const selected =
     container.querySelector(
       ".option-btn.selected"
     );
 
-  return selected
-    ? selected.getAttribute("data-value") || ""
-    : "";
+
+  if (!selected) return "";
+
+
+  return (
+    selected.getAttribute(
+      "data-value"
+    ) || ""
+  );
 }
 
 
@@ -706,6 +808,7 @@ function changeDetailsQty(change) {
     document.getElementById(
       "detailsQty"
     );
+
 
   if (!element) return;
 
@@ -721,7 +824,9 @@ function changeDetailsQty(change) {
 
 
   if (quantity < 1) {
+
     quantity = 1;
+
   }
 
 
@@ -731,7 +836,7 @@ function changeDetailsQty(change) {
 
 
 /* =========================================================
-   ADD PRODUCT FROM DETAILS
+   ADD DETAILS PRODUCT
 ========================================================= */
 
 function addDetailsProductToCart(id) {
@@ -757,14 +862,70 @@ function addDetailsProductToCart(id) {
 
   const color =
     colors.length
-      ? getSelectedOption("colorOptions")
+      ? getSelectedOption(
+          "colorOptions"
+        )
       : "";
 
 
   const size =
     sizes.length
-      ? getSelectedOption("sizeOptions")
+      ? getSelectedOption(
+          "sizeOptions"
+        )
       : "";
+
+
+  const error =
+    document.getElementById(
+      "optionError"
+    );
+
+
+  /* =======================================================
+     REQUIRE COLOR
+  ======================================================= */
+
+  if (
+    colors.length &&
+    !color
+  ) {
+
+    if (error) {
+
+      error.textContent =
+        "من فضلك اختر اللون أولًا.";
+
+      error.style.display =
+        "block";
+
+    }
+
+    return;
+  }
+
+
+  /* =======================================================
+     REQUIRE SIZE
+  ======================================================= */
+
+  if (
+    sizes.length &&
+    !size
+  ) {
+
+    if (error) {
+
+      error.textContent =
+        "من فضلك اختر المقاس أولًا.";
+
+      error.style.display =
+        "block";
+
+    }
+
+    return;
+  }
 
 
   const qtyElement =
@@ -791,6 +952,19 @@ function addDetailsProductToCart(id) {
     size,
     quantity
   );
+
+
+  const modal =
+    document.querySelector(
+      ".product-details-modal"
+    );
+
+
+  if (modal) {
+
+    modal.remove();
+
+  }
 }
 
 
@@ -831,15 +1005,20 @@ function addConfiguredProductToCart(
 
       category: product.category,
 
-      price: Number(product.price || 0),
+      price:
+        Number(product.price || 0),
 
-      image: product.image || "",
+      image:
+        product.image || "",
 
-      color: color,
+      color:
+        color,
 
-      size: size,
+      size:
+        size,
 
-      qty: quantity
+      qty:
+        quantity
 
     });
 
@@ -853,7 +1032,7 @@ function addConfiguredProductToCart(
 
 
 /* =========================================================
-   ADD PRODUCT
+   ADD SIMPLE PRODUCT
 ========================================================= */
 
 function addToCart(id) {
@@ -904,15 +1083,21 @@ function addToCart(id) {
 function updateCart() {
 
   const cartCount =
-    document.getElementById("cartCount");
+    document.getElementById(
+      "cartCount"
+    );
 
 
   const cartItems =
-    document.getElementById("cartItems");
+    document.getElementById(
+      "cartItems"
+    );
 
 
   const cartTotal =
-    document.getElementById("cartTotal");
+    document.getElementById(
+      "cartTotal"
+    );
 
 
   const totalQuantity =
@@ -1101,16 +1286,16 @@ function updateCart() {
 
 function changeQty(index, change) {
 
-  if (!cart[index]) {
-    return;
-  }
+  if (!cart[index]) return;
 
 
   cart[index].qty +=
     change;
 
 
-  if (cart[index].qty <= 0) {
+  if (
+    cart[index].qty <= 0
+  ) {
 
     cart.splice(
       index,
@@ -1235,7 +1420,7 @@ function checkout() {
 
       return (
         sum +
-        Number(item.price) *
+        Number(item.price || 0) *
         item.qty
       );
 
