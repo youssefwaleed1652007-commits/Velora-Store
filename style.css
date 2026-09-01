@@ -2559,4 +2559,83 @@ SMALL PHONES
     min-height: 36px;
     padding: 8px 9px;
   }
+/* =========================
+   SHIPPING & POLICIES
+========================= */
 
+.policies {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+.policies-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 35px;
+}
+
+.policy-card {
+  background: var(--dark, #211f1e);
+  border: 1px solid rgba(201, 169, 110, .16);
+  border-radius: 18px;
+  padding: 24px 20px;
+  transition: transform .25s ease, border-color .25s ease;
+}
+
+.policy-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201, 169, 110, .45);
+}
+
+.policy-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(201, 169, 110, .10);
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.policy-card h3 {
+  margin: 0 0 10px;
+}
+
+.policy-card p {
+  margin: 0;
+  color: #aaa;
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .policies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .policies {
+    padding-top: 45px;
+    padding-bottom: 45px;
+  }
+
+  .policies-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .policy-card {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .policy-icon {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+}
